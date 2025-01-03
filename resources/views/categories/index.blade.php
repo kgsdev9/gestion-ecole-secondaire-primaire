@@ -391,7 +391,7 @@
                                     showConfirmButton: false,
                                     timer: 1500,
                                 });
-
+                                
                                 // Retirer le produit de la liste `this.products`
                                 this.products = this.products.filter(product => product.id !== categorieId);
 

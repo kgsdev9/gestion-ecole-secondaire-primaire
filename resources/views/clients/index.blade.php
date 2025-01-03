@@ -347,10 +347,10 @@
                                     timer: 1500,
                                 });
 
-                                // Retirer le produit de la liste `this.products`
-                                this.clients = this.clients.filter(client => client.id !== clientId);
 
-                                // Après suppression, appliquer le filtre pour mettre à jour la liste affichée
+                                this.users = this.users.filter(client => client.id !== clientId);
+
+
                                 this.filterUsers();
                             } else {
                                 Swal.fire({
