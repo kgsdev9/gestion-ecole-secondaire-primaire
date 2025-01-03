@@ -257,7 +257,7 @@
                                 });
 
                                 // Retirer le produit de la liste `this.products`
-                                this.factures = this.factures.filter(factrue => user.id !== numvente);
+                                this.factures = this.factures.filter(factrue => factrue.id !== numvente);
 
                                 // Après suppression, appliquer le filtre pour mettre à jour la liste affichée
                                 this.filterUsers();
