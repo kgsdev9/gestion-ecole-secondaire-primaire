@@ -112,8 +112,6 @@
                 isEdite: false,
 
                 async searchData() {
-
-
                     const formData = new FormData();
                     formData.append('timeframe', this.timeframe); // Ajoute la période sélectionnée
                     formData.append('start_date', this.startDate); // Ajoute la date de début
@@ -129,8 +127,15 @@
                         });
 
                         if (response.ok) {
-                            const data = await response.json();
-                            // Vous pouvez traiter les données reçues ici, afficher un message de succès, etc.
+                            // Créer un lien temporaire pour télécharger le PDF
+                            const blob = await response.blob(); // Récupérer le contenu du PDF
+                            const url = window.URL.createObjectURL(blob); // Créer un objet URL pour le blob
+                            const link = document.createElement('a'); // Créer un lien de téléchargement
+                            link.href = url; // Associer l'URL du blob au lien
+                            link.download = 'rapport_ventes.pdf'; // Spécifier le nom du fichier
+                            link.click(); // Simuler un clic pour démarrer le téléchargement
+
+                            // Afficher un message de succès avec SweetAlert
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Rapport généré avec succès!',
@@ -152,7 +157,8 @@
                             showConfirmButton: true
                         });
                     }
-                },
+                }
+
             };
         }
     </script>
