@@ -12,7 +12,7 @@
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                         <!--begin::Title-->
                         <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
-                            Tableau de bord  {{Auth::user()->name}} </h1>
+                            Tableau de bord {{ Auth::user()->name }} </h1>
                         <!--end::Title-->
                         <!--begin::Breadcrumb-->
                         <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -229,7 +229,7 @@
                                             <div class="text-gray-500 flex-grow-1 me-4">Total jour </div>
                                             <!--end::Label-->
                                             <!--begin::Stats-->
-                                            <div class="fw-bolder text-gray-700 text-xxl-end">{{$ventesJour}}</div>
+                                            <div class="fw-bolder text-gray-700 text-xxl-end">{{ $ventesJour }}</div>
                                             <!--end::Stats-->
                                         </div>
                                         <!--end::Label-->
@@ -242,7 +242,7 @@
                                             <div class="text-gray-500 flex-grow-1 me-4">Total semaine</div>
                                             <!--end::Label-->
                                             <!--begin::Stats-->
-                                            <div class="fw-bolder text-gray-700 text-xxl-end">{{$ventesSemaine}}</div>
+                                            <div class="fw-bolder text-gray-700 text-xxl-end">{{ $ventesSemaine }}</div>
                                             <!--end::Stats-->
                                         </div>
                                         <!--end::Label-->
@@ -256,7 +256,7 @@
                                             <div class="text-gray-500 flex-grow-1 me-4">Total mois </div>
                                             <!--end::Label-->
                                             <!--begin::Stats-->
-                                            <div class="fw-bolder text-gray-700 text-xxl-end">{{$ventesMois}} </div>
+                                            <div class="fw-bolder text-gray-700 text-xxl-end">{{ $ventesMois }} </div>
                                             <!--end::Stats-->
                                         </div>
                                         <!--end::Label-->
@@ -434,7 +434,7 @@
 
                                                         </td>
                                                         <td class="text-end">
-                                                            <a href=""
+                                                            <a href="{{ route('facturepersonnalite.show', $facture->codefacture) }}"
                                                                 class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px">
                                                                 <i class="fa fa-eye"></i>
 

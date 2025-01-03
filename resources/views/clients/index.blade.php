@@ -403,7 +403,7 @@
                     formData.append('tregimefiscal_id', this.formData.tregimefiscal_id);
                     formData.append('tcodedevise_id', this.formData.tcodedevise_id);
                     if (!this.currentClient) {
-
+                        formData.append('client_id', null);
                     } else {
                         formData.append('client_id', this.currentClient.id);
                     }
@@ -424,7 +424,11 @@
                             const data = await response.json();
                             const client = data.client;
 
+
+
                             if (client) {
+
+
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Client enregistré avec succès!',
@@ -437,7 +441,7 @@
                                     if (index !== -1) this.users[index] = client;
                                 } else {
                                     this.users.push(client);
-                                    alert('bienvenue');
+
                                     this.users.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                                 }
 

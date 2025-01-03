@@ -81,11 +81,14 @@
                     <!--end::sidebar mobile toggle-->
                     <!--begin::Mobile logo-->
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                        <a href="../../demo1/dist/index.html" class="d-lg-none">
-                            <img alt="Logo" src="assets/media/logos/default-small.svg"
-                                class="theme-light-show h-30px" />
-                            <img alt="Logo" src="assets/media/logos/default-small-dark.svg"
-                                class="theme-dark-show h-30px" />
+                        <a href="{{ url('') }}" class="d-lg-none">
+                            @can('after')
+                                <img alt="Logo" src="assets/media/logos/default-small.svg"
+                                    class="theme-light-show h-30px" />
+                                <img alt="Logo" src="assets/media/logos/default-small-dark.svg"
+                                    class="theme-dark-show h-30px" />
+                            @endcan
+
                         </a>
                     </div>
                     <!--end::Mobile logo-->
@@ -328,7 +331,7 @@
                                 <div class="cursor-pointer symbol symbol-35px symbol-md-40px"
                                     data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                     data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                                    <img src="assets/media/avatars/300-3.jpg" alt="user" />
+                                    <img src="{{ asset('avatar.png') }}" style="height:45px;" alt="user" />
                                 </div>
                                 <!--begin::User account menu-->
                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px"
@@ -338,17 +341,18 @@
                                         <div class="menu-content d-flex align-items-center px-3">
                                             <!--begin::Avatar-->
                                             <div class="symbol symbol-50px me-5">
-                                                <img alt="Logo" src="assets/media/avatars/300-3.jpg" />
+                                                <img alt="Logo" src="{{ asset('avatar.png') }}" />
                                             </div>
                                             <!--end::Avatar-->
                                             <!--begin::Username-->
                                             <div class="d-flex flex-column">
-                                                <div class="fw-bold d-flex align-items-center fs-5">Max Smith
+                                                <div class="fw-bold d-flex align-items-center fs-5">
+                                                    {{ Auth::user()->name }}
                                                     <span
                                                         class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Pro</span>
                                                 </div>
                                                 <a href="#"
-                                                    class="fw-semibold text-muted text-hover-primary fs-7">max@kt.com</a>
+                                                    class="fw-semibold text-muted text-hover-primary fs-7">{{ Auth::user()->email }}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -363,7 +367,7 @@
                                             <span class="menu-text">Mes Abonnements</span>
                                             <span class="menu-badge">
                                                 <span
-                                                    class="badge badge-light-danger badge-circle fw-bold fs-7">3</span>
+                                                    class="badge badge-light-danger badge-circle fw-bold fs-7"></span>
                                             </span>
                                         </a>
                                     </div>
@@ -759,7 +763,6 @@
                     <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6" id="kt_app_sidebar_footer">
                         <a href="#"
                             class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100"
-
                             title="Disponible via notre formulaire">
                             <span class="btn-label">Documentation</span>
 

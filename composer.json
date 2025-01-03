@@ -2,11 +2,14 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "codedge/laravel-fpdf": "^1.10",
+        "codedge/laravel-fpdf": "^1.8",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
@@ -56,6 +59,10 @@
         }
     },
     "config": {
+        "platform": {
+            "php": "7.3.9"
+        },
+
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true

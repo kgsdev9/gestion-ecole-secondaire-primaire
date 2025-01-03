@@ -97,9 +97,12 @@ class FacturePersonnaliseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($facture)
     {
-        //
+        $facture = TFacture::where('codefacture', $facture)->first();
+        $facturelignes = TfactureLigne::where('codefacture', $facture->codefacture)->get();
+        $listeclients = TClient::all();
+        return view('facturepersonnalites.show', compact('facture', 'facturelignes', 'listeclients'));
     }
 
     /**

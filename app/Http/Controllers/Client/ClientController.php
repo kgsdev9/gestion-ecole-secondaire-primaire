@@ -97,13 +97,20 @@ class ClientController extends Controller
 
     private function createClient(Request $request)
     {
+        $email = $request->email;
+
+        // Vérifier si l'email existe déjà
+        if ($email && TClient::where('email', $email)->exists()) {
+            $email = $this->generateUniqueEmail($email);
+        }
+
         $client = TClient::create([
             'codeclient' => $this->generateClientCode(),
             'libtiers' => $request->libtiers,
             'adressepostale' => $request->adressepostale,
             'adressegeo' => $request->adressegeo,
             'fax' => $request->fax,
-            'email' => $request->email,
+            'email' => $email,
             'telephone' => $request->telephone,
             'numerocomtribuabe' => $request->numerocomtribuabe,
             'numerodecompte' => $request->numerodecompte,
@@ -112,44 +119,30 @@ class ClientController extends Controller
             'tcodedevise_id' => $request->tcodedevise_id,
         ]);
 
-        // $client->load('codedevise',);
-        return response()->json(['message' => 'Client créé avec succès', 'user' => $client], 201);
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return response()->json(['message' => 'Client créé avec succès', 'client' => $client], 201);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Générer un email unique en ajoutant un suffixe incrémental.
      */
-    public function edit($id)
+    private function generateUniqueEmail($email)
     {
-        //
+        $originalEmail = $email;
+        $i = 1;
+
+        // Découper l'email en partie locale et domaine
+        [$localPart, $domain] = explode('@', $email);
+
+        // Boucler jusqu'à trouver un email qui n'existe pas
+        while (TClient::where('email', $email)->exists()) {
+            $email = "{$localPart}_{$i}@{$domain}";
+            $i++;
+        }
+
+        return $email;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+
 
     /**
      * Remove the specified resource from storage.
