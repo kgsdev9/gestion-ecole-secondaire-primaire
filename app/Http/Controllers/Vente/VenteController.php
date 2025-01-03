@@ -230,7 +230,7 @@ class VenteController extends Controller
      */
     public function destroy($id)
     {
-       
+
         try {
             // Rechercher le produit par ID
             $vente = TFacture::where('id', $id)->first();

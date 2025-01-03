@@ -47,3 +47,12 @@ Route::resource('/devis', CommandeController::class);
 Route::resource('/facturepersonnalite', FacturePersonnaliseController::class);
 Route::get('/generatefacture/{codefacure}', [ImpressionFactureController::class, 'generateFacture'])->name('facture.generate');
 Route::get('/generateRapport', [ImpressionFactureController::class, 'generateRapport'])->name('facture.rapport');
+
+
+Route::get('/rapport', [RapportController::class, 'generateRapportForm'])->name('vente.rapport');
+Route::post('/rapport/vente', [RapportController::class, 'generateRapport'])->name('rapport.vente');
+
+
+
+
+

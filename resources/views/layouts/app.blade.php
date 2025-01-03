@@ -117,22 +117,22 @@
                                 </a>
                                 <!--end:Menu item-->
                                 <!--begin:Menu item-->
-                                <div class="menu-item menu-lg-down-accordion me-0 me-lg-2">
+                                <a href="{{ route('vente.rapport') }}"
+                                    class="menu-item menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-title">Rapport</span>
-                                        <span class="menu-arrow d-lg-none"></span>
+                                        <span class=" d-lg-none"></span>
                                     </span>
 
-                                </div>
+                                </a>
                                 <!--end:Menu item-->
                                 <!--begin:Menu item-->
-                                <a href="{{ route('facturepersonnalite.index') }}"
-                                    class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+                                <a href="{{ route('facturepersonnalite.index') }}" class="menu-item  me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
-                                        <span class="menu-title">Facuration Personalisée</span>
-                                        <span class="menu-arrow d-lg-none"></span>
+                                        <span class="menu-title">Facuration Personalisées</span>
+                                        <span class="d-lg-none"></span>
                                     </span>
 
                                 </a>
@@ -143,7 +143,7 @@
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-title">Ventes</span>
-                                        <span class="menu-arrow d-lg-none"></span>
+                                        <span class=" d-lg-none"></span>
                                     </span>
 
                                 </a>
@@ -153,7 +153,7 @@
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-title">Aide Assisante</span>
-                                        <span class="menu-arrow d-lg-none"></span>
+                                        <span class="d-lg-none"></span>
                                     </span>
 
                                 </div>
@@ -560,7 +560,7 @@
 
                                 <div class="menu-item pt-5">
                                     <div class="menu-content">
-                                        <span class="menu-heading fw-bold text-uppercase fs-7">Boutique</span>
+                                        <span class="menu-heading fw-bold text-uppercase fs-7">Ventes</span>
                                     </div>
                                 </div>
 
@@ -583,9 +583,11 @@
                                                 </svg>
                                             </span>
                                         </span>
-                                        <span class="menu-title">eCommerce</span>
+                                        <span class="menu-title">E-Vente</span>
                                         <span class="menu-arrow"></span>
                                     </span>
+
+
 
                                     <div class="menu-sub menu-sub-accordion">
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
@@ -697,9 +699,9 @@
 
                                 <div class="menu-item pt-5">
                                     <!--begin:Menu content-->
-                                    <div class="menu-content">
-                                        <span class="menu-heading fw-bold text-uppercase fs-7">Rapport</span>
-                                    </div>
+                                    <a href="" class="menu-content">
+                                        <span class="menu-heading fw-bold text-uppercase fs-7">Rapportssdsd</span>
+                                    </a>
                                     <!--end:Menu content-->
                                 </div>
                                 <!--end:Menu item-->
