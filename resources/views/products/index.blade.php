@@ -92,10 +92,10 @@
                                                     <td class="d-flex align-items-center">
                                                         <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
                                                             <div class="symbol-label">
-                                                                <img :src="product.image ? '{{ asset('s3/') }}/' + product.image :
-                                                                    '/default-image.jpg'"
-                                                                    alt="Image" class="w-100 h-100">
+                                                                <!-- Ne pas dupliquer l'URL dans 'src', utilisez directement 'product.image_url' -->
+                                                                <img :src="product.image_url" alt="Image" class="w-100 h-100">
                                                             </div>
+
 
                                                         </div>
                                                         <div class="d-flex flex-column">
@@ -107,11 +107,8 @@
                                                     <td x-text="product.prixachat"></td>
                                                     <td x-text="product.prixvente"></td>
                                                     <td x-text="product.qtedisponible"></td>
-
                                                     <td x-text="new Date(product.created_at).toLocaleDateString('fr-FR')">
                                                     </td>
-
-
                                                     <td class="text-end">
 
                                                         <button @click="openModal(product)"
@@ -205,6 +202,13 @@
                                     <input type="file" id="image" class="form-control" @change="handleFileChange"
                                         :required="!isEdite">
                                 </div>
+
+
+                                <div v-if="formData.imagePreview" class="mt-3">
+                                    <img :src="formData.imagePreview" alt="Image Preview" class="img-fluid"
+                                        style="max-height:100px;">
+                                </div>
+
                                 <button type="submit" class="btn btn-primary"
                                     x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
 
@@ -239,6 +243,7 @@
                     qtedisponible: '',
                     prixvente: '',
                     image: '',
+                    imagePreview: null,
                     category_id: ''
                 },
                 currentProduct: null,
@@ -264,6 +269,7 @@
                             qtedisponible: this.currentProduct.qtedisponible,
                             category_id: this.currentProduct.category.id,
                             image: null,
+                            imagePreview: this.currentProduct.image_url || '/default-image.jpg',
                         };
                     } else {
                         this.resetForm();
@@ -273,8 +279,22 @@
                     this.showModal = true;
                 },
 
+
                 handleFileChange(event) {
-                    this.formData.image = event.target.files[0];
+                    // Récupère le fichier sélectionné
+                    const file = event.target.files[0];
+
+                    if (file) {
+                        // Met à jour l'image dans formData
+                        this.formData.image = file;
+
+                        // Crée un aperçu de l'image en utilisant FileReader
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            this.formData.imagePreview = reader.result; // Met à jour l'aperçu
+                        };
+                        reader.readAsDataURL(file); // Lire l'image en tant qu'URL base64
+                    }
                 },
 
                 resetForm() {
@@ -284,6 +304,7 @@
                         prixvente: '',
                         category_id: '',
                         qtedisponible: '',
+                        imagePreview: null,
                         image: null,
                     };
                     document.getElementById('image').value = '';
@@ -303,6 +324,40 @@
                         return;
                     }
 
+                    if (!this.formData.prixachat || isNaN(this.formData.prixachat) || parseFloat(this.formData
+                            .prixachat) <= 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le prix du produit doit être un nombre valide et supérieur à 0.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+
+                    if (!this.formData.prixvente || isNaN(this.formData.prixvente) || parseFloat(this.formData
+                            .prixvente) <= 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le prix de vente du produit doit être un nombre valide et supérieur à 0.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+
+                    if (!this.formData.qtedisponible || isNaN(this.formData.qtedisponible) || parseFloat(this.formData
+                            .qtedisponible) <= 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'La quantité disponible doit être un nombre valide et supérieur à 0.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
                     const formData = new FormData();
                     formData.append('name', this.formData.name);
                     formData.append('prixachat', this.formData.prixachat);
@@ -316,11 +371,11 @@
 
                     try {
                         const response = await fetch('{{ route('product.store') }}', {
-                            method: 'POST', // Toujours 'POST', même pour la mise à jour
+                            method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                             },
-                            body: formData, // Utilisez FormData pour envoyer l'image
+                            body: formData,
                         });
 
                         if (response.ok) {
