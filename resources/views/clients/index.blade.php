@@ -390,6 +390,59 @@
                         return;
                     }
 
+                    if (!this.formData.capital || isNaN(this.formData.capital) || parseFloat(this.formData
+                            .prixachat) <= 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le captial doit être un nombre valide et supérieur à 0.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.fax || this.formData.fax.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le fax est requis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+
+
+                    if (!this.formData.telephone || this.formData.telephone.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le télephone est requis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.email || this.formData.email.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'L\'email est requis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.adressepostale || this.formData.adressepostale.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Adresse postale est requis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
                     const formData = new FormData();
                     formData.append('libtiers', this.formData.libtiers);
                     formData.append('adressepostale', this.formData.adressepostale);
