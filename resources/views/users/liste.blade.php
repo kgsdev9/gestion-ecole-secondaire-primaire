@@ -67,10 +67,9 @@
                                                         </button>
 
 
-                                                        <button @click="deleteUsers(user.id)"
-                                                        class="btn btn-danger btn-sm">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
+                                                        <button @click="deleteUsers(user.id)" class="btn btn-danger btn-sm">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
 
                                                     </td>
 
@@ -185,7 +184,7 @@
                             ...user
                         };
 
-                       
+
                         this.formData = {
                             name: this.currentUser.name,
                             email: this.currentUser.email,
@@ -208,7 +207,8 @@
                     };
                 },
 
-                async submitForm() {
+                async submitForm()
+                {
                     this.isLoading = true;
                     if (!this.formData.name || this.formData.name.trim() === '') {
                         Swal.fire({
@@ -219,6 +219,39 @@
                         this.isLoading = false;
                         return;
                     }
+
+                    if (!this.formData.email || this.formData.email.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'L\'
+                            email est requis.
+                            ',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.role_id || this.formData.role_id.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le role est réquis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.password || this.formData.password.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le password est réquis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
 
                     const formData = new FormData();
                     formData.append('name', this.formData.name);

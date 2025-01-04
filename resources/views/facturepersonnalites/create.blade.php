@@ -205,7 +205,7 @@
 
                                                     <a href="{{ route('facturepersonnalite.index') }}"
                                                         class="btn btn-light btn-sm">Retourner
-                                                        </a>
+                                                    </a>
                                                 </div>
                                             </div>
                                             <div class="mb-0">
@@ -320,7 +320,31 @@
                 },
 
                 async submitInvoice() {
-                    this.updateAllMontants();
+                    // Vérifier si un client est sélectionné
+                    if (!this.selectedClient.id) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Veuillez sélectionner un client.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    // Vérification qu'il y a au moins une ligne renseignée dans items
+                    const isItemsValid = this.items.some(item => item.name && item.quantity > 0 && item.price > 0);
+
+                    if (!isItemsValid) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Veuillez renseigner au moins une ligne.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    // Construction des données à envoyer
                     const data = {
                         items: this.items,
                         total_ht: this.totalHT(),
@@ -329,10 +353,9 @@
                         echeance: this.echeanceDate,
                         clientid: this.selectedClient.id,
                         tvainclus: this.isTVAIncluded,
-
                     };
-
                     try {
+                        // Envoi de la requête avec les données
                         const response = await fetch("{{ route('facturepersonnalite.store') }}", {
                             method: 'POST',
                             headers: {
@@ -344,6 +367,7 @@
                         });
 
                         const result = await response.json();
+
                         if (response.ok) {
                             alert('Facture enregistrée avec succès !');
                             window.location.href = "{{ route('facturepersonnalite.index') }}";
@@ -355,7 +379,6 @@
                         alert('Une erreur est survenue.');
                     }
                 },
-
 
             };
         }
