@@ -18,9 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         $query = TProduct::with('category')->orderByDesc('created_at');
-
         $listecategorie = TCategorieProduct::all();
-        // Récupérer tous les utilisateurs sans pagination
         $users = $query->get();
 
         return view('products.index', [
@@ -56,7 +54,14 @@ class ProductController extends Controller
     {
         // Gérer l'upload de l'image s'il y en a une
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $imagePath = $request->file('image')->store('products', 'public');
+            $image = $request->file('image');
+
+            // Récupère le nom original du fichier
+            $originalName = $image->getClientOriginalName();
+
+            // Stocke l'image sous le nom original dans le dossier 'products'
+            $imagePath = $request->file('image')->storeAs('products', $originalName, 'public');
+
             // Supprimer l'ancienne image si elle existe
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
@@ -66,26 +71,33 @@ class ProductController extends Controller
             $imagePath = $product->image;
         }
 
-
-
         // Mise à jour du produit
         $product->update([
             'libelleproduct' => $request->name,
             'prixachat' => $request->prixachat,
-            'qtedisponible' => $request->prixachat,
+            'qtedisponible' => $request->qtedisponible,
             'prixvente' => $request->prixvente,
             'tcategorieproduct_id' => $request->category_id,
             'image' => $imagePath,
         ]);
 
+        $product->load('category');
+
         return response()->json(['message' => 'Produit mis à jour avec succès', 'product' => $product], 200);
     }
+
 
     private function createProduct(Request $request)
     {
         // Vérifier que l'image est présente et valide
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $imagePath = $request->file('image')->store('products', 'public');
+
+            $image = $request->file('image');
+
+            // Récupère le nom original du fichier
+            $originalName = $image->getClientOriginalName();
+
+            $imagePath = $request->file('image')->storeAs('products', $originalName);
         } else {
             return response()->json(['message' => 'Image invalide ou absente.'], 400);
         }
@@ -94,15 +106,12 @@ class ProductController extends Controller
         $product = TProduct::create([
             'libelleproduct' => $request->name,
             'prixachat' => $request->prixachat,
-            'qtedisponible' => $request->prixachat, // Assurez-vous que c'est correct
+            'qtedisponible' => $request->qtedisponible,
             'prixvente' => $request->prixvente,
             'tcategorieproduct_id' => $request->category_id,
             'image' => $imagePath,
         ]);
-
         $product->load('category');
-
-
         return response()->json(['message' => 'Produit créé avec succès', 'product' => $product], 201);
     }
 

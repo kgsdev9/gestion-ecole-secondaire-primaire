@@ -26,13 +26,10 @@
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="card">
-
                         <div class="card-header border-0 pt-6">
                             <div class="card-title">
                                 <div class="d-flex align-items-center position-relative my-1">
-
                                     <i class='fas fa-search  position-absolute ms-5'></i>
-
                                     <input type="text"
                                         class="form-control form-control-solid w-250px ps-13 form-control-sm"
                                         placeholder="Rechercher" x-model="searchTerm" @input="filterProducts">
@@ -40,7 +37,6 @@
                             </div>
                             <div class="card-toolbar">
                                 <div class="d-flex justify-content-end align-items-center gap-3">
-
                                     <div>
                                         <select x-model="selectedCategory" @change="filterByCategory"
                                             class="form-select form-select-sm" data-live-search="true">
@@ -96,10 +92,11 @@
                                                     <td class="d-flex align-items-center">
                                                         <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
                                                             <div class="symbol-label">
-                                                                <img :src="product.image ? '{{ asset('storage/') }}/' + product
-                                                                    .image : '/default-image.jpg'"
+                                                                <img :src="product.image ? '{{ asset('s3/') }}/' + product.image :
+                                                                    '/default-image.jpg'"
                                                                     alt="Image" class="w-100 h-100">
                                                             </div>
+
                                                         </div>
                                                         <div class="d-flex flex-column">
                                                             <a href="#" class="text-gray-800 text-hover-primary mb-1"
@@ -177,15 +174,22 @@
                                         required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Prix d'Achat</label>
+                                    <label for="prixachat" class="form-label">Prix d'Achat</label>
                                     <input type="number" id="prixachat" class="form-control"
                                         x-model="formData.prixachat" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">Prix de Vente</label>
+                                    <label for="prixvente" class="form-label">Prix de Vente</label>
                                     <input type="number" id="prixvente" class="form-control"
                                         x-model="formData.prixvente" required>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label for="qtedisponible" class="form-label">Qte disponible</label>
+                                    <input type="number" id="qtedisponible" class="form-control"
+                                        x-model="formData.qtedisponible" required>
+                                </div>
+
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Catégorie</label>
                                     <select x-model="formData.category_id" class="form-select">
@@ -232,6 +236,7 @@
                 formData: {
                     name: '',
                     prixachat: '',
+                    qtedisponible: '',
                     prixvente: '',
                     image: '',
                     category_id: ''
@@ -252,15 +257,13 @@
                         this.currentProduct = {
                             ...product
                         };
-
-
                         this.formData = {
                             name: this.currentProduct.libelleproduct,
                             prixachat: this.currentProduct.prixachat,
                             prixvente: this.currentProduct.prixvente,
+                            qtedisponible: this.currentProduct.qtedisponible,
                             category_id: this.currentProduct.category.id,
                             image: null,
-
                         };
                     } else {
                         this.resetForm();
@@ -280,6 +283,7 @@
                         prixachat: '',
                         prixvente: '',
                         category_id: '',
+                        qtedisponible: '',
                         image: null,
                     };
                     document.getElementById('image').value = '';
@@ -304,13 +308,14 @@
                     formData.append('prixachat', this.formData.prixachat);
                     formData.append('prixvente', this.formData.prixvente);
                     formData.append('category_id', this.formData.category_id);
+                    formData.append('qtedisponible', this.formData.qtedisponible);
                     formData.append('product_id', this.currentProduct ? this.currentProduct.id : null);
                     if (this.formData.image) {
                         formData.append('image', this.formData.image);
                     }
 
                     try {
-                        const response = await fetch('{{ route('products.store') }}', {
+                        const response = await fetch('{{ route('product.store') }}', {
                             method: 'POST', // Toujours 'POST', même pour la mise à jour
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -377,24 +382,19 @@
                     return this.filteredProducts.slice(start, end);
                 },
 
+
                 filterProducts() {
+
                     const term = this.searchTerm.toLowerCase();
-                    const categoryTerm = this.categoryTerm ? this.categoryTerm.toLowerCase() :
-                        ''; // Si vous avez un filtre pour la catégorie
-
                     this.filteredProducts = this.products.filter(product => {
-                        const matchesProductName = product.libelleproduct && product.libelleproduct.toLowerCase()
-                            .includes(term);
-                        const matchesCategory = product.category && product.category.libellecategorieproduct &&
-                            product.category.libellecategorieproduct.toLowerCase().includes(categoryTerm);
-
-                        return matchesProductName &&
-                            matchesCategory;
+                        return product.libelleproduct && product.libelleproduct.toLowerCase().includes(
+                            term);
                     });
-
                     this.totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
                     this.currentPage = 1;
                 },
+
+
 
                 printProducts() {
                     let printContent = '<h1>Liste des Produits</h1>';
@@ -460,7 +460,7 @@
                 async deleteProduct(productId) {
                     try {
                         const url =
-                            `{{ route('products.destroy', ['product' => '__ID__']) }}`.replace(
+                            `{{ route('product.destroy', ['product' => '__ID__']) }}`.replace(
                                 "__ID__",
                                 productId
                             );

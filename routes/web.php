@@ -36,7 +36,7 @@ Route::resource('/users', UserController::class);
 Route::resource('/roles', RoleController::class);
 Route::resource('/factures', FactureController::class);
 Route::resource('/clients', ClientController::class);
-Route::resource('/products', ProductController::class);
+Route::resource('/product', ProductController::class);
 Route::resource('/categories', CategoryController::class);
 Route::resource('/ventes', VenteController::class);
 Route::resource('/roles', RoleController::class);

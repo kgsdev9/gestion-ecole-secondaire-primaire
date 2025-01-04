@@ -614,7 +614,7 @@
                                                 </div>
 
                                                 <div class="menu-item">
-                                                    <a class="menu-link" href="{{ route('products.index') }}">
+                                                    <a class="menu-link" href="{{ route('product.index') }}">
                                                         <span class="menu-bullet">
                                                             <span class="bullet bullet-dot"></span>
                                                         </span>
@@ -697,7 +697,7 @@
                                     <!--end:Menu sub-->
                                 </div>
 
-                             
+
                             </div>
                             <!--end::Menu-->
                         </div>
