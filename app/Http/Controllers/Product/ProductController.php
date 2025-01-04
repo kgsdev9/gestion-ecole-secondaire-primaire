@@ -26,7 +26,7 @@ class ProductController extends Controller
             // Assurez-vous que l'URL est construite correctement sans doublon
             $product->image_url = $product->image
                 ? asset('s3/' . $product->image) // Utilisation correcte du disque local
-                : asset('storage/default-image.jpg');     // Image par défaut
+                : asset('defaultimage.webp');     // Image par défaut
         });
 
         return view('products.index', [
