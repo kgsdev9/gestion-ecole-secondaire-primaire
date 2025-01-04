@@ -15,9 +15,13 @@ class ModeReglementSeeder extends Seeder
     public function run()
     {
         DB::table('mode_reglemnts')->insert([
-            ['libellemodereglement'=> 'Cheque'] ,
-            ['libellemodereglement'=> 'Virement Bancaire'] ,
+            ['libellemodereglement'=> 'ORANGE MONEY'],
+            ['libellemodereglement'=> 'WAVE'] ,
+            ['libellemodereglement'=> 'MOOV MONEY'],
+            ['libellemodereglement'=> 'MTN MONEY'],
+            ['libellemodereglement'=> 'VISA CARD'],
             ['libellemodereglement'=> 'En Espece'] ,
+            ['libellemodereglement'=> 'AFG BANK'] ,
         ]);
     }
 }

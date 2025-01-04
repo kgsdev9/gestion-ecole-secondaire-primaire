@@ -11,14 +11,11 @@
                             style="z-index: 1;" x-show="isScrollable">
                             <i class="bi bi-chevron-left"></i>
                         </button>
-
                         <!-- Liste des catégories scrollable -->
                         <div class="d-flex overflow-auto px-4"
                             style="scroll-behavior: smooth; white-space: nowrap; max-width: 100%;" ref="categoryContainer"
                             @scroll="checkScrollState">
                             <template x-for="category in categories" :key="category.id">
-
-
                                 <button class="btn btn-outline-secondary me-2"
                                     :class="{ 'active': selectedCategory === category.id }"
                                     @click="filterByCategory(category.id)" x-text="category.libellecategorieproduct">
@@ -45,12 +42,12 @@
                             <div class="product-card">
                                 <img :src="product.image_url" alt="Product" class="img-fluid">
                                 <h6 class="mt-2" x-text="product.libelleproduct"></h6>
-                                <p class="text-muted" x-text="`₹${product.prixvente}`"></p>
-                                <button class="btn btn-sm btn-primary" @click="addToCart(product)">Ajouter au
-                                    panier</button>
+                                <p class="text-muted" x-text="`${product.prixvente} FCFA`"></p> <!-- Prix en FCFA -->
+                                <button class="btn btn-sm btn-primary" @click="addToCart(product)">Ajouter au panier</button>
                             </div>
                         </div>
                     </template>
+
                 </div>
             </div>
 
@@ -60,32 +57,78 @@
                 <h5 class="mb-3">Sommaire de la commande</h5>
                 <button class="btn btn-sm btn-outline-secondary mb-3">+ Ajouter un client</button>
                 <div>
+                    <label for="restaurant-select">Sélectionner une Table </label>
+                    <select id="restaurant-select" class="form-select mt-2">
+                        <option value="">Choisir une table </option>
+                        <template x-for="restaurant in listetabrestaurant" :key="restaurant.id">
+                            <option :value="restaurant.id" x-text="restaurant.name"></option>
+                        </template>
+                    </select>
+                </div>
+
+
+
+                <div class="mt-2">
+                    <label for="restaurant-select">Sélectionner un serveur </label>
+                    <select id="restaurant-select" class="form-select mt-2">
+                        <option value="">Choisir un serveur</option>
+                        <template x-for="seveur in listeserveurs" :key="seveur.id">
+                            <option :value="seveur.id" x-text="seveur.name"></option>
+                        </template>
+                    </select>
+                </div>
+
+                <div class="mt-2">
                     <template x-for="(item, index) in cart" :key="item.id">
                         <div class="order-item d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <strong x-text="item.libelleproduct"></strong>
-                                <p class="text-muted mb-0">Regular</p>
+                            <div class="d-flex align-items-center">
+                                <!-- Affichage de l'image du produit -->
+                                <img :src="item.image_url" alt="Product Image" class="img-thumbnail"
+                                    style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
+                                <div>
+                                    <strong x-text="item.libelleproduct"></strong>
+                                </div>
                             </div>
-                            <div>
+                            <div class="d-flex align-items-center">
+                                <!-- Boutons pour augmenter/diminuer la quantité -->
                                 <button class="btn btn-sm btn-outline-secondary" @click="decreaseQuantity(index)">-</button>
                                 <span class="mx-2" x-text="item.quantity"></span>
                                 <button class="btn btn-sm btn-outline-secondary" @click="increaseQuantity(index)">+</button>
                             </div>
-                            <strong x-text="`₹${item.prixvente * item.quantity}`"></strong>
-                            <button class="btn btn-sm btn-danger" @click="removeFromCart(index)">✕</button>
+                            <strong x-text="`${item.prixvente * item.quantity} FCFA`"></strong>
+
+                            <button :class="item.offert ? 'btn btn-sm btn-success' : 'btn btn-sm btn-danger'"
+                                @click="markAsOffered(index)">
+                                <span x-text="item.offert ? 'Offerte' : 'Non Offerte'"></span>
+                            </button>
+
+
                         </div>
                     </template>
+
                 </div>
+
+                <div class="mb-4">
+                    <h4>Modes de Règlement</h4>
+                    <div class="d-flex flex-wrap">
+                        <template x-for="mode in listemodereglement" :key="mode.id">
+                            <div class="me-3 mb-2">
+                                <input type="radio" :id="'mode-' + mode.id" :name="'modeReglement'" :value="mode.id" class="form-check-input">
+                                <label :for="'mode-' + mode.id" x-text="mode.libellemodereglement" class="form-check-label"></label>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+
                 <div class="mt-4">
+
                     <div class="d-flex justify-content-between">
-                        <span>Taxes :</span>
-                        <span x-text="`₹${calculateTax()}`"></span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <h5>Total :</h5>
-                        <h5 x-text="`₹${calculateTotal()}`"></h5>
+                        <h5>NET A PAYER :</h5>
+                        <h5 x-text="`${total} FCFA`"></h5> 
                     </div>
                 </div>
+
                 <button class="btn btn-pay w-100 mt-3" @click="confirmOrder()">Confirmer la commande</button>
             </div>
         </div>
@@ -97,9 +140,14 @@
                 search: '',
                 products: @json($listeProducts),
                 categories: @json($listecategories),
+                listemodereglement: @json($listemodereglement),
+                listetabrestaurant: @json($listetabrestaurant),
+                listeserveurs: @json($listeserveurs),
                 selectedCategory: '',
                 isScrollable: false,
                 cart: [],
+                total: 0, // Initialisation de la propriété total
+
                 filteredProducts() {
                     return this.products.filter(product => {
                         const matchesSearch = product.libelleproduct.toLowerCase().includes(this.search
@@ -110,9 +158,40 @@
                     });
                 },
 
+                markAsOffered(index) {
+                    const item = this.cart[index];
+
+                    // Si l'article est déjà offert, on le remet à son prix initial
+                    if (item.offert) {
+                        // Vérifie que originalPrix est bien défini et qu'il est un nombre
+                        if (item.originalPrix !== undefined && item.originalPrix !== null && !isNaN(item.originalPrix)) {
+                            // Recalcule le prix en fonction de la quantité
+                            item.prixvente = item.originalPrix * item.quantity;
+                        } else {
+
+                            alert(item.originalPrix);
+                            console.warn(`Prix initial non défini ou invalide pour l'article ${item.libelleproduct}`);
+                            item.prixvente = 0; // Définit le prix à zéro si le prix initial est invalide
+                        }
+                        item.offert = false; // Marque comme non offert
+                    } else {
+                        // Si l'article n'est pas offert, on le marque comme offert
+                        item.prixvente = 0; // Met le prix à zéro pour l'article offert
+                        item.offert = true; // Marque comme offert
+                    }
+                    // Mettre à jour le total après chaque modification de prix
+                    this.updateTotal();
+                },
+
+                updateTotal() {
+                    // Calcul du total en fonction des prix et des quantités des produits dans le panier
+                    this.total = this.cart.reduce((acc, item) => {
+                        return acc + (item.prixvente * item
+                            .quantity); // Calcul du total en fonction de la quantité et du prix
+                    }, 0);
+                },
 
                 filterByCategory(categoryId) {
-                   
                     this.selectedCategory = this.selectedCategory === categoryId ? '' : categoryId;
                 },
 
@@ -123,22 +202,31 @@
                     } else {
                         this.cart.push({
                             ...product,
-                            quantity: 1
+                            quantity: 1,
+                            originalPrix: product.prixvente, // Assurez-vous que le prix original est défini ici
                         });
                     }
+                    this.updateTotal(); // Met à jour le total après l'ajout
                 },
+
+
                 removeFromCart(index) {
                     this.cart.splice(index, 1);
+                    this.updateTotal(); // Met à jour le total après la suppression
                 },
+
                 increaseQuantity(index) {
                     this.cart[index].quantity++;
+                    this.updateTotal(); // Met à jour le total après l'augmentation
                 },
+
                 decreaseQuantity(index) {
                     if (this.cart[index].quantity > 1) {
                         this.cart[index].quantity--;
                     } else {
                         this.removeFromCart(index);
                     }
+                    this.updateTotal(); // Met à jour le total après la diminution
                 },
 
                 scrollLeft() {
@@ -146,23 +234,22 @@
                     container.scrollLeft -= 100; // Ajustez la valeur selon vos besoins
                 },
 
-
                 scrollRight() {
                     const container = this.$refs.categoryContainer;
                     container.scrollLeft += 100; // Ajustez la valeur selon vos besoins
                 },
-                calculateTax() {
-                    const total = this.cart.reduce((sum, item) => sum + item.prixvente * item.quantity, 0);
-                    return (total * 0.1).toFixed(2); // 10% tax
-                },
+
+
                 calculateTotal() {
                     const total = this.cart.reduce((sum, item) => sum + item.prixvente * item.quantity, 0);
-                    const tax = total * 0.1; // 10% tax
-                    return (total + tax).toFixed(2);
+
+                    return (total).toFixed(2); // Total avec taxe
                 },
+
                 confirmOrder() {
                     alert('Commande confirmée ! Merci pour votre achat.');
-                    this.cart = [];
+                    this.cart = []; // Vide le panier après confirmation
+                    this.updateTotal(); // Réinitialise le total après la commande
                 },
             };
         }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Pos;
 
 use App\Http\Controllers\Controller;
+use App\Models\ModeReglemnt;
+use App\Models\Serveur;
+use App\Models\TabRestaurant;
 use App\Models\TCategorieProduct;
 use App\Models\TProduct;
 use Illuminate\Http\Request;
@@ -21,7 +24,11 @@ class ProductPostController extends Controller
         $query = TProduct::with('category')->orderByDesc('created_at');
         $listecategories = TCategorieProduct::all();
         $listeProducts = $query->get();
+        $listetabrestaurant  = TabRestaurant::all();
 
+        $listemodereglement  = ModeReglemnt::all();
+
+        $listeserveurs  = Serveur::all();
         // Ajouter l'URL de l'image à chaque produit
         $listeProducts->each(function ($product) {
             // Assurez-vous que l'URL est construite correctement sans doublon
@@ -31,7 +38,7 @@ class ProductPostController extends Controller
         });
 
 
-        return view('Pos.products.gridproduct', compact('listeProducts', 'listecategories'));
+        return view('Pos.products.gridproduct', compact('listeProducts', 'listecategories', 'listemodereglement', 'listetabrestaurant', 'listeserveurs'));
     }
 
     /**
