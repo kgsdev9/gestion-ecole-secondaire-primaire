@@ -8,6 +8,7 @@ use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Factures\FacturePersonnaliseController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Impression\Facture\ImpressionFactureController;
+use App\Http\Controllers\Pos\ProductPostController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Rapport\RapportController;
 use App\Http\Controllers\Role\RoleController;
@@ -52,7 +53,4 @@ Route::get('/generateRapport', [ImpressionFactureController::class, 'generateRap
 Route::get('/rapport', [RapportController::class, 'generateRapportForm'])->name('vente.rapport');
 Route::post('/rapport/vente', [RapportController::class, 'generateRapport'])->name('rapport.vente');
 
-
-
-
-
+Route::get('/post/ventes', [ProductPostController::class, 'allProducts'])->name('product.pos');

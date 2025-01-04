@@ -217,7 +217,7 @@
                     if (!this.formData.libellerole || this.formData.libellerole.trim() === '') {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Le nom du produit est requis.',
+                            title: 'Le nom du role est requis.',
                             showConfirmButton: true
                         });
                         this.isLoading = false;

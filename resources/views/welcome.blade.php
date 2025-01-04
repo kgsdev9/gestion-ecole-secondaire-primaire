@@ -17,6 +17,7 @@
                         <!--begin::Breadcrumb-->
                         <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                             <!--begin::Item-->
+
                             <li class="breadcrumb-item text-muted">
                                 <a href="../../demo1/dist/index.html" class="text-muted text-hover-primary">Home</a>
                             </li>
@@ -391,7 +392,7 @@
                                             <!--begin::Table head-->
                                             <thead>
                                                 <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
-                                                    <th class="p-0 pb-3 min-w-175px text-start">ITEM</th>
+                                                    <th class="p-0 pb-3 min-w-175px text-start">CODE FACTURE</th>
                                                     <th class="p-0 pb-3 min-w-100px text-end">MONTANT HT </th>
                                                     <th class="p-0 pb-3 min-w-100px text-end">MONTANT TVA</th>
                                                     <th class="p-0 pb-3 min-w-175px text-end pe-12">MONTANT TTC</th>

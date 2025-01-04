@@ -68,15 +68,39 @@ class UserController extends Controller
 
     private function createUser(Request $request)
     {
+        // Vérifier si l'email existe déjà
+        if (User::where('email', $request->email)->exists()) {
+            // Si l'email existe, générer un nouvel email unique
+            $email = $this->generateUniqueEmail($request->email);
+        } else {
+            $email = $request->email;
+        }
+
+        // Créer l'utilisateur avec l'email (modifié ou original)
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $email,
             'role_id' => $request->role_id,
             'password' => Hash::make($request->password) ?? Hash::make(12345),
         ]);
 
         $user->load('role');
+
         return response()->json(['message' => 'Utilisateur créé avec succès', 'user' => $user], 201);
+    }
+
+    // Méthode pour générer un email unique
+    private function generateUniqueEmail($originalEmail)
+    {
+        $emailParts = explode('@', $originalEmail);
+        $newEmail = $emailParts[0] . '-' . uniqid() . '@' . $emailParts[1];
+
+        // Vérifier si l'email généré existe déjà, sinon retourner l'email
+        while (User::where('email', $newEmail)->exists()) {
+            $newEmail = $emailParts[0] . '-' . uniqid() . '@' . $emailParts[1];
+        }
+
+        return $newEmail;
     }
 
 

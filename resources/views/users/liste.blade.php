@@ -222,6 +222,27 @@
                     }
 
 
+                    if (!this.formData.email || this.formData.email.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Email est requis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.role_id || this.formData.role_id.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Role id est réquis .',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+
                     const formData = new FormData();
                     formData.append('name', this.formData.name);
                     formData.append('email', this.formData.email);
