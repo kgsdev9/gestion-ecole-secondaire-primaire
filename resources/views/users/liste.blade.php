@@ -58,7 +58,8 @@
                                                 <tr>
                                                     <td x-text="user.name"></td>
                                                     <td x-text="user.email"></td>
-                                                    <td x-text="user.role.libellerole"></td>
+                                                    <td x-text="user.role?.libellerole ?? 'Aucun rôle'"></td>
+
                                                     <td x-text="new Date(user.created_at).toLocaleDateString('fr-FR')"></td>
                                                     <td class="text-end">
                                                         <button @click="openModal(user)"
@@ -184,11 +185,11 @@
                             ...user
                         };
 
-
+                        // Vérification si `user` et `user.role` existent avant d'accéder à `id`
                         this.formData = {
                             name: this.currentUser.name,
                             email: this.currentUser.email,
-                            role_id: this.currentUser.role.id ?? null,
+                            role_id: this.currentUser.role ? this.currentUser.role.id : null,
                             user_id: this.currentUser.id ?? null
                         };
                     } else {
@@ -197,6 +198,7 @@
                     }
                     this.showModal = true;
                 },
+
 
                 resetForm() {
                     this.formData = {
@@ -207,45 +209,12 @@
                     };
                 },
 
-                async submitForm()
-                {
+                async submitForm() {
                     this.isLoading = true;
                     if (!this.formData.name || this.formData.name.trim() === '') {
                         Swal.fire({
                             icon: 'error',
                             title: 'Le nom est requis.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-                    if (!this.formData.email || this.formData.email.trim() === '') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'L\'
-                            email est requis.
-                            ',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-                    if (!this.formData.role_id || this.formData.role_id.trim() === '') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Le role est réquis.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-                    if (!this.formData.password || this.formData.password.trim() === '') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Le password est réquis.',
                             showConfirmButton: true
                         });
                         this.isLoading = false;
