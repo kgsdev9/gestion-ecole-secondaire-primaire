@@ -1,0 +1,98 @@
+ public function PrintAllVente(Request $request)
+    {
+        // Récupérer les critères de filtrage depuis la requête
+        $modereglement = $request->input('modereglement'); // Filtrer par mode de règlement (optionnel)
+        $table = $request->input('table'); // Filtrer par table (optionnel)
+
+        // Construire la requête de base
+        $query = TFacture::with(['modereglement', 'table'])
+            ->where('numvente', 'like', 'POS%')
+            ->whereDate('created_at', Carbon::today()) // Ventes du jour uniquement
+            ->orderByDesc('created_at');
+
+        // Appliquer le filtre par mode de règlement si spécifié
+        if (!empty($modereglement)) {
+            $query->whereHas('modereglement', function ($q) use ($modereglement) {
+                $q->where('id', $modereglement);
+            });
+        }
+
+        // Appliquer le filtre par table si spécifié
+        if (!empty($table)) {
+            $query->whereHas('table', function ($q) use ($table) {
+                $q->where('id', $table);
+            });
+        }
+
+        // Récupérer les ventes filtrées
+        $listeventes = $query->get();
+
+        // Calculer le total des montants
+        $totalMontantHT = $listeventes->sum('montantht');
+        $totalMontantTVA = $listeventes->sum('montanttva');
+        $totalMontantTTC = $listeventes->sum('montantttc');
+
+        // Générer le PDF
+        $pdf = new FPDF();
+        $pdf->AddPage('L', 'A4'); // Format paysage
+        $pdf->SetFont('Arial', 'B', 14);
+
+        // En-tête principal
+        $pdf->SetTextColor(0, 0, 0); // Couleur noire pour le texte
+        $pdf->Cell(0, 10, utf8_decode('ETAT DES VENTES'), 0, 1, 'C');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 6, utf8_decode('(de la journée)'), 0, 1, 'C');
+
+        // Trait horizontal gris sous le titre
+        $pdf->Ln(3);
+        $pdf->SetDrawColor(192, 192, 192);
+        $pdf->Line(10, $pdf->GetY(), 290, $pdf->GetY());
+        $pdf->Ln(5);
+
+        // En-tête du tableau
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetFillColor(192, 192, 192); // Fond gris
+        $headers = [
+            'Num Vente', 'Client', 'Téléphone', 'Montant HT', 'Montant TVA', 'Montant TTC',
+            'Mode Règlement', 'Table', 'Date de Création'
+        ];
+        $widths = [27, 40, 25, 30, 30, 30, 30, 30, 30];
+
+        foreach ($headers as $i => $header) {
+            $pdf->Cell($widths[$i], 7, utf8_decode($header), 1, 0, 'C', true);
+        }
+        $pdf->Ln();
+
+        // Corps du tableau
+        $pdf->SetFont('Arial', '', 10);
+        foreach ($listeventes as $vente) {
+            $pdf->Cell($widths[0], 7, utf8_decode($vente->numvente), 1, 0, 'C');
+            $pdf->Cell($widths[1], 7, utf8_decode(\Str::limit($vente->nom, 12)), 1, 0, 'C');
+            $pdf->Cell($widths[2], 7, utf8_decode($vente->telephone ?? '-'), 1, 0, 'C');
+            $pdf->Cell($widths[3], 7, utf8_decode(number_format($vente->montantht, 2)), 1, 0, 'C');
+            $pdf->Cell($widths[4], 7, utf8_decode(number_format($vente->montanttva, 2)), 1, 0, 'C');
+            $pdf->Cell($widths[5], 7, utf8_decode(number_format($vente->montantttc, 2)), 1, 0, 'C');
+            $pdf->Cell($widths[6], 7, utf8_decode($vente->modereglement->libellemodereglement ?? '-'), 1, 0, 'C');
+            $pdf->Cell($widths[7], 7, utf8_decode($vente->table->name ?? '-'), 1, 0, 'C');
+            $pdf->Cell($widths[8], 7, utf8_decode($vente->created_at->format('d/m/Y')), 1, 0, 'C');
+            $pdf->Ln();
+        }
+
+        // Ajouter le total à la fin du tableau
+        $pdf->Ln(5);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(160, 7, utf8_decode('Total HT:'), 1, 0, 'R');
+        $pdf->Cell(30, 7, utf8_decode(number_format($totalMontantHT, 2)), 1, 0, 'C');
+        $pdf->Ln();
+        $pdf->Cell(160, 7, utf8_decode('Total TVA:'), 1, 0, 'R');
+        $pdf->Cell(30, 7, utf8_decode(number_format($totalMontantTVA, 2)), 1, 0, 'C');
+        $pdf->Ln();
+        $pdf->Cell(160, 7, utf8_decode('Total TTC:'), 1, 0, 'R');
+        $pdf->Cell(30, 7, utf8_decode(number_format($totalMontantTTC, 2)), 1, 0, 'C');
+        $pdf->Ln();
+
+        // Retourner le PDF en réponse
+        return response($pdf->Output('S', 'ventes_filtrees.pdf'), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="ventes_du_jour.pdf"');
+    }

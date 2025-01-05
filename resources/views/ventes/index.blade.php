@@ -64,7 +64,7 @@
                                     </div>
 
 
-                                    <button @click="printRapport" class="btn btn-light-primary btn-sm">
+                                    <button @click="printVentes" class="btn btn-light-primary btn-sm">
                                         <i class="fa fa-print"></i> Imprimer
                                     </button>
                                     <button @click="ExportRapport" class="btn btn-light-primary btn-sm">
@@ -225,34 +225,62 @@
                     password: '',
                 },
 
-                async printRapport() {
-                    const search = encodeURIComponent(this.searchTerm);
-                    const modules = encodeURIComponent(this.modules);
+                async printVentes() {
+
+
+                    const formData = new FormData();
+
+                    // Ajouter les critères de filtrage
+                    formData.append('modereglement', this.selectModereglement || ''); // Mode de règlement
+                    formData.append('table', this.selectTable || ''); // Table
+
+
+
+
 
                     try {
-                        // Appelle la route avec le critère de recherche dans l'URL
-                        const response = await fetch(`/generateRapport?search=${search}&modules=${modules}`, {
-                            method: 'GET',
+                        // Envoyer une requête POST au backend
+                        const response = await fetch('{{ route('facture.vente.rapport') }}', {
+                            method: 'POST',
                             headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                    'content'),
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}', // Token CSRF pour sécuriser la requête
                             },
+                            body: formData, // Données de la requête
                         });
 
                         if (response.ok) {
-                            // Récupère le PDF sous forme de blob
+                            // Récupérer le contenu du PDF
                             const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob); // Créer un objet URL pour le blob
+                            const link = document.createElement('a'); // Créer un lien de téléchargement
+                            link.href = url;
+                            link.download = 'rapport_ventes.pdf'; // Spécifier le nom du fichier
+                            link.click(); // Simuler un clic pour démarrer le téléchargement
 
-                            // Crée une URL pour afficher ou télécharger le PDF
-                            const url = window.URL.createObjectURL(blob);
-
-                            // Ouvre le PDF dans une nouvelle fenêtre
-                            window.open(url, '_blank');
+                            // Message de succès avec SweetAlert
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Rapport généré avec succès!',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
                         } else {
-                            console.error('Erreur lors de la récupération du PDF.');
+                            // Message d'erreur en cas d'échec de la requête
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur lors de la génération du rapport.',
+                                showConfirmButton: true,
+                            });
                         }
                     } catch (error) {
-                        console.error('Une erreur est survenue :', error);
+                        console.error('Erreur réseau :', error);
+
+                        // Message d'erreur en cas d'erreur réseau
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Une erreur est survenue.',
+                            showConfirmButton: true,
+                        });
                     }
                 },
 
@@ -364,6 +392,9 @@
                             console.error('Erreur lors de la génération de la facture:', error);
                         });
                 },
+
+
+
 
                 get paginatedUsers() {
                     let start = (this.currentPage - 1) * this.usersPerPage;

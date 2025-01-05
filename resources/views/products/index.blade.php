@@ -449,8 +449,6 @@
                     this.currentPage = 1;
                 },
 
-
-
                 printProducts() {
                     let printContent = '<h1>Liste des Produits</h1>';
                     printContent +=
@@ -565,8 +563,6 @@
                         });
                     }
                 },
-
-
 
                 goToPage(page) {
                     if (page < 1 || page > this.totalPages) return;

@@ -60,3 +60,4 @@ Route::post('/ventes/{vente}/validate', [VenteController::class, 'validatVente']
 
 
 Route::get('/generatefactureVente/{codefacure}', [VenteController::class, 'generateFactureVente'])->name('facture.vente.generate');
+Route::post('/rapport/vente/days', [VenteController::class, 'PrintAllVente'])->name('facture.vente.rapport');

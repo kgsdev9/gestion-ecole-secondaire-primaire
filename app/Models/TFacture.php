@@ -56,7 +56,7 @@ class TFacture extends Model
 
     public function items()
     {
-        return $this->hasMany(TfactureLigne::class, 'numvente');
+        return $this->hasMany(TfactureLigne::class, 'numvente', 'numvente');
     }
 
 
