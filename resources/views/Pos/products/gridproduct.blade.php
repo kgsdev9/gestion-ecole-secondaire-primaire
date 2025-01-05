@@ -59,7 +59,7 @@
                 <button class="btn btn-sm btn-outline-secondary mb-3" @click="shownNameClient()">+ Ajouter un
                     client</button>
                 <div class="" x-show="shownameclient">
-                    <input type="text" class="form-control-sm" placeholder="Nom du clien ">
+                    <input type="text" x-model="nom" class="form-control-sm" placeholder="Nom du clien ">
                 </div>
 
                 <div>
@@ -87,7 +87,7 @@
                     <template x-for="(item, index) in cart" :key="item.id">
                         <div class="order-item d-flex justify-content-between align-items-center mb-2">
                             <div class="d-flex align-items-center">
-                                <!-- Affichage de l'image du produit -->
+
                                 <img :src="item.image_url" alt="Product Image" class="img-thumbnail"
                                     style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
                                 <div>
@@ -153,6 +153,7 @@
                 selectedCategory: '',
                 isScrollable: false,
                 shownameclient: false,
+                nom: '',
                 selectedModeReglement: null,
                 table: null,
                 serveur: null,
@@ -170,8 +171,9 @@
                 },
 
                 shownNameClient() {
-                    this.shownameclient = true;
+                    this.shownameclient = !this.shownameclient; // Alterne entre vrai et faux
                 },
+
 
 
                 markAsOffered(index) {
@@ -264,7 +266,7 @@
 
                 async confirmOrder() {
 
-
+                   
                     if (!this.cart || this.cart.length === 0) {
                         Swal.fire({
                             icon: 'error',
@@ -275,17 +277,27 @@
                         return;
                     }
 
-                    if (!this.table || this.table.trim() === '') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Veuillez sélectionner une table.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
+                    if (!this.nom || this.nom.trim() === '') {
+                        if (!this.table || this.table.trim() === '') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Veuillez sélectionner une table.',
+                                showConfirmButton: true
+                            });
+                            this.isLoading = false;
+                            return;
+                        }
                     }
 
-
+                    // if (!this.table || this.table.trim() === '') {
+                    //     Swal.fire({
+                    //         icon: 'error',
+                    //         title: 'Veuillez sélectionner une table.',
+                    //         showConfirmButton: true
+                    //     });
+                    //     this.isLoading = false;
+                    //     return;
+                    // }
                     if (!this.serveur || this.serveur.trim() === '') {
                         Swal.fire({
                             icon: 'error',
@@ -295,8 +307,6 @@
                         this.isLoading = false;
                         return;
                     }
-
-
                     if (this.totalttc <= 0) {
                         Swal.fire({
                             icon: 'error',
@@ -306,8 +316,6 @@
                         this.isLoading = false;
                         return;
                     }
-
-
                     if (!this.selectedModeReglement || this.selectedModeReglement === '') {
                         Swal.fire({
                             icon: 'error',
@@ -324,6 +332,8 @@
                         totalttc: this.calculateTotal(),
                         modereglement_id: this.selectedModeReglement,
                     };
+
+
 
 
                     try {
