@@ -356,6 +356,9 @@
                                         </div>
                                     </div>
 
+                                    @can('is_admin')
+
+
                                     <div class="separator my-2"></div>
                                     <div class="menu-item px-5">
                                         <a href="#" class="menu-link px-5">Mon Profile</a>
@@ -378,10 +381,16 @@
                                     <div class="menu-item px-5 my-1">
                                         <a href="#" class="menu-link px-5">Compte</a>
                                     </div>
-
+                                    @endcan
                                     <div class="menu-item px-5">
-                                        <a href="#" class="menu-link px-5">Déconnexion</a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+                                        <a href="#" class="menu-link px-5" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            Déconnexion
+                                        </a>
                                     </div>
+
                                 </div>
 
                             </div>
@@ -425,7 +434,7 @@
                     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
                         <!--begin::Logo image-->
                         <a href="/" class="text-dark" option="changerlelogo">
-                            Carrriere techno
+                            RESTO 2.0
                         </a>
                         <!--end::Logo image-->
                         <!--begin::Sidebar toggle-->

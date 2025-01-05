@@ -279,7 +279,7 @@
                                     <!--begin::Item-->
                                     <div class="d-flex flex-stack">
                                         <!--begin::Section-->
-                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Total Ventes </div>
+                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Total Client </div>
                                         <!--end::Section-->
                                         <!--begin::Statistics-->
                                         <div class="d-flex align-items-senter">
