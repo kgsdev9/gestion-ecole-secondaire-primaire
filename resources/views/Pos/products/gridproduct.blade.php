@@ -64,7 +64,7 @@
 
                 <div>
                     <label for="restaurant-select">Sélectionner une Table </label>
-                    <select id="restaurant-select" class="form-select mt-2">
+                    <select id="restaurant-select" class="form-select mt-2" x-model="table">
                         <option value="">Choisir une table </option>
                         <template x-for="restaurant in listetabrestaurant" :key="restaurant.id">
                             <option :value="restaurant.id" x-text="restaurant.name"></option>
@@ -75,7 +75,7 @@
 
                 <div class="mt-2">
                     <label for="restaurant-select">Sélectionner un serveur </label>
-                    <select id="restaurant-select" class="form-select mt-2">
+                    <select id="restaurant-select" x-model="serveur" class="form-select mt-2">
                         <option value="">Choisir un serveur</option>
                         <template x-for="seveur in listeserveurs" :key="seveur.id">
                             <option :value="seveur.id" x-text="seveur.name"></option>
@@ -154,6 +154,8 @@
                 isScrollable: false,
                 shownameclient: false,
                 selectedModeReglement: null,
+                table: null,
+                serveur: null,
                 cart: [],
                 total: 0, // Initialisation de la propriété total
 
@@ -262,9 +264,63 @@
 
                 async confirmOrder() {
 
-                    alert(this.selectedModeReglement)
+
+                    if (!this.cart || this.cart.length === 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le panier est vide.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.table || this.table.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Veuillez sélectionner une table.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+
+                    if (!this.serveur || this.serveur.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Veuillez sélectionner un serveur.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+
+                    if (this.totalttc <= 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le total TTC est incorrect.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+
+                    if (!this.selectedModeReglement || this.selectedModeReglement === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Veuillez sélectionner un mode de règlement.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
                     const data = {
                         items: this.cart,
+                        table: this.table,
+                        serveur: this.serveur,
                         totalttc: this.calculateTotal(),
                         modereglement_id: this.selectedModeReglement,
                     };
@@ -281,7 +337,7 @@
                         });
 
                         if (response.ok) {
-                            alert('vente enregistré');
+
                             window.location.href = "{{ route('ventes.index') }}";
 
                         } else {

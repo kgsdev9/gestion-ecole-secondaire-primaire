@@ -9,6 +9,7 @@ use App\Models\TProduct;
 use App\Models\TventeDirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class VenteController extends Controller
 {
@@ -21,10 +22,10 @@ class VenteController extends Controller
     {
 
         $listeventes = TFacture::with('modereglement')
-            ->where('numvente', 'like', 'POS%')
-            ->orderByDesc('created_at')
-            ->get();
-
+        ->where('numvente', 'like', 'POS%')
+        ->whereDate('created_at', Carbon::today()) // Filtrer les ventes créées aujourd'hui
+        ->orderByDesc('created_at')
+        ->get();
 
         return view('ventes.index', compact('listeventes'));
     }
@@ -74,7 +75,7 @@ class VenteController extends Controller
 
         $vente = TFacture::where('numvente', $id)->first();
 
-    
+
         // Vérifier si la vente est déjà validée
         if ($vente->status === 'valide') {
             return response()->json([
@@ -102,8 +103,8 @@ class VenteController extends Controller
                 'nom' => $request->input('nom') ?? 'Fabrice Kouadio',
                 'montantht' => $request->input('totalttc'),
                 'montantttc' => $request->input('totalttc'),
-                'tabrestaurant_id ' => $request->input('tabrestaurant_id '),
-                'serveur_id' => $request->input('serveur_id '),
+                'tabrestaurant_id' => $request->input('table'),
+                'serveur_id' => $request->input('serveur'),
                 'mode_reglement_id' => $request->input('modereglement_id'),
             ]);
 

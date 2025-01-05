@@ -31,7 +31,7 @@
 
 
                                     <a class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
-                                        href="{{ route('ventes.create') }}">
+                                        href="{{ route('product.pos') }}">
                                         <i class="fa fa-plus"></i> Création
                                     </a>
                                 </div>
