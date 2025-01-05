@@ -131,11 +131,7 @@
                                                         <!-- Affiche les actions si le statut est "en attente" -->
                                                         <template x-if="user.status === 'en attente'">
                                                             <div>
-                                                                <!-- Bouton pour modifier la vente -->
-                                                                <a :href="`/ventes/${user.numvente}/edit`"
-                                                                    class="btn btn-primary btn-sm mx-2">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </a>
+                                                              
 
                                                                 <!-- Bouton pour générer la facture -->
                                                                 <button @click="generateFacture(user.numvente)"

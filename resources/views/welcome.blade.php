@@ -370,15 +370,15 @@
                                 <div class="card-header pt-7">
                                     <!--begin::Title-->
                                     <h3 class="card-title align-items-start flex-column">
-                                        <span class="card-label fw-bold text-gray-800">Liste des récentes factures</span>
-                                        <span class="text-gray-400 mt-1 fw-semibold fs-6">Les factures émises recemments
+                                        <span class="card-label fw-bold text-gray-800">Liste des récentes facture ventes
+                                        </span>
+                                        <span class="text-gray-400 mt-1 fw-semibold fs-6">Les facture ventes
                                         </span>
                                     </h3>
                                     <!--end::Title-->
                                     <!--begin::Toolbar-->
                                     <div class="card-toolbar">
-                                        <a href="{{ route('facturepersonnalite.index') }}"
-                                            class="btn btn-sm btn-light">Consulter </a>
+                                        <a href="{{ route('ventes.index') }}" class="btn btn-sm btn-light">Consulter </a>
                                     </div>
                                     <!--end::Toolbar-->
                                 </div>
@@ -393,11 +393,11 @@
                                             <thead>
                                                 <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
                                                     <th class="p-0 pb-3 min-w-175px text-start">CODE FACTURE</th>
-                                                    <th class="p-0 pb-3 min-w-100px text-end">MONTANT HT </th>
-                                                    <th class="p-0 pb-3 min-w-100px text-end">MONTANT TVA</th>
+                                                    <th class="p-0 pb-3 min-w-100px text-end">Mode réglement </th>
+                                                    <th class="p-0 pb-3 min-w-100px text-end">Table</th>
                                                     <th class="p-0 pb-3 min-w-175px text-end pe-12">MONTANT TTC</th>
                                                     <th class="p-0 pb-3 w-125px text-end pe-7">Date</th>
-                                                    <th class="p-0 pb-3 w-50px text-end">Action</th>
+
                                                 </tr>
                                             </thead>
                                             <!--end::Table head-->
@@ -411,18 +411,18 @@
                                                                 <div class="d-flex justify-content-start flex-column">
                                                                     <a href="#"
                                                                         class="text-gray-800 fw-bold text-hover-primary mb-1 fs-6">
-                                                                        {{ $facture->codefacture }}</a>
+                                                                        {{ $facture->numvente }}</a>
                                                                     <span class="text-gray-400 fw-semibold d-block fs-7">
-                                                                        {{ $facture->client->libtiers }}</span>
+                                                                        {{ $facture->nom }}</span>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td class="text-end pe-0">
                                                             <span
-                                                                class="text-gray-600 fw-bold fs-6">{{ $facture->montantht }}</span>
+                                                                class="text-gray-600 fw-bold fs-6">{{ $facture->modereglement->libellemodereglement ?? '' }}</span>
                                                         </td>
                                                         <td class="text-end pe-0">
-                                                            {{ $facture->montanttva }}
+                                                            {{ $facture->table->name ?? '' }}
 
                                                         </td>
                                                         <td class="text-end pe-12">
@@ -434,13 +434,7 @@
 
 
                                                         </td>
-                                                        <td class="text-end">
-                                                            <a href="{{ route('facturepersonnalite.show', $facture->codefacture) }}"
-                                                                class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px">
-                                                                <i class="fa fa-eye"></i>
 
-                                                            </a>
-                                                        </td>
                                                     </tr>
                                                 @endforeach
 

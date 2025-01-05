@@ -23,13 +23,12 @@ class HomeController extends Controller
     }
     public function index()
     {
-        $listerecentesfactures = TFacture::where('codefacture', 'like', 'fap%')->orderByDesc('created_at')->take(20)->get();
-        $countlisterecentesfactures = TFacture::where('codefacture', 'like', 'fap%')->sum('montantttc');
+        $listerecentesfactures = TFacture::where('numvente', 'like', 'POS%')->orderByDesc('created_at')->take(20)->get();
+        $countlisterecentesfactures = TFacture::where('numvente', 'like', 'POS%')->sum('montantttc');
         $ventes  =  TFacture::where('numvente', 'like', 'vp%')->sum('montantttc');
         $counCclient = TClient::count();
         $counFatures = TFacture::count();
 
-        // statistuque rapport
 
         $bilan = TFacture::where('numvente', 'like', 'POS%')
             ->select(DB::raw('MONTH(created_at) as mois'), DB::raw('SUM(montantttc) as total'))
