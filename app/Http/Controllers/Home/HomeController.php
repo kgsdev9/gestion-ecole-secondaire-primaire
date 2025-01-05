@@ -31,7 +31,7 @@ class HomeController extends Controller
 
         // statistuque rapport
 
-        $bilan = TFacture::where('numvente', 'like', 'vp%')
+        $bilan = TFacture::where('numvente', 'like', 'POS%')
             ->select(DB::raw('MONTH(created_at) as mois'), DB::raw('SUM(montantttc) as total'))
             ->groupBy('mois')
             ->orderBy('mois')
@@ -44,16 +44,16 @@ class HomeController extends Controller
 
         $data = $bilan->pluck('total');
 
-        $ventesJour = TFacture::where('numvente', 'like', 'vp%')
+        $ventesJour = TFacture::where('numvente', 'like', 'POS%')
             ->whereDate('created_at', Carbon::today())
             ->sum('montantttc');
 
-        $ventesSemaine = TFacture::where('numvente', 'like', 'vp%')
+        $ventesSemaine = TFacture::where('numvente', 'like', 'POS%')
             ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
             ->sum('montantttc');
 
 
-        $ventesMois = TFacture::where('numvente', 'like', 'vp%')
+        $ventesMois = TFacture::where('numvente', 'like', 'POS%')
             ->whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->sum('montantttc');

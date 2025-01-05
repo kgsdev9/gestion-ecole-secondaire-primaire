@@ -53,9 +53,8 @@
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                                 <th class="min-w-125px">Code Vente</th>
                                                 <th class="min-w-125px">Client </th>
-                                                <th class="min-w-125px">Montant ht</th>
-                                                <th class="min-w-125px">Montant tva</th>
                                                 <th class="min-w-125px">Montant TTC</th>
+                                                <th class="min-w-125px">Statut</th>
                                                 <th class="min-w-125px">Date créat
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
@@ -82,30 +81,52 @@
                                                             <span x-text="user.nom"></span>
                                                         </div>
                                                     </td>
-                                                    <td x-text="user.prenom"></td>
-                                                    <td x-text="user.montantht"></td>
-                                                    <td x-text="user.montanttva"></td>
+                                                    <td x-text="user.nom"></td>
+
 
                                                     <td x-text="user.montantttc"></td>
+                                                    <td x-text="user.status"></td>
                                                     <td x-text="new Date(user.created_at).toLocaleDateString('fr-FR')"></td>
 
                                                     <td class="text-end">
-                                                        <a :href="`/ventes/${user.numvente}/edit`"
-                                                            class="btn btn-primary btn-sm mx-2">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
+                                                        <!-- Affiche les actions si le statut est "en attente" -->
+                                                        <template x-if="user.status === 'en attente'">
+                                                            <div>
+                                                                <!-- Bouton pour modifier la vente -->
+                                                                <a :href="`/ventes/${user.numvente}/edit`" class="btn btn-primary btn-sm mx-2">
+                                                                    <i class="fa fa-edit"></i>
+                                                                </a>
 
-                                                        <button @click="generateFacture(user.numvente)"
-                                                            class="btn btn-dark ms-2 btn-sm mx-2">
-                                                            <i class='far fa-clone'></i>
-                                                        </button>
+                                                                <!-- Bouton pour générer la facture -->
+                                                                <button @click="generateFacture(user.numvente)" class="btn btn-dark btn-sm mx-2">
+                                                                    <i class='far fa-clone'></i>
+                                                                </button>
 
-                                                        <button @click="deleteVente(user.id)" class="btn btn-danger btn-sm">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
+                                                                <!-- Bouton pour supprimer la vente -->
+                                                                <button @click="deleteVente(user.id)" class="btn btn-danger btn-sm mx-2">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
 
+                                                                <!-- Bouton pour valider la vente -->
+                                                                <button @click="validateVente(user.id)" class="btn btn-success btn-sm mx-2">
+                                                                    <i class="fa fa-check"></i> Valider
+                                                                </button>
+                                                            </div>
+                                                        </template>
 
+                                                        <!-- Affiche uniquement le bouton "imprimer" si le statut est "validée" -->
+                                                        <template x-if="user.status === 'valide'">
+                                                            <div>
+                                                                <!-- Bouton pour générer la facture -->
+                                                                <button @click="generateFacture(user.numvente)" class="btn btn-dark btn-sm mx-2">
+                                                                    <i class='far fa-clone'></i> Imprimer
+                                                                </button>
+                                                            </div>
+                                                        </template>
                                                     </td>
+
+
+
 
                                                 </tr>
                                             </template>

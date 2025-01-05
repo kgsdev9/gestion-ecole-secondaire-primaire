@@ -43,7 +43,8 @@
                                 <img :src="product.image_url" alt="Product" class="img-fluid">
                                 <h6 class="mt-2" x-text="product.libelleproduct"></h6>
                                 <p class="text-muted" x-text="`${product.prixvente} FCFA`"></p> <!-- Prix en FCFA -->
-                                <button class="btn btn-sm btn-primary" @click="addToCart(product)">Ajouter au panier</button>
+                                <button class="btn btn-sm btn-primary" @click="addToCart(product)">Ajouter au
+                                    panier</button>
                             </div>
                         </div>
                     </template>
@@ -55,7 +56,12 @@
             <!-- Order Section -->
             <div class="col-md-4 order-section">
                 <h5 class="mb-3">Sommaire de la commande</h5>
-                <button class="btn btn-sm btn-outline-secondary mb-3">+ Ajouter un client</button>
+                <button class="btn btn-sm btn-outline-secondary mb-3" @click="shownNameClient()">+ Ajouter un
+                    client</button>
+                <div class="" x-show="shownameclient">
+                    <input type="text" class="form-control-sm" placeholder="Nom du clien ">
+                </div>
+
                 <div>
                     <label for="restaurant-select">Sélectionner une Table </label>
                     <select id="restaurant-select" class="form-select mt-2">
@@ -65,7 +71,6 @@
                         </template>
                     </select>
                 </div>
-
 
 
                 <div class="mt-2">
@@ -99,7 +104,7 @@
 
                             <button :class="item.offert ? 'btn btn-sm btn-success' : 'btn btn-sm btn-danger'"
                                 @click="markAsOffered(index)">
-                                <span x-text="item.offert ? 'Offerte' : 'Non Offerte'"></span>
+                                <span x-text="item.offert ? 'Offerte' : 'Non Offert'"></span>
                             </button>
 
 
@@ -113,8 +118,10 @@
                     <div class="d-flex flex-wrap">
                         <template x-for="mode in listemodereglement" :key="mode.id">
                             <div class="me-3 mb-2">
-                                <input type="radio" :id="'mode-' + mode.id" :name="'modeReglement'" :value="mode.id" class="form-check-input">
-                                <label :for="'mode-' + mode.id" x-text="mode.libellemodereglement" class="form-check-label"></label>
+                                <input type="radio" :id="'mode-' + mode.id" :name="'modeReglement'"
+                                    :value="mode.id" class="form-check-input" x-model="selectedModeReglement">
+                                <label :for="'mode-' + mode.id" x-text="mode.libellemodereglement"
+                                    class="form-check-label"></label>
                             </div>
                         </template>
                     </div>
@@ -125,7 +132,7 @@
 
                     <div class="d-flex justify-content-between">
                         <h5>NET A PAYER :</h5>
-                        <h5 x-text="`${total} FCFA`"></h5> 
+                        <h5 x-text="`${total} FCFA`"></h5>
                     </div>
                 </div>
 
@@ -145,6 +152,8 @@
                 listeserveurs: @json($listeserveurs),
                 selectedCategory: '',
                 isScrollable: false,
+                shownameclient: false,
+                selectedModeReglement: null,
                 cart: [],
                 total: 0, // Initialisation de la propriété total
 
@@ -157,6 +166,11 @@
                         return matchesSearch && matchesCategory;
                     });
                 },
+
+                shownNameClient() {
+                    this.shownameclient = true;
+                },
+
 
                 markAsOffered(index) {
                     const item = this.cart[index];
@@ -246,11 +260,39 @@
                     return (total).toFixed(2); // Total avec taxe
                 },
 
-                confirmOrder() {
-                    alert('Commande confirmée ! Merci pour votre achat.');
-                    this.cart = []; // Vide le panier après confirmation
-                    this.updateTotal(); // Réinitialise le total après la commande
+                async confirmOrder() {
+
+                    alert(this.selectedModeReglement)
+                    const data = {
+                        items: this.cart,
+                        totalttc: this.calculateTotal(),
+                        modereglement_id: this.selectedModeReglement,
+                    };
+
+
+                    try {
+                        const response = await fetch("{{ route('ventes.store') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify(data)
+                        });
+
+                        if (response.ok) {
+                            alert('vente enregistré');
+                            window.location.href = "{{ route('ventes.index') }}";
+
+                        } else {
+                            alert('Erreur lors de l\'enregistrement');
+                        }
+                    } catch (error) {
+                        console.error('Erreur lors de l\'enregistrement de la facture', error);
+                    }
                 },
+
+
             };
         }
     </script>

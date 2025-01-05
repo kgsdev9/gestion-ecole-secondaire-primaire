@@ -131,29 +131,27 @@
                                 <a href="{{ route('facturepersonnalite.index') }}" class="menu-item  me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
-                                        <span class="menu-title">Facuration Personalisées</span>
+                                        <span class="menu-title">Proforma Client </span>
                                         <span class="d-lg-none"></span>
                                     </span>
 
                                 </a>
-                                <!--end:Menu item-->
-                                <!--begin:Menu item-->
+
                                 <a href="{{ route('ventes.index') }}"
                                     class="menu-item menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
-                                        <span class="menu-title">Ventes</span>
+                                        <span class="menu-title">Liste des factures</span>
                                         <span class=" d-lg-none"></span>
                                     </span>
 
                                 </a>
-                                <!--end:Menu item-->
-                                <!--begin:Menu item-->
+
                                 <a href="{{ route('product.pos') }}"
                                     class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
-                                        <span class="menu-title">POST Systeme </span>
+                                        <span class="menu-title">Création de facture </span>
                                         <span class="d-lg-none"></span>
                                     </span>
 

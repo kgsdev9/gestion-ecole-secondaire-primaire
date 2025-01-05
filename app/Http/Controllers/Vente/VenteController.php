@@ -20,9 +20,11 @@ class VenteController extends Controller
     public function index()
     {
 
-        $listeventes = TFacture::query()
-            ->where('numvente', 'like', 'vp%')
-            ->orderByDesc('created_at')->get();
+        $listeventes = TFacture::with('modereglement')
+            ->where('numvente', 'like', 'POS%')
+            ->orderByDesc('created_at')
+            ->get();
+
 
         return view('ventes.index', compact('listeventes'));
     }
@@ -69,50 +71,34 @@ class VenteController extends Controller
 
     public function store(Request $request)
     {
-        // Début de la transaction pour garantir la consistance des données
-        \DB::beginTransaction();
-
-        $tvainclus = null;
-        if ($request->input('tvaincluse')) {
-            $tvainclus = 1;
-        } else {
-            $tvainclus = 0;
-        }
-
         try {
-            // Créer une nouvelle facture
             $facture = TFacture::create([
-                'numvente' => $this->generateIdentifier('VP', date('y')),
-                'adresse' => $request->input('adresse'),
-                'nom' => $request->input('nom'),
-                'prenom' => $request->input('prenom'),
-                'montantht' => $request->input('total_ht'),
-                'montanttva' => $request->input('total_tva'),
-                'tvafacture' => $tvainclus,
-                'montantttc' => $request->input('total_ttc'),
-                'telephone' => $request->input('telephone'),
+                'numvente' => $this->generateIdentifier('POS', date('y')),
+                'nom' => $request->input('nom') ?? 'Fabrice Kouadio',
+                'montantht' => $request->input('totalttc'),
+                'montantttc' => $request->input('totalttc'),
+                'tabrestaurant_id ' => $request->input('tabrestaurant_id '),
+                'serveur_id' => $request->input('serveur_id '),
+                'mode_reglement_id' => $request->input('modereglement_id'),
             ]);
 
-            // Boucle pour enregistrer les lignes de facture et mettre à jour le stock
+
             foreach ($request->input('items') as $ligne) {
-                // Créer la ligne de facture
                 TfactureLigne::create([
                     'numvente' => $facture->numvente,
-                    'tproduct_id' => $ligne['product_id'],
+                    'tproduct_id' => $ligne['id'],
                     'quantite' => $ligne['quantity'],
-                    'prix_unitaire' => $ligne['price'],
+                    'prix_unitaire' => $ligne['prixvente'],
                     'remise' => $ligne['remise'] ?? 0,
-                    'montant_ht' => $ligne['montantht'],
-                    'montant_tva' => $ligne['montanttva'],
-                    'montant_ttc' => $ligne['montanttc'],
+                    'montant_ht' => $ligne['prixvente'] * $ligne['quantity'],
+                    'montant_tva' => 0,
+                    'montant_ttc' => $ligne['prixvente'] * $ligne['quantity'],
                 ]);
 
-                // Mettre à jour la quantité disponible du produit
-                $product = TProduct::findOrFail($ligne['product_id']);
-                $product->qtedisponible -= $ligne['quantity']; // Soustraction de la quantité commandée
-                $product->save(); // Sauvegarder la mise à jour
+                $product = TProduct::findOrFail($ligne['id']);
+                $product->qtedisponible -= $ligne['quantity'];
+                $product->save();
             }
-
 
             // Valider la transaction
             \DB::commit();
