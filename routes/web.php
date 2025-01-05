@@ -54,3 +54,4 @@ Route::get('/rapport', [RapportController::class, 'generateRapportForm'])->name(
 Route::post('/rapport/vente', [RapportController::class, 'generateRapport'])->name('rapport.vente');
 
 Route::get('/post/ventes', [ProductPostController::class, 'allProducts'])->name('product.pos');
+Route::post('/ventes/{vente}/validate', [VenteController::class, 'validatVente'])->name('ventes.validate');

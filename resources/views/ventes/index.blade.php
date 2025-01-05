@@ -93,22 +93,26 @@
                                                         <template x-if="user.status === 'en attente'">
                                                             <div>
                                                                 <!-- Bouton pour modifier la vente -->
-                                                                <a :href="`/ventes/${user.numvente}/edit`" class="btn btn-primary btn-sm mx-2">
+                                                                <a :href="`/ventes/${user.numvente}/edit`"
+                                                                    class="btn btn-primary btn-sm mx-2">
                                                                     <i class="fa fa-edit"></i>
                                                                 </a>
 
                                                                 <!-- Bouton pour générer la facture -->
-                                                                <button @click="generateFacture(user.numvente)" class="btn btn-dark btn-sm mx-2">
+                                                                <button @click="generateFacture(user.numvente)"
+                                                                    class="btn btn-dark btn-sm mx-2">
                                                                     <i class='far fa-clone'></i>
                                                                 </button>
 
                                                                 <!-- Bouton pour supprimer la vente -->
-                                                                <button @click="deleteVente(user.id)" class="btn btn-danger btn-sm mx-2">
+                                                                <button @click="deleteVente(user.id)"
+                                                                    class="btn btn-danger btn-sm mx-2">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
 
                                                                 <!-- Bouton pour valider la vente -->
-                                                                <button @click="validateVente(user.id)" class="btn btn-success btn-sm mx-2">
+                                                                <button @click="validateVente(user.numvente)"
+                                                                    class="btn btn-success btn-sm mx-2">
                                                                     <i class="fa fa-check"></i> Valider
                                                                 </button>
                                                             </div>
@@ -118,7 +122,8 @@
                                                         <template x-if="user.status === 'valide'">
                                                             <div>
                                                                 <!-- Bouton pour générer la facture -->
-                                                                <button @click="generateFacture(user.numvente)" class="btn btn-dark btn-sm mx-2">
+                                                                <button @click="generateFacture(user.numvente)"
+                                                                    class="btn btn-dark btn-sm mx-2">
                                                                     <i class='far fa-clone'></i> Imprimer
                                                                 </button>
                                                             </div>
@@ -207,6 +212,79 @@
                         console.error('Une erreur est survenue :', error);
                     }
                 },
+
+                validateVente(numvente) {
+
+
+                    Swal.fire({
+                        title: "Êtes-vous sûr de vouloir valider cette vente ?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Oui, valider !",
+                        cancelButtonText: "Annuler",
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                const url =
+                                    `{{ route('ventes.validate', ['vente' => '__ID__']) }}`.replace(
+                                        "__ID__",
+                                        numvente
+                                    );
+
+                                const response = await fetch(url, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                    },
+                                });
+
+                                if (response.ok) {
+                                    const result = await response.json();
+                                    if (result.success) {
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: result.message,
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                        });
+
+                                        const index = this.factures.findIndex(
+                                            (facture) => facture.numvente === numvente
+                                        );
+                                        if (index !== -1) {
+                                            this.factures[index].status = "valide";
+                                        }
+
+                                        this.filterUsers();
+                                    } else {
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: result.message,
+                                            showConfirmButton: true,
+                                        });
+                                    }
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Erreur lors de la requête.",
+                                        showConfirmButton: true,
+                                    });
+                                }
+                            } catch (error) {
+                                console.error("Erreur réseau :", error);
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Une erreur réseau s'est produite.",
+                                    showConfirmButton: true,
+                                });
+                            }
+                        }
+                    });
+                },
+
 
                 generateFacture(codefacture) {
                     // Envoi d'une requête GET pour générer la facture

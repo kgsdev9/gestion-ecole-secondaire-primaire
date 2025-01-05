@@ -69,6 +69,31 @@ class VenteController extends Controller
     }
 
 
+    public function validatVente(Request $request, $id)
+    {
+
+        $vente = TFacture::where('numvente', $id)->first();
+
+    
+        // Vérifier si la vente est déjà validée
+        if ($vente->status === 'valide') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cette vente est déjà validée.',
+            ], 400);
+        }
+
+        // Mettre à jour le statut
+        $vente->status = 'valide';
+        $vente->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Vente validée avec succès.',
+        ]);
+    }
+
+
     public function store(Request $request)
     {
         try {
