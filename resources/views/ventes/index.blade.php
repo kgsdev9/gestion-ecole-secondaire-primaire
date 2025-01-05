@@ -3,6 +3,25 @@
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="userSearch()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
+
+            <div class="app-toolbar py-3 py-lg-6">
+                <div class="app-container container-xxl d-flex flex-stack">
+                    <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                            GESTION DES VENTES DU JOUR
+                        </h1>
+                        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                            <li class="breadcrumb-item text-muted">
+                                <a href="#" class="text-muted text-hover-primary">Accueil</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                            </li>
+                            <li class="breadcrumb-item text-muted">Gestion des ventes </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="card">
@@ -20,6 +39,30 @@
                             </div>
                             <div class="card-toolbar">
                                 <div class="d-flex justify-content-end align-items-center gap-3">
+
+                                    <div>
+                                        <select x-model="selectModereglement" @change="filterVentes"
+                                            class="form-select form-select-sm" data-live-search="true">
+                                            <option value="">Choisir un mode reglement </option>
+                                            <template x-for="modereglement in listemodereglement" :key="modereglement.id">
+                                                <option :value="modereglement.id"
+                                                    x-text="modereglement.libellemodereglement">
+                                                </option>
+                                            </template>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <select x-model="selectTable" @change="filterVentes"
+                                            class="form-select form-select-sm" data-live-search="true">
+                                            <option value="">Choisir un table </option>
+                                            <template x-for="table in listetablerestaurant" :key="table.id">
+                                                <option :value="table.id" x-text="table.name">
+                                                </option>
+                                            </template>
+                                        </select>
+                                    </div>
+
 
                                     <button @click="printRapport" class="btn btn-light-primary btn-sm">
                                         <i class="fa fa-print"></i> Imprimer
@@ -52,7 +95,8 @@
                                         <thead>
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                                 <th class="min-w-125px">Code Vente</th>
-                                                <th class="min-w-125px">Client </th>
+                                                <th class="min-w-125px">Mode re reglement</th>
+                                                <th class="min-w-125px">Table</th>
                                                 <th class="min-w-125px">Montant TTC</th>
                                                 <th class="min-w-125px">Statut</th>
                                                 <th class="min-w-125px">Date créat
@@ -65,15 +109,11 @@
                                                     <td class="d-flex align-items-center">
                                                         <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
                                                             <div class="symbol-label">
-
                                                                 <span class="menu-icon"><i
                                                                         class="ki-duotone ki-file fs-2"><span
                                                                             class="path1"></span><span
                                                                             class="path2"></span></i></span>
-
-
                                                             </div>
-
                                                         </div>
                                                         <div class="d-flex flex-column">
                                                             <a href="#" class="text-gray-800 text-hover-primary mb-1"
@@ -81,9 +121,8 @@
                                                             <span x-text="user.nom"></span>
                                                         </div>
                                                     </td>
-                                                    <td x-text="user.nom"></td>
-
-
+                                                    <td x-text="user.modereglement.libellemodereglement"></td>
+                                                    <td x-text="user.table.name"></td>
                                                     <td x-text="user.montantttc"></td>
                                                     <td x-text="user.status"></td>
                                                     <td x-text="new Date(user.created_at).toLocaleDateString('fr-FR')"></td>
@@ -170,10 +209,14 @@
                 searchTerm: '',
                 modules: 'ventes',
                 factures: @json($listeventes),
+                listemodereglement: @json($listemodereglement),
+                listetablerestaurant: @json($listetablerestaurant),
                 filteredUsers: [],
                 currentPage: 1,
                 usersPerPage: 10,
                 totalPages: 0,
+                selectModereglement: '',
+                selectTable: '',
                 isLoading: true,
                 showModal: false,
                 formData: {
@@ -283,6 +326,21 @@
                             }
                         }
                     });
+                },
+
+
+                filterVentes() {
+                    this.filteredUsers = this.factures;
+                    if (this.selectModereglement) {
+                        this.filteredUsers = this.filteredUsers.filter(facture => facture.modereglement.id === parseInt(this
+                            .selectModereglement));
+                    }
+
+                    if (this.selectTable) {
+                        this.filteredUsers = this.filteredUsers.filter(facture => facture.table && facture.table.id ===
+                            parseInt(this.selectTable));
+                    }
+                    this.totalPages = Math.ceil(this.filteredUsers.length / this.usersPerPage);
                 },
 
 

@@ -44,6 +44,11 @@ class TFacture extends Model
         'montantttc',
     ];
 
+    public function table()
+    {
+        return $this->belongsTo(TabRestaurant::class, 'tabrestaurant_id');
+    }
+
     public function client()
     {
         return $this->belongsTo(TClient::class, 'client_id');

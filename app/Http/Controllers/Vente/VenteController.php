@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Vente;
 
 use App\Http\Controllers\Controller;
+use App\Models\ModeReglemnt;
+use App\Models\TabRestaurant;
 use App\Models\TFacture;
 use App\Models\TfactureLigne;
 use App\Models\TProduct;
@@ -21,14 +23,17 @@ class VenteController extends Controller
      */
     public function index()
     {
-
-        $listeventes = TFacture::with('modereglement')
+        $listeventes = TFacture::with(['modereglement', 'table'])
             ->where('numvente', 'like', 'POS%')
-            ->whereDate('created_at', Carbon::today()) // Filtrer les ventes créées aujourd'hui
+            ->whereDate('created_at', Carbon::today())
             ->orderByDesc('created_at')
             ->get();
 
-        return view('ventes.index', compact('listeventes'));
+
+        $listemodereglement = ModeReglemnt::all();
+        $listetablerestaurant = TabRestaurant::all();
+
+        return view('ventes.index', compact('listeventes', 'listemodereglement', 'listetablerestaurant'));
     }
 
     /**
