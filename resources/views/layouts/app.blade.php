@@ -628,7 +628,7 @@
                                                         <span class="menu-bullet">
                                                             <span class="bullet bullet-dot"></span>
                                                         </span>
-                                                        <span class="menu-title">Ventes </span>
+                                                        <span class="menu-title">Facture Vente </span>
                                                     </a>
                                                 </div>
                                             </div>
@@ -641,7 +641,7 @@
 
                                 <div class="menu-item pt-5">
                                     <div class="menu-content">
-                                        <span class="menu-heading fw-bold text-uppercase fs-7">Comptabilité</span>
+                                        <span class="menu-heading fw-bold text-uppercase fs-7">Gestion des proforma </span>
                                     </div>
                                 </div>
 
@@ -663,7 +663,7 @@
                                             </span>
                                             <!--end::Svg Icon-->
                                         </span>
-                                        <span class="menu-title">Facturation</span>
+                                        <span class="menu-title">Proforma</span>
                                         <span class="menu-arrow"></span>
                                     </span>
                                     <!--end:Menu link-->
@@ -676,7 +676,7 @@
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Liste des factures</span>
+                                                <span class="menu-title">Proforma libre </span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
@@ -687,7 +687,7 @@
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Facture Personnalisée</span>
+                                                <span class="menu-title">Proforma Client </span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
