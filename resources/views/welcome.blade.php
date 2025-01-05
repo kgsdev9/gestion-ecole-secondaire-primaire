@@ -57,7 +57,8 @@
                                         <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $ventes }}</span>
                                         <!--end::Amount-->
                                         <!--begin::Subtitle-->
-                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Total des ventes réalisées
+                                        <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Total des ventes de
+                                            l'année
                                         </span>
                                         <!--end::Subtitle-->
                                     </div>
@@ -163,7 +164,7 @@
                                     <div class="d-flex flex-stack">
                                         <!--begin::Section-->
                                         <a href="{{ route('factures.index') }}"
-                                            class="text-primary fw-semibold fs-6 me-2">Gestion des factures</a>
+                                            class="text-primary fw-semibold fs-6 me-2">Gestion des proforma libre </a>
                                         <!--end::Section-->
                                         <!--begin::Action-->
                                         <button type="button"
@@ -272,16 +273,13 @@
                             <div class="card card-flush h-lg-50">
                                 <div class="card-header pt-5">
                                     <h3 class="card-title text-gray-800">Vos Activités </h3>
-
-
-
                                 </div>
 
                                 <div class="card-body pt-5">
                                     <!--begin::Item-->
                                     <div class="d-flex flex-stack">
                                         <!--begin::Section-->
-                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Total client </div>
+                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Total Ventes </div>
                                         <!--end::Section-->
                                         <!--begin::Statistics-->
                                         <div class="d-flex align-items-senter">
@@ -310,7 +308,7 @@
                                     <!--begin::Item-->
                                     <div class="d-flex flex-stack">
                                         <!--begin::Section-->
-                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Total Factures</div>
+                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Total Factures Ventes </div>
                                         <!--end::Section-->
                                         <!--begin::Statistics-->
                                         <div class="d-flex align-items-senter">
@@ -328,7 +326,7 @@
                                             </span>
                                             <!--end::Svg Icon-->
                                             <!--begin::Number-->
-                                            <span class="text-gray-900 fw-bolder fs-6">{{ $counFatures }}</span>
+                                            <span class="text-gray-900 fw-bolder fs-6">{{ $counFaturesVentes }}</span>
                                             <!--end::Number-->
                                         </div>
                                         <!--end::Statistics-->

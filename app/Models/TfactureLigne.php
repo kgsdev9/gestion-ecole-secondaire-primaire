@@ -16,6 +16,7 @@ class TfactureLigne extends Model
         'designation',
         'quantite',
         'prix_unitaire',
+        'qtedisponible',
         'remise',
         'montant_ht',
         'montant_tva',
@@ -36,5 +37,5 @@ class TfactureLigne extends Model
     }
 
     // Calcul des montants pour la ligne
-   
+
 }

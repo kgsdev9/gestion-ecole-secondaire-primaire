@@ -20,6 +20,7 @@ class CreateTfactureLignesTable extends Migration
             $table->string('codecommade')->nullable();
             $table->string('codefacture')->nullable();
             $table->string('numvente')->nullable();
+            $table->string('qtedisponible')->nullable();
             $table->integer('quantite');
             $table->decimal('prix_unitaire', 10, 2);
             $table->decimal('remise', 5, 2)->default(0.00);

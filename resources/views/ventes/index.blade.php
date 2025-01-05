@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Liste des ventes')
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="userSearch()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
@@ -131,7 +131,7 @@
                                                         <!-- Affiche les actions si le statut est "en attente" -->
                                                         <template x-if="user.status === 'en attente'">
                                                             <div>
-                                                              
+
 
                                                                 <!-- Bouton pour générer la facture -->
                                                                 <button @click="generateFacture(user.numvente)"

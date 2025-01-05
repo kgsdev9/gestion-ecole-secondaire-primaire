@@ -25,9 +25,9 @@ class HomeController extends Controller
     {
         $listerecentesfactures = TFacture::where('numvente', 'like', 'POS%')->orderByDesc('created_at')->take(20)->get();
         $countlisterecentesfactures = TFacture::where('numvente', 'like', 'POS%')->sum('montantttc');
-        $ventes  =  TFacture::where('numvente', 'like', 'vp%')->sum('montantttc');
+        $ventes  =  TFacture::where('numvente', 'like', 'POS%')->sum('montantttc');
         $counCclient = TClient::count();
-        $counFatures = TFacture::count();
+        $counFaturesVentes = TFacture::where('numvente', 'like', 'POS%')->count();
 
 
         $bilan = TFacture::where('numvente', 'like', 'POS%')
@@ -58,7 +58,7 @@ class HomeController extends Controller
             ->sum('montantttc');
 
 
-        return view('welcome', compact('listerecentesfactures', 'countlisterecentesfactures', 'ventes', 'counCclient', 'counFatures', 'labels', 'data', 'ventesJour', 'ventesSemaine', 'ventesMois'));
+        return view('welcome', compact('listerecentesfactures', 'countlisterecentesfactures', 'ventes', 'counCclient', 'counFaturesVentes', 'labels', 'data', 'ventesJour', 'ventesSemaine', 'ventesMois'));
     }
 
     /**

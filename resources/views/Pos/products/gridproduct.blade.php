@@ -266,7 +266,7 @@
 
                 async confirmOrder() {
 
-                   
+
                     if (!this.cart || this.cart.length === 0) {
                         Swal.fire({
                             icon: 'error',
@@ -330,6 +330,7 @@
                         table: this.table,
                         serveur: this.serveur,
                         totalttc: this.calculateTotal(),
+                        nom: this.nom,
                         modereglement_id: this.selectedModeReglement,
                     };
 
