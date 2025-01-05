@@ -49,6 +49,13 @@ class TFacture extends Model
         return $this->belongsTo(TClient::class, 'client_id');
     }
 
+    public function items()
+    {
+        return $this->hasMany(TfactureLigne::class, 'numvente');
+    }
+
+
+
     public function codedevise()
     {
         return $this->belongsTo(TcodeDevise::class, 'codedevise_id');

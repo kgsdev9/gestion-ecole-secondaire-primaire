@@ -55,3 +55,8 @@ Route::post('/rapport/vente', [RapportController::class, 'generateRapport'])->na
 
 Route::get('/post/ventes', [ProductPostController::class, 'allProducts'])->name('product.pos');
 Route::post('/ventes/{vente}/validate', [VenteController::class, 'validatVente'])->name('ventes.validate');
+
+
+
+
+Route::get('/generatefactureVente/{codefacure}', [VenteController::class, 'generateFactureVente'])->name('facture.vente.generate');

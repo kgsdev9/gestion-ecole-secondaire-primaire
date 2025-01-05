@@ -288,7 +288,7 @@
 
                 generateFacture(codefacture) {
                     // Envoi d'une requête GET pour générer la facture
-                    fetch(`/generatefacture/${codefacture}`, {
+                    fetch(`generatefactureVente/${codefacture}`, {
                             method: 'GET', // Utilisation de la méthode GET
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}', // Ajoutez le token CSRF

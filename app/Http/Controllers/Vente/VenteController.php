@@ -8,6 +8,7 @@ use App\Models\TfactureLigne;
 use App\Models\TProduct;
 use App\Models\TventeDirect;
 use Illuminate\Http\Request;
+use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -22,10 +23,10 @@ class VenteController extends Controller
     {
 
         $listeventes = TFacture::with('modereglement')
-        ->where('numvente', 'like', 'POS%')
-        ->whereDate('created_at', Carbon::today()) // Filtrer les ventes créées aujourd'hui
-        ->orderByDesc('created_at')
-        ->get();
+            ->where('numvente', 'like', 'POS%')
+            ->whereDate('created_at', Carbon::today()) // Filtrer les ventes créées aujourd'hui
+            ->orderByDesc('created_at')
+            ->get();
 
         return view('ventes.index', compact('listeventes'));
     }
@@ -70,6 +71,80 @@ class VenteController extends Controller
     }
 
 
+    public function generateFactureVente($numvente)
+    {
+        // Récupérer la vente avec ses informations liées
+        $vente = TFacture::with(['modereglement'])->where('numvente', $numvente)->firstOrFail();
+
+        // Récupérer les lignes de facture
+        $factureLigne = TfactureLigne::where('numvente', 'like', $vente->numvente)->get();
+
+        // Créer une instance de FPDF avec un format de ticket (80 mm de largeur)
+        $pdf = new FPDF('P', 'mm', [80, 200]); // Format 80x200 mm (ticket)
+        $pdf->AddPage();
+
+        // Encodage pour gérer les caractères spéciaux (UTF-8)
+        $pdf->SetFont('Arial', 'B', 10);
+
+        // Titre de l'entreprise (centré)
+        $pdf->Cell(0, 5, utf8_decode('NOM DE L\'ENTREPRISE'), 0, 1, 'C');
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->Cell(0, 5, utf8_decode('Adresse : Exemple 123'), 0, 1, 'C');
+        $pdf->Cell(0, 5, utf8_decode('Tel : 0123456789'), 0, 1, 'C');
+        $pdf->Ln(5);
+
+        // Informations principales de la vente (centré)
+        $pdf->Cell(0, 5, utf8_decode('Facture N°: ') . $vente->numvente, 0, 1, 'C');
+        $pdf->Cell(0, 5, 'Date : ' . $vente->created_at->format('d/m/Y H:i'), 0, 1, 'C');
+
+        // Afficher le mode de règlement
+        $pdf->Ln(5);
+        $pdf->Cell(0, 5, utf8_decode('Mode de règlement : ') . utf8_decode($vente->modereglement->libellemodereglement), 0, 1, 'C');
+        $pdf->Ln(5);
+
+        // En-têtes du tableau (décalé vers la gauche, sans bordure)
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->Cell(45, 5, utf8_decode('Produit'), 0, 0, 'L');
+        $pdf->SetX(40); // Définir la position X à 5 mm (ajustez selon vos besoins)
+        $pdf->Cell(10, 5, utf8_decode('Qté'), 0, 0, 'L');
+
+        $pdf->Cell(20, 5, 'Total', 0, 1, 'L');
+
+        // Liste des produits (décalé, sans bordure)
+        $pdf->SetFont('Arial', '', 8);
+        foreach ($factureLigne as $item) {
+            $pdf->SetX(10); // Définir la position X à 10 mm, vous pouvez ajuster cette valeur selon vos besoins
+            $pdf->Cell(45, 5, utf8_decode($item->product->libelleproduct), 0, 0, 'L');
+            $pdf->SetX(40); // Définir la position X avant d'afficher la quantité
+            $pdf->Cell(10, 5, $item->quantite, 0, 0, 'L');
+            $pdf->Cell(20, 5, number_format($item->montant_ttc, 2, ',', ' ') . '', 0, 1, 'L');
+        }
+
+        $pdf->Ln(5);
+
+        // Total (décalé vers la gauche)
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(45, 5, utf8_decode('Total TTC'), 0, 0, 'L'); // Première cellule (45mm), alignée à gauche
+        $pdf->SetX(30); // Définir la position X plus petite pour déplacer vers la gauche
+        $pdf->Cell(20, 5, number_format($vente->montantttc, 2, ',', ' ') . ' FCFA', 0, 1, 'L');
+
+
+        // Remerciement (centré)
+        $pdf->Ln(10);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->MultiCell(0, 5, utf8_decode('Merci pour votre achat !'), 0, 'C');
+
+        // Générer le PDF pour l'imprimante de caisse
+        $pdf->Output('I', 'facture_' . $vente->numvente . '.pdf');
+    }
+
+
+
+
+
+
+
+
     public function validatVente(Request $request, $id)
     {
 
@@ -97,6 +172,7 @@ class VenteController extends Controller
 
     public function store(Request $request)
     {
+
         try {
             $facture = TFacture::create([
                 'numvente' => $this->generateIdentifier('POS', date('y')),
