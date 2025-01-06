@@ -125,6 +125,7 @@
                 selectedCategory: '',
                 isScrollable: false,
                 shownameclient: false,
+                checkScrollState:false,
                 nom: '',
                 selectedModeReglement: null,
                 table: null,
