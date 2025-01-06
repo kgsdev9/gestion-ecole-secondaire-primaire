@@ -434,7 +434,7 @@
                     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
                         <!--begin::Logo image-->
                         <a href="/" class="text-dark" option="changerlelogo">
-                            RESTO 2.0
+                            BOUTIQUE FACTURE 2.0
                         </a>
                         <!--end::Logo image-->
                         <!--begin::Sidebar toggle-->
@@ -568,7 +568,7 @@
 
                                 <div class="menu-item pt-5">
                                     <div class="menu-content">
-                                        <span class="menu-heading fw-bold text-uppercase fs-7">Ventes</span>
+                                        <span class="menu-heading fw-bold text-uppercase fs-7">Boutique</span>
                                     </div>
                                 </div>
 
@@ -591,7 +591,7 @@
                                                 </svg>
                                             </span>
                                         </span>
-                                        <span class="menu-title">E-Vente</span>
+                                        <span class="menu-title">E-Boutique</span>
                                         <span class="menu-arrow"></span>
                                     </span>
 
@@ -650,7 +650,7 @@
 
                                 <div class="menu-item pt-5">
                                     <div class="menu-content">
-                                        <span class="menu-heading fw-bold text-uppercase fs-7">Gestion des proforma </span>
+                                        <span class="menu-heading fw-bold text-uppercase fs-7">Factures proforma  </span>
                                     </div>
                                 </div>
 
@@ -672,7 +672,7 @@
                                             </span>
                                             <!--end::Svg Icon-->
                                         </span>
-                                        <span class="menu-title">Proforma</span>
+                                        <span class="menu-title">Facture Proforma </span>
                                         <span class="menu-arrow"></span>
                                     </span>
                                     <!--end:Menu link-->
@@ -685,7 +685,7 @@
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Proforma libre </span>
+                                                <span class="menu-title">Facture Proforma libre </span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
@@ -696,7 +696,7 @@
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Proforma Client </span>
+                                                <span class="menu-title">Facture Proforma Client </span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>

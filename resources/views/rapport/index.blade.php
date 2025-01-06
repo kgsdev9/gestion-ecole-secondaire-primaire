@@ -61,6 +61,7 @@
                                                 <div class="form-group me-4">
                                                     <label for="timeframe" class="form-label">Select Timeframe</label>
                                                     <select id="timeframe" x-model="timeframe" class="form-select">
+                                                        <option value="" selected>Choisir un critere</option>
                                                         <option value="month">Mois</option>
                                                         <option value="day">Jour</option>
                                                         <option value="week">Semaine</option>
@@ -106,7 +107,7 @@
     <script>
         function rapportVente() {
             return {
-                timeframe: 'month',
+                timeframe: '',
                 startDate: '',
                 endDate: '', // Date de fin
                 isEdite: false,
@@ -117,6 +118,8 @@
                     formData.append('start_date', this.startDate); // Ajoute la date de début
                     formData.append('end_date', this.endDate); // Ajoute la date de fin
 
+
+                   
                     try {
                         const response = await fetch('{{ route('rapport.vente') }}', {
                             method: 'POST',

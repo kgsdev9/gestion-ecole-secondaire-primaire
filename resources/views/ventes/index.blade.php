@@ -52,18 +52,6 @@
                                         </select>
                                     </div>
 
-                                    <div>
-                                        <select x-model="selectTable" @change="filterVentes"
-                                            class="form-select form-select-sm" data-live-search="true">
-                                            <option value="">Choisir un table </option>
-                                            <template x-for="table in listetablerestaurant" :key="table.id">
-                                                <option :value="table.id" x-text="table.name">
-                                                </option>
-                                            </template>
-                                        </select>
-                                    </div>
-
-
                                     <button @click="printVentes" class="btn btn-light-primary btn-sm">
                                         <i class="fa fa-print"></i> Imprimer
                                     </button>
@@ -95,8 +83,7 @@
                                         <thead>
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                                 <th class="min-w-125px">Code Vente</th>
-                                                <th class="min-w-125px">Mode re reglement</th>
-                                                <th class="min-w-125px">Table</th>
+                                                <th class="min-w-125px">Mode de reglement</th>
                                                 <th class="min-w-125px">Montant TTC</th>
                                                 <th class="min-w-125px">Statut</th>
                                                 <th class="min-w-125px">Date créat
@@ -122,7 +109,6 @@
                                                         </div>
                                                     </td>
                                                     <td x-text="user.modereglement.libellemodereglement"></td>
-                                                    <td x-text="user.table.name"></td>
                                                     <td x-text="user.montantttc"></td>
                                                     <td x-text="user.status"></td>
                                                     <td x-text="new Date(user.created_at).toLocaleDateString('fr-FR')"></td>
@@ -206,7 +192,6 @@
                 modules: 'ventes',
                 factures: @json($listeventes),
                 listemodereglement: @json($listemodereglement),
-                listetablerestaurant: @json($listetablerestaurant),
                 filteredUsers: [],
                 currentPage: 1,
                 usersPerPage: 10,
@@ -228,10 +213,6 @@
 
                     // Ajouter les critères de filtrage
                     formData.append('modereglement', this.selectModereglement || ''); // Mode de règlement
-                    formData.append('table', this.selectTable || ''); // Table
-
-
-
 
 
                     try {

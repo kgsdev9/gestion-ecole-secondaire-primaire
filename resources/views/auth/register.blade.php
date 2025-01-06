@@ -4,16 +4,16 @@
 
 <head>
     <base href="../../../" />
-    <title>Restaurateur 2.0 - Simplifiez la Gestion de Votre Restaurant</title>
+    <title>Restaurateur 2.0 - Gérez vos Factures et votre Boutique en Ligne</title>
     <meta charset="utf-8" />
     <meta name="description"
-        content="Découvrez Restaurateur 2.0, l'application révolutionnaire pour optimiser la gestion et le suivi de votre restaurant. Simplifiez vos opérations, améliorez vos services et développez votre activité." />
+        content="Découvrez Restaurateur 2.0, l'application idéale pour gérer vos factures et optimiser votre boutique en ligne. Suivez les ventes, gérez les paiements et boostez votre e-commerce." />
     <meta name="keywords"
-        content="restaurant, gestion restaurant, application restaurant, suivi commandes, facturation restaurant, optimisation services, technologie de restauration" />
+        content="restaurant, gestion restaurant, application restaurant, boutique en ligne, e-commerce, gestion factures, suivi commandes, optimisation des ventes" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Restaurateur 2.0 - La Technologie au Service de Votre Restaurant" />
+    <meta property="og:title" content="Restaurateur 2.0 - La Solution Complète pour Votre E-commerce de Restaurant" />
     <meta property="og:url" content="https://votre-application-restaurant.com" />
     <meta property="og:site_name" content="Restaurateur 2.0" />
     <link rel="canonical" href="https://votre-application-restaurant.com" />
@@ -49,16 +49,16 @@
                     <!--end::Image-->
                     <!--begin::Title-->
                     <h1 class="d-none d-lg-block text-white fs-2qx fw-bold text-center mb-7">
-                        Simplifiez la gestion de votre restaurant avec innovation et efficacité
+                        Gérez vos Factures et Optimisez votre Boutique en Ligne
                     </h1>
                     <!--end::Title-->
                     <!--begin::Text-->
                     <div class="d-none d-lg-block text-white fs-base text-center">
-                        Découvrez comment notre application transforme la gestion de votre restaurant.
+                        Découvrez comment notre application transforme la gestion des **factures** et de votre **boutique en ligne**.
                         <a href="#" class="opacity-75-hover text-warning fw-semibold me-1">Restaurateur 2.0</a>
-                        vous aide à gérer les commandes, suivre vos factures et optimiser vos opérations.
-                        <br />Une expérience intuitive et des fonctionnalités innovantes pour un service amélioré.
-                        <br />Commencez dès aujourd'hui à propulser votre restaurant vers de nouveaux sommets.
+                        vous permet de suivre facilement vos ventes, gérer les paiements, et améliorer l'expérience d'achat pour vos clients.
+                        <br />Optimisez vos opérations, automatisez la facturation et boostez votre performance e-commerce.
+                        <br />Commencez dès aujourd'hui à gérer votre boutique et vos factures de manière simple et efficace.
                     </div>
                     <!--end::Text-->
                 </div>
@@ -74,9 +74,8 @@
                             @csrf
                             <!--begin::Heading-->
                             <div class="text-center mb-11">
-                                <h1 class="text-dark fw-bolder mb-3">Gérez votre restaurant efficacement</h1>
-                                <div class="text-gray-500 fw-semibold fs-6">Suivez vos commandes, factures et opérations
-                                    en temps réel</div>
+                                <h1 class="text-dark fw-bolder mb-3">Inscrivez-vous pour gérer vos factures et votre boutique en ligne</h1>
+                                <div class="text-gray-500 fw-semibold fs-6">Accédez à la gestion complète des paiements, des ventes et des factures en un seul endroit.</div>
                             </div>
                             <!--end::Heading-->
                             <!-- User Name -->
@@ -148,3 +147,4 @@
 </body>
 
 </html>
+    

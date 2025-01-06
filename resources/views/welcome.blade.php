@@ -392,7 +392,6 @@
                                                 <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
                                                     <th class="p-0 pb-3 min-w-175px text-start">CODE FACTURE</th>
                                                     <th class="p-0 pb-3 min-w-100px text-end">Mode réglement </th>
-                                                    <th class="p-0 pb-3 min-w-100px text-end">Table</th>
                                                     <th class="p-0 pb-3 min-w-175px text-end pe-12">MONTANT TTC</th>
                                                     <th class="p-0 pb-3 w-125px text-end pe-7">Date</th>
 
@@ -419,10 +418,7 @@
                                                             <span
                                                                 class="text-gray-600 fw-bold fs-6">{{ $facture->modereglement->libellemodereglement ?? '' }}</span>
                                                         </td>
-                                                        <td class="text-end pe-0">
-                                                            {{ $facture->table->name ?? '' }}
-
-                                                        </td>
+                                                      
                                                         <td class="text-end pe-12">
                                                             <span class="badge py-3 px-4 fs-7 badge-light-primary">
                                                                 {{ $facture->montantttc }}</span>

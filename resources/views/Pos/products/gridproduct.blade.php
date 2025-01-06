@@ -52,8 +52,6 @@
                 </div>
             </div>
 
-
-            <!-- Order Section -->
             <div class="col-md-4 order-section">
                 <h5 class="mb-3">Sommaire de la commande</h5>
                 <button class="btn btn-sm btn-outline-secondary mb-3" @click="shownNameClient()">+ Ajouter un
@@ -62,26 +60,6 @@
                     <input type="text" x-model="nom" class="form-control-sm" placeholder="Nom du clien ">
                 </div>
 
-                <div>
-                    <label for="restaurant-select">Sélectionner une Table </label>
-                    <select id="restaurant-select" class="form-select mt-2" x-model="table">
-                        <option value="">Choisir une table </option>
-                        <template x-for="restaurant in listetabrestaurant" :key="restaurant.id">
-                            <option :value="restaurant.id" x-text="restaurant.name"></option>
-                        </template>
-                    </select>
-                </div>
-
-
-                <div class="mt-2">
-                    <label for="restaurant-select">Sélectionner un serveur </label>
-                    <select id="restaurant-select" x-model="serveur" class="form-select mt-2">
-                        <option value="">Choisir un serveur</option>
-                        <template x-for="seveur in listeserveurs" :key="seveur.id">
-                            <option :value="seveur.id" x-text="seveur.name"></option>
-                        </template>
-                    </select>
-                </div>
 
                 <div class="mt-2">
                     <template x-for="(item, index) in cart" :key="item.id">
@@ -106,8 +84,6 @@
                                 @click="markAsOffered(index)">
                                 <span x-text="item.offert ? 'Offerte' : 'Non Offert'"></span>
                             </button>
-
-
                         </div>
                     </template>
 
@@ -127,9 +103,7 @@
                     </div>
                 </div>
 
-
                 <div class="mt-4">
-
                     <div class="d-flex justify-content-between">
                         <h5>NET A PAYER :</h5>
                         <h5 x-text="`${total} FCFA`"></h5>
@@ -148,8 +122,6 @@
                 products: @json($listeProducts),
                 categories: @json($listecategories),
                 listemodereglement: @json($listemodereglement),
-                listetabrestaurant: @json($listetabrestaurant),
-                listeserveurs: @json($listeserveurs),
                 selectedCategory: '',
                 isScrollable: false,
                 shownameclient: false,
@@ -158,7 +130,7 @@
                 table: null,
                 serveur: null,
                 cart: [],
-                total: 0, // Initialisation de la propriété total
+                total: 0,
 
                 filteredProducts() {
                     return this.products.filter(product => {
@@ -173,8 +145,6 @@
                 shownNameClient() {
                     this.shownameclient = !this.shownameclient; // Alterne entre vrai et faux
                 },
-
-
 
                 markAsOffered(index) {
                     const item = this.cart[index];
@@ -277,36 +247,6 @@
                         return;
                     }
 
-                    if (!this.nom || this.nom.trim() === '') {
-                        if (!this.table || this.table.trim() === '') {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Veuillez sélectionner une table.',
-                                showConfirmButton: true
-                            });
-                            this.isLoading = false;
-                            return;
-                        }
-                    }
-
-                    // if (!this.table || this.table.trim() === '') {
-                    //     Swal.fire({
-                    //         icon: 'error',
-                    //         title: 'Veuillez sélectionner une table.',
-                    //         showConfirmButton: true
-                    //     });
-                    //     this.isLoading = false;
-                    //     return;
-                    // }
-                    if (!this.serveur || this.serveur.trim() === '') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Veuillez sélectionner un serveur.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
                     if (this.totalttc <= 0) {
                         Swal.fire({
                             icon: 'error',
@@ -358,8 +298,6 @@
                         console.error('Erreur lors de l\'enregistrement de la facture', error);
                     }
                 },
-
-
             };
         }
     </script>

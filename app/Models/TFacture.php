@@ -28,8 +28,6 @@ class TFacture extends Model
         'date_echance',
         'mode_reglement_id',
         'status',
-        'tabrestaurant_id',
-        'serveur_id',
         'client_id',
         'codedevise_id',
         'user_id',
@@ -44,10 +42,7 @@ class TFacture extends Model
         'montantttc',
     ];
 
-    public function table()
-    {
-        return $this->belongsTo(TabRestaurant::class, 'tabrestaurant_id');
-    }
+
 
     public function client()
     {
@@ -59,15 +54,10 @@ class TFacture extends Model
         return $this->hasMany(TfactureLigne::class, 'numvente', 'numvente');
     }
 
-
-
     public function codedevise()
     {
         return $this->belongsTo(TcodeDevise::class, 'codedevise_id');
     }
-
-    //date echeance, mode reglement
-
     public function modereglement()
     {
         return $this->belongsTo(ModeReglemnt::class, 'mode_reglement_id');
