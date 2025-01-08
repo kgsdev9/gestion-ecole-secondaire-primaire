@@ -20,7 +20,7 @@ class CreateNotesTable extends Migration
             $table->decimal('note', 5, 2);
             $table->enum('type_composition', ['Contrôle continu', 'Examen', 'Devoir', 'Autre']);
             $table->date('date_composition');
-            $table->foreignId('anneacademique_id')->constrained('anneeacademiques')->onDelete('cascade');
+            $table->foreignId('anneacademique_id')->constrained('annee_academiques')->onDelete('cascade');
             $table->timestamps();
         });
     }

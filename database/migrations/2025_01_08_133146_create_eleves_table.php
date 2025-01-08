@@ -19,11 +19,11 @@ class CreateElevesTable extends Migration
             $table->string('prenom');
             $table->string('photo')->nullable();
             $table->string('matricule')->unique();
-            $table->foreignId('classe_id')->constrained()->onDelete('cascade');
+            $table->foreignId('classe_id')->constrained('classes')->onDelete('cascade');
             $table->date('date_naissance');
             $table->string('adresse');
             $table->string('telephone_parent');
-            $table->foreignId('anneeacademique_id')->constrained()->onDelete('cascade');
+            $table->foreignId('anneeacademique_id')->constrained('annee_academiques')->onDelete('cascade');
             $table->timestamps();
         });
     }

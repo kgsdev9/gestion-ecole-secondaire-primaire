@@ -16,9 +16,9 @@ class CreateClassesTable extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('niveau_id');
-            $table->string('id_annee_academique');
-            $table->string('salle_id');
+            $table->foreignId('niveau_id')->constrained('niveaux')->onDelete('cascade');
+            $table->foreignId('id_annee_academique')->constrained('annee_academiques')->onDelete('cascade');
+            $table->foreignId('salle_id')->constrained('salles')->onDelete('cascade');
             $table->timestamps();
         });
     }
