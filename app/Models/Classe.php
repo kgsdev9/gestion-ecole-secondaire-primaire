@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TCategorieProduct extends Model
+class Classe extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'libellecategorieproduct',
+        'name',
+        'niveau_id',
+        'id_annee_academique',
+        'salle_id'
     ];
 }
+
+

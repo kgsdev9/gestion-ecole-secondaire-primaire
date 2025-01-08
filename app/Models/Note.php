@@ -5,11 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Serveur extends Model
+class Note extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'id_eleve',
+        'id_matiere',
+        'note',
+        'type_composition',
+        'date_composition',
+        'anneacademique_id'
     ];
+
 }

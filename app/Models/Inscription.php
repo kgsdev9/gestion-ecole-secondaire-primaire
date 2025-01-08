@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ModeReglemnt extends Model
+class Inscription extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'id_eleve',
+        'anneeacademique_id',
+        'id_classe',
+        'date_inscription'
     ];
+
 }

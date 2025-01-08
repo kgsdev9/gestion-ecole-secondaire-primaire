@@ -5,17 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tentreprise extends Model
+class Eleve extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'libtiers',
-        'email',
-        'telephone',
+        'nom',
+        'prenom',
+        'photo',
+        'matricule',
+        'classe_id',
+        'date_naissance',
         'adresse',
-        'fax',
-        'logo',
-        'numero_registre',
-        'user_id',
+        'telephone_parant',
+        'anneeacademique_id'
     ];
+
 }

@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TDpenses extends Model
+class Enseignant extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'reference',
-        'description',
-        'montant',
-        'mode_paiement',
-        'notes',
+        'nom',
+        'prenom',
+        'email',
+        'telephone',
+        'matricule',
+        'matiere_id'
     ];
 }
