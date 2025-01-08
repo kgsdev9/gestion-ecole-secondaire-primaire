@@ -15,9 +15,9 @@ class CreateScolaritesTable extends Migration
     {
         Schema::create('scolarites', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_niveau')->constrained('niveaux')->onDelete('cascade');
-            $table->foreignId('id_classe')->constrained('classes')->onDelete('cascade');
-            $table->foreignId('id_annee_academique')->constrained('annee_academiques')->onDelete('cascade');
+            $table->foreignId('niveau_id')->constrained('niveaux')->onDelete('cascade');
+            $table->foreignId('classe_id')->constrained('classes')->onDelete('cascade');
+            $table->foreignId('annee_academique_id')->constrained('annee_academiques')->onDelete('cascade');
             $table->decimal('montant_scolarite', 10, 2);
             $table->timestamps();
         });

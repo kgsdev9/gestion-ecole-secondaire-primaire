@@ -11,7 +11,7 @@ class Classe extends Model
     protected $fillable = [
         'name',
         'niveau_id',
-        'id_annee_academique',
+        'annee_academique_id',
         'salle_id'
     ];
 }

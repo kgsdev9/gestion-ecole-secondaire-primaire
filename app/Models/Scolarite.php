@@ -10,9 +10,9 @@ class Scolarite extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_niveau',
-        'id_classe',
-        'id_annee_academique',
+        'niveau_id',
+        'classe_id',
+        'annee_academique_id',
         'montant_scolarite',
     ];
 }
