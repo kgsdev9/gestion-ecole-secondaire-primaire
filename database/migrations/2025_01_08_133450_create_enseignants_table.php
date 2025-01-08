@@ -15,6 +15,14 @@ class CreateEnseignantsTable extends Migration
     {
         Schema::create('enseignants', function (Blueprint $table) {
             $table->id();
+            $table->string('nom');
+            $table->string('prenom');
+            $table->string('photo')->nullable();
+            $table->string('email');
+            $table->string('adresse');
+            $table->string('telephone');
+            $table->string('matricule')->unique();
+            $table->foreignId('matiere_id')->constrained('matieres')->onDelete('cascade');
             $table->timestamps();
         });
     }

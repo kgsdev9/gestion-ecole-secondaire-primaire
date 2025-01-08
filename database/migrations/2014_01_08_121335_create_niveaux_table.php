@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTvaImposablesTable extends Migration
+class CreateNiveauxTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateTvaImposablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tva_imposables', function (Blueprint $table) {
+        Schema::create('niveaux', function (Blueprint $table) {
             $table->id();
-            $table->string('tauxtva');
-            $table->string('pourcentage');
-            $table->string('pays');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateTvaImposablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tva_imposables');
+        Schema::dropIfExists('niveaux');
     }
 }

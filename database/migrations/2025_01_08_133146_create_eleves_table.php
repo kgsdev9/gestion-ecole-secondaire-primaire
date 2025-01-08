@@ -15,6 +15,15 @@ class CreateElevesTable extends Migration
     {
         Schema::create('eleves', function (Blueprint $table) {
             $table->id();
+            $table->string('nom');
+            $table->string('prenom');
+            $table->string('photo')->nullable();
+            $table->string('matricule')->unique();
+            $table->foreignId('classe_id')->constrained()->onDelete('cascade');
+            $table->date('date_naissance');
+            $table->string('adresse');
+            $table->string('telephone_parent');
+            $table->foreignId('anneeacademique_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -15,9 +15,14 @@ class CreateCompositionsTable extends Migration
     {
         Schema::create('compositions', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('date_composition');
+            $table->string('description');
             $table->timestamps();
         });
     }
+
+  
 
     /**
      * Reverse the migrations.

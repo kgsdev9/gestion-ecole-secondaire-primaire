@@ -12,7 +12,9 @@ class Enseignant extends Model
     protected $fillable = [
         'nom',
         'prenom',
+        'photo',
         'email',
+        'adresse',
         'telephone',
         'matricule',
         'matiere_id'
