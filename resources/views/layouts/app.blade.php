@@ -524,16 +524,17 @@
                                     <div class="menu-sub menu-sub-accordion">
 
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{ route('users.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('users.index') ? 'active' : '' }}" href="{{ route('users.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Utilisateurs</span>
                                             </a>
+
                                         </div>
 
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('anneeacademique.index') ? 'active' : '' }}" href="{{ route('anneeacademique.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>

@@ -12,6 +12,7 @@ use App\Http\Controllers\Pos\ProductPostController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Rapport\RapportController;
 use App\Http\Controllers\Role\RoleController;
+use App\Http\Controllers\Salle\AnneAcademiqueController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vente\VenteController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Auth::routes();
 Route::get('/', [HomeController::class, 'index']);
 
 Route::resource('/users', UserController::class);
+Route::resource('/anneeacademique', AnneAcademiqueController::class);
 Route::resource('/roles', RoleController::class);
 Route::resource('/factures', FactureController::class);
 Route::resource('/clients', ClientController::class);
