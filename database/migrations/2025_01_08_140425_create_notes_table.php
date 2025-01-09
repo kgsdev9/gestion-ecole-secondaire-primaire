@@ -15,7 +15,7 @@ class CreateNotesTable extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_eleve')->constrained('eleves')->onDelete('cascade');
+            $table->foreignId('id_eleve')->constrained('etudiants')->onDelete('cascade');
             $table->foreignId('id_matiere')->constrained('matieres')->onDelete('cascade');
             $table->decimal('note', 5, 2);
             $table->enum('type_composition', ['Contrôle continu', 'Examen', 'Devoir', 'Autre']);

@@ -11,7 +11,7 @@ class Versement extends Model
 
     protected $fillable = [
         'nom',
-        'id_eleve',
+        'eleve_id',
         'montant',
         'date_versement',
         'type_versement', // Frais d'inscription", "Frais de scolarité", "Examen", "Autres").

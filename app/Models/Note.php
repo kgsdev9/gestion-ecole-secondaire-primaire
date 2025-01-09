@@ -10,8 +10,8 @@ class Note extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_eleve',
-        'id_matiere',
+        'eleve_id',
+        'matiere_id',
         'note',
         'type_composition',
         'date_composition',

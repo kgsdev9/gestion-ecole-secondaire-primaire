@@ -44,6 +44,7 @@
                     <!--begin::Logo-->
                     <a href="#" class="mb-0 mb-lg-20">
                         <img alt="Logo" src="{{ asset('school-logo.png') }}" class="h-40px h-lg-50px" />
+                        <img alt="Logo" src="{{ asset('school-logo.png') }}" class="h-40px h-lg-50px" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Image-->
