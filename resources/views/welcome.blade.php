@@ -346,7 +346,7 @@
                             <div class="card card-flush h-md-100">
                                 <div class="card-header pt-5">
                                     <h3 class="card-title align-items-start flex-column">
-                                        <span class="card-label fw-bold text-gray-800">Activités de votre entreprise</span>
+                                        <span class="card-label fw-bold text-gray-800">Liste des etudiants par année </span>
                                         <span class="text-gray-400 mt-1 fw-semibold fs-6">Graphique des rapports</span>
                                     </h3>
                                 </div>
@@ -368,9 +368,9 @@
                                 <div class="card-header pt-7">
                                     <!--begin::Title-->
                                     <h3 class="card-title align-items-start flex-column">
-                                        <span class="card-label fw-bold text-gray-800">Liste des récentes facture ventes
+                                        <span class="card-label fw-bold text-gray-800">Liste des récentes versements effectutés
                                         </span>
-                                        <span class="text-gray-400 mt-1 fw-semibold fs-6">Les facture ventes
+                                        <span class="text-gray-400 mt-1 fw-semibold fs-6">Les versements
                                         </span>
                                     </h3>
                                     <!--end::Title-->
@@ -418,7 +418,7 @@
                                                             <span
                                                                 class="text-gray-600 fw-bold fs-6">{{ $facture->modereglement->libellemodereglement ?? '' }}</span>
                                                         </td>
-                                                      
+
                                                         <td class="text-end pe-12">
                                                             <span class="badge py-3 px-4 fs-7 badge-light-primary">
                                                                 {{ $facture->montantttc }}</span>

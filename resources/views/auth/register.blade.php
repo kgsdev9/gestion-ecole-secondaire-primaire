@@ -4,24 +4,22 @@
 
 <head>
     <base href="../../../" />
-    <title>Restaurateur 2.0 - Gérez vos Factures et votre Boutique en Ligne</title>
+    <title>Gestion École - Inscription</title>
     <meta charset="utf-8" />
-    <meta name="description"
-        content="Découvrez Restaurateur 2.0, l'application idéale pour gérer vos factures et optimiser votre boutique en ligne. Suivez les ventes, gérez les paiements et boostez votre e-commerce." />
-    <meta name="keywords"
-        content="restaurant, gestion restaurant, application restaurant, boutique en ligne, e-commerce, gestion factures, suivi commandes, optimisation des ventes" />
+    <meta name="description" content="Inscrivez-vous pour gérer l'administration scolaire, les élèves, et les matières." />
+    <meta name="keywords" content="école, gestion scolaire, inscription, gestion élèves, gestion classes" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Restaurateur 2.0 - La Solution Complète pour Votre E-commerce de Restaurant" />
-    <meta property="og:url" content="https://votre-application-restaurant.com" />
-    <meta property="og:site_name" content="Restaurateur 2.0" />
-    <link rel="canonical" href="https://votre-application-restaurant.com" />
+    <meta property="og:title" content="Gestion Scolaire - Inscription" />
+    <meta property="og:url" content="https://votre-application-ecole.com" />
+    <meta property="og:site_name" content="Gestion Scolaire" />
+    <link rel="canonical" href="https://votre-application-ecole.com" />
     <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
-    <!--begin::Fonts(mandatory for all pages)-->
+    <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
-    <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+    <!--begin::Global Stylesheets Bundle-->
     <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
@@ -40,25 +38,21 @@
                 <div class="d-flex flex-column flex-center p-6 p-lg-10 w-100">
                     <!--begin::Logo-->
                     <a href="#" class="mb-0 mb-lg-20">
-                        <img alt="Logo" src="{{ asset('avatar.png') }}" class="h-40px h-lg-50px" />
+                        <img alt="Logo" src="{{ asset('school-logo.png') }}" class="h-40px h-lg-50px" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Image-->
                     <img class="d-none d-lg-block mx-auto w-300px w-lg-75 w-xl-500px mb-10 mb-lg-20"
-                        src="assets/media/misc/auth-screens.png" alt="" />
+                        src="assets/media/misc/auth-school-image.png" alt="" />
                     <!--end::Image-->
                     <!--begin::Title-->
                     <h1 class="d-none d-lg-block text-white fs-2qx fw-bold text-center mb-7">
-                        Gérez vos Factures et Optimisez votre Boutique en Ligne
+                        Inscrivez-vous pour Gérer Votre École
                     </h1>
                     <!--end::Title-->
                     <!--begin::Text-->
                     <div class="d-none d-lg-block text-white fs-base text-center">
-                        Découvrez comment notre application transforme la gestion des **factures** et de votre **boutique en ligne**.
-                        <a href="#" class="opacity-75-hover text-warning fw-semibold me-1">Restaurateur 2.0</a>
-                        vous permet de suivre facilement vos ventes, gérer les paiements, et améliorer l'expérience d'achat pour vos clients.
-                        <br />Optimisez vos opérations, automatisez la facturation et boostez votre performance e-commerce.
-                        <br />Commencez dès aujourd'hui à gérer votre boutique et vos factures de manière simple et efficace.
+                        Gérez les élèves, les enseignants, les classes et plus encore dans un seul système. Optimisez votre gestion scolaire et améliorez l'expérience des étudiants et du personnel.
                     </div>
                     <!--end::Text-->
                 </div>
@@ -74,22 +68,25 @@
                             @csrf
                             <!--begin::Heading-->
                             <div class="text-center mb-11">
-                                <h1 class="text-dark fw-bolder mb-3">Inscrivez-vous pour gérer vos factures et votre boutique en ligne</h1>
-                                <div class="text-gray-500 fw-semibold fs-6">Accédez à la gestion complète des paiements, des ventes et des factures en un seul endroit.</div>
+                                <h1 class="text-dark fw-bolder mb-3">Inscrivez-vous pour gérer votre école</h1>
+                                <div class="text-gray-500 fw-semibold fs-6">Accédez à la gestion des élèves, des enseignants et des classes.</div>
                             </div>
                             <!--end::Heading-->
-                            <!-- User Name -->
+                            <!-- Nom de l'élève -->
                             <div class="fv-row mb-8 form-floating">
                                 <input id="name" type="text"
                                     class="form-control @error('name') is-invalid @enderror" name="name"
-                                    value="{{ old('email') }}" required autocomplete="email" autofocus>
-                                <label for="name" class="form-label">Nom d'utilisateur</label>
-                                @error('name')
+                                    value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <label for="nom" class="form-label">Nom</label>
+                                @error('nom')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+                            <!-- Prénom de l'élève -->
+
+
                             <!-- Email -->
                             <div class="fv-row mb-8 form-floating">
                                 <input id="email" type="email"
@@ -102,7 +99,7 @@
                                     </span>
                                 @enderror
                             </div>
-                            <!-- Password -->
+                            <!-- Mot de passe -->
                             <div class="fv-row mb-8 form-floating" data-kt-password-meter="true">
                                 <input id="password" type="password"
                                     class="form-control @error('password') is-invalid @enderror" name="password"
@@ -114,7 +111,7 @@
                                     </span>
                                 @enderror
                             </div>
-                            <!-- Confirm Password -->
+                            <!-- Confirmation du mot de passe -->
                             <div class="fv-row mb-8 form-floating">
                                 <input id="password_confirmation" type="password"
                                     class="form-control @error('password') is-invalid @enderror"
@@ -127,7 +124,7 @@
                                     </span>
                                 @enderror
                             </div>
-                            <!-- Submit -->
+                          
                             <div class="d-grid mb-10">
                                 <button type="submit" class="btn btn-primary">
                                     <span class="indicator-label">Inscription</span>
@@ -147,4 +144,3 @@
 </body>
 
 </html>
-    
