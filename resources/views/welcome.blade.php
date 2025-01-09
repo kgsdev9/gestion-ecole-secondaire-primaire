@@ -54,7 +54,7 @@
                                     <!--begin::Title-->
                                     <div class="card-title d-flex flex-column">
                                         <!--begin::Amount-->
-                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $ventes }}</span>
+                                        <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2"></span>
                                         <!--end::Amount-->
                                         <!--begin::Subtitle-->
                                         <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Total des ventes de
@@ -99,7 +99,7 @@
                                     <div class="d-flex flex-stack">
                                         <!--begin::Section-->
                                         <a href="{{ route('clients.index') }}"
-                                            class="text-primary fw-semibold fs-6 me-2">Gestion client
+                                            class="text-primary fw-semibold fs-6 me-2">Gestion eleves
                                         </a>
                                         <!--end::Section-->
                                         <!--begin::Action-->
@@ -164,7 +164,7 @@
                                     <div class="d-flex flex-stack">
                                         <!--begin::Section-->
                                         <a href="{{ route('factures.index') }}"
-                                            class="text-primary fw-semibold fs-6 me-2">Gestion des proforma libre </a>
+                                            class="text-primary fw-semibold fs-6 me-2">Gestion des versments </a>
                                         <!--end::Section-->
                                         <!--begin::Action-->
                                         <button type="button"
@@ -196,7 +196,7 @@
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
+                        {{--  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
                             <!--begin::Card widget 17-->
                             <div class="card card-flush h-md-50 mb-5 mb-xl-10">
                                 <!--begin::Header-->
@@ -339,7 +339,7 @@
                                 <!--end::Body-->
                             </div>
                             <!--end::LIst widget 25-->
-                        </div>
+                        </div>  --}}
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-xxl-6">
@@ -382,7 +382,7 @@
                                 </div>
                                 <!--end::Header-->
                                 <!--begin::Body-->
-                                <div class="card-body pt-6">
+                                {{--  <div class="card-body pt-6">
                                     <!--begin::Table container-->
                                     <div class="table-responsive">
                                         <!--begin::Table-->
@@ -441,7 +441,7 @@
                                         </table>
                                     </div>
                                     <!--end::Table-->
-                                </div>
+                                </div>  --}}
                                 <!--end: Card Body-->
                             </div>
                             <!--end::Table widget 14-->
@@ -464,7 +464,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script>
+    {{--  <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Récupérer les données du backend
             const labels = @json($labels); // Mois
@@ -560,5 +560,5 @@
                 }
             });
         });
-    </script>
+    </script>  --}}
 @endpush

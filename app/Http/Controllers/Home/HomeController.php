@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
+use App\Models\Eleve;
 use App\Models\TClient;
 use App\Models\TFacture;
 use Carbon\Carbon;
@@ -23,39 +24,36 @@ class HomeController extends Controller
     }
     public function index()
     {
-        $listerecentesfactures = TFacture::where('numvente', 'like', 'POS%')->orderByDesc('created_at')->take(20)->get();
-        $countlisterecentesfactures = TFacture::where('numvente', 'like', 'POS%')->sum('montantttc');
-        $ventes  =  TFacture::where('numvente', 'like', 'POS%')->sum('montantttc');
-        $counCclient = TClient::count();
-        $counFaturesVentes = TFacture::where('numvente', 'like', 'POS%')->count();
+        $listerecentesfactures =  [];
+        $countlisterecentesfactures =0;
+        $ventes  =  [];
+        $counCclient = 0;
+        $counFaturesVentes = 0;
 
 
-        $bilan = TFacture::where('numvente', 'like', 'POS%')
-            ->select(DB::raw('MONTH(created_at) as mois'), DB::raw('SUM(montantttc) as total'))
-            ->groupBy('mois')
-            ->orderBy('mois')
-            ->get();
+        // $bilan = Eleve::select(DB::raw('MONTH(created_at) as mois'), DB::raw('SUM(created_at as total'))
+        //     ->groupBy('mois')
+        //     ->orderBy('mois')
+        //     ->get();
+
 
         // Transformer les données pour Chart.js
-        $labels = $bilan->pluck('mois')->map(function ($mois) {
-            return date('F', mktime(0, 0, 0, $mois, 1));
-        });
+        // $labels = $bilan->pluck('mois')->map(function ($mois) {
+        //     return date('F', mktime(0, 0, 0, $mois, 1));
+        // });
 
-        $data = $bilan->pluck('total');
+        // $data = $bilan->pluck('total');
 
-        $ventesJour = TFacture::where('numvente', 'like', 'POS%')
-            ->whereDate('created_at', Carbon::today())
-            ->sum('montantttc');
-
-        $ventesSemaine = TFacture::where('numvente', 'like', 'POS%')
-            ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-            ->sum('montantttc');
+        $labels = "";
+        $data = [];
 
 
-        $ventesMois = TFacture::where('numvente', 'like', 'POS%')
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
-            ->sum('montantttc');
+        $ventesJour = 0;
+
+        $ventesSemaine = 0;
+
+
+        $ventesMois = 0;
 
 
         return view('welcome', compact('listerecentesfactures', 'countlisterecentesfactures', 'ventes', 'counCclient', 'counFaturesVentes', 'labels', 'data', 'ventesJour', 'ventesSemaine', 'ventesMois'));

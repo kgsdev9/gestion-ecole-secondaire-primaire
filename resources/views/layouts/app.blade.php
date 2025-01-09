@@ -129,7 +129,7 @@
                                 <a href="{{ route('facturepersonnalite.index') }}" class="menu-item  me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
-                                        <span class="menu-title">Proforma Client </span>
+                                        <span class="menu-title">Eleves</span>
                                         <span class="d-lg-none"></span>
                                     </span>
 
@@ -139,7 +139,7 @@
                                     class="menu-item menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
-                                        <span class="menu-title">Liste des factures</span>
+                                        <span class="menu-title">Versments</span>
                                         <span class=" d-lg-none"></span>
                                     </span>
 
@@ -149,7 +149,7 @@
                                     class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
-                                        <span class="menu-title">Création de facture </span>
+                                        <span class="menu-title">Composition</span>
                                         <span class="d-lg-none"></span>
                                     </span>
 
@@ -355,36 +355,36 @@
                                     </div>
 
                                     @can('is_admin')
+                                        <div class="separator my-2"></div>
+                                        <div class="menu-item px-5">
+                                            <a href="#" class="menu-link px-5">Mon Profile</a>
+                                        </div>
 
+                                        <div class="menu-item px-5">
+                                            <a href="#" class="menu-link px-5">
+                                                <span class="menu-text">Mes Abonnements</span>
+                                                <span class="menu-badge">
+                                                    <span
+                                                        class="badge badge-light-danger badge-circle fw-bold fs-7"></span>
+                                                </span>
+                                            </a>
+                                        </div>
 
-                                    <div class="separator my-2"></div>
-                                    <div class="menu-item px-5">
-                                        <a href="#" class="menu-link px-5">Mon Profile</a>
-                                    </div>
+                                        <div class="menu-item px-5">
+                                            <a href="#" class="menu-link px-5">Parametre</a>
+                                        </div>
 
-                                    <div class="menu-item px-5">
-                                        <a href="#" class="menu-link px-5">
-                                            <span class="menu-text">Mes Abonnements</span>
-                                            <span class="menu-badge">
-                                                <span
-                                                    class="badge badge-light-danger badge-circle fw-bold fs-7"></span>
-                                            </span>
-                                        </a>
-                                    </div>
-
-                                    <div class="menu-item px-5">
-                                        <a href="#" class="menu-link px-5">Parametre</a>
-                                    </div>
-
-                                    <div class="menu-item px-5 my-1">
-                                        <a href="#" class="menu-link px-5">Compte</a>
-                                    </div>
+                                        <div class="menu-item px-5 my-1">
+                                            <a href="#" class="menu-link px-5">Compte</a>
+                                        </div>
                                     @endcan
                                     <div class="menu-item px-5">
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            style="display: none;">
                                             @csrf
                                         </form>
-                                        <a href="#" class="menu-link px-5" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <a href="#" class="menu-link px-5"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             Déconnexion
                                         </a>
                                     </div>
@@ -432,7 +432,7 @@
                     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
                         <!--begin::Logo image-->
                         <a href="/" class="text-dark" option="changerlelogo">
-                            BOUTIQUE FACTURE 2.0
+                            GESTION ECOLE 2.0
                         </a>
                         <!--end::Logo image-->
                         <!--begin::Sidebar toggle-->
@@ -522,15 +522,6 @@
                                         <span class="menu-arrow"></span>
                                     </span>
                                     <div class="menu-sub menu-sub-accordion">
-                                        <div class="menu-item">
-                                            <a class="menu-link" href="{{ route('roles.index') }}">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">Roles</span>
-                                            </a>
-
-                                        </div>
 
                                         <div class="menu-item">
                                             <a class="menu-link" href="{{ route('users.index') }}">
@@ -538,6 +529,84 @@
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Utilisateurs</span>
+                                            </a>
+                                        </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Année academique</span>
+                                            </a>
+
+                                        </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Matieres</span>
+                                            </a>
+
+                                        </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Niveau</span>
+                                            </a>
+
+                                        </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Classes</span>
+                                            </a>
+
+                                        </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Salles </span>
+                                            </a>
+
+                                        </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Enseignants</span>
+                                            </a>
+                                        </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Scolarite</span>
+                                            </a>
+
+                                        </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Inscription</span>
                                             </a>
 
                                         </div>
@@ -560,13 +629,13 @@
                                             </span>
 
                                         </span>
-                                        <span class="menu-title">Clients</span>
+                                        <span class="menu-title">Eleves</span>
                                     </span>
                                 </a>
 
                                 <div class="menu-item pt-5">
                                     <div class="menu-content">
-                                        <span class="menu-heading fw-bold text-uppercase fs-7">Boutique</span>
+                                        <span class="menu-heading fw-bold text-uppercase fs-7">Academique</span>
                                     </div>
                                 </div>
 
@@ -589,7 +658,7 @@
                                                 </svg>
                                             </span>
                                         </span>
-                                        <span class="menu-title">E-Boutique</span>
+                                        <span class="menu-title">Module Scolaire</span>
                                         <span class="menu-arrow"></span>
                                     </span>
 
@@ -602,43 +671,23 @@
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Ma boutique</span>
-                                                <span class="menu-arrow"></span>
+                                                <span class="menu-title">Notes</span>
+
                                             </span>
 
-                                            <div class="menu-sub menu-sub-accordion">
-                                                <!--begin:Menu item-->
-                                                <div class="menu-item">
-                                                    <!--begin:Menu link-->
-                                                    <a class="menu-link" href="{{ route('categories.index') }}">
-                                                        <span class="menu-bullet">
-                                                            <span class="bullet bullet-dot"></span>
-                                                        </span>
-                                                        <span class="menu-title">Mes Catégories</span>
-                                                    </a>
+                                            <span class="menu-link">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Moyennes</span>
+                                            </span>
 
-                                                </div>
-
-                                                <div class="menu-item">
-                                                    <a class="menu-link" href="{{ route('product.index') }}">
-                                                        <span class="menu-bullet">
-                                                            <span class="bullet bullet-dot"></span>
-                                                        </span>
-                                                        <span class="menu-title">Mes Produits</span>
-                                                    </a>
-
-                                                </div>
-
-                                                <div class="menu-item">
-                                                    <!--begin:Menu link-->
-                                                    <a class="menu-link" href="{{ route('ventes.index') }}">
-                                                        <span class="menu-bullet">
-                                                            <span class="bullet bullet-dot"></span>
-                                                        </span>
-                                                        <span class="menu-title">Facture Vente </span>
-                                                    </a>
-                                                </div>
-                                            </div>
+                                            <span class="menu-link">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Examens</span>
+                                            </span>
                                         </div>
                                     </div>
 
@@ -648,7 +697,7 @@
 
                                 <div class="menu-item pt-5">
                                     <div class="menu-content">
-                                        <span class="menu-heading fw-bold text-uppercase fs-7">Factures proforma  </span>
+                                        <span class="menu-heading fw-bold text-uppercase fs-7">Comptabilité</span>
                                     </div>
                                 </div>
 
@@ -670,7 +719,7 @@
                                             </span>
                                             <!--end::Svg Icon-->
                                         </span>
-                                        <span class="menu-title">Facture Proforma </span>
+                                        <span class="menu-title">Suivi versements</span>
                                         <span class="menu-arrow"></span>
                                     </span>
                                     <!--end:Menu link-->
@@ -683,7 +732,7 @@
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Facture Proforma libre </span>
+                                                <span class="menu-title">Par Etudiant</span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
@@ -694,14 +743,45 @@
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Facture Proforma Client </span>
+                                                <span class="menu-title">Rapport de versement</span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
 
                                     </div>
+
+
                                     <!--end:Menu sub-->
                                 </div>
+
+
+                                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                    <!--begin:Menu link-->
+                                    <span class="menu-link">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/layouts/lay008.svg-->
+                                            <span class="svg-icon svg-icon-2">
+                                                <svg width="24" height="24" viewBox="0 0 24 24"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M20 7H3C2.4 7 2 6.6 2 6V3C2 2.4 2.4 2 3 2H20C20.6 2 21 2.4 21 3V6C21 6.6 20.6 7 20 7ZM7 9H3C2.4 9 2 9.4 2 10V20C2 20.6 2.4 21 3 21H7C7.6 21 8 20.6 8 20V10C8 9.4 7.6 9 7 9Z"
+                                                        fill="currentColor" />
+                                                    <path opacity="0.3"
+                                                        d="M20 21H11C10.4 21 10 20.6 10 20V10C10 9.4 10.4 9 11 9H20C20.6 9 21 9.4 21 10V20C21 20.6 20.6 21 20 21Z"
+                                                        fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                        <span class="menu-title">Historique</span>
+
+                                    </span>
+
+
+
+
+                                </div>
+
 
 
                             </div>
