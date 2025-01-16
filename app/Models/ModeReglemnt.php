@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ModeReglemnt extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'name',
     ];

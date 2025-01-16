@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMatieresTable extends Migration
+class CreateSemestresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateMatieresTable extends Migration
      */
     public function up()
     {
-        Schema::create('matieres', function (Blueprint $table) {
+        Schema::create('semestres', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('annee_academique_id');
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->boolean('cloture')->default(false);
             $table->timestamps();
+            $table->foreign('annee_academique_id')->references('id')->on('annee_academiques')->onDelete('cascade');
         });
     }
 
@@ -28,6 +30,6 @@ class CreateMatieresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('matieres');
+        Schema::dropIfExists('semestres');
     }
 }

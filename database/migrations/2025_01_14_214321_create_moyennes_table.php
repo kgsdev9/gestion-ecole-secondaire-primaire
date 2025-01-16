@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotesTable extends Migration
+class CreateMoyennesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,18 @@ class CreateNotesTable extends Migration
      */
     public function up()
     {
-
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('moyennes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('semestre_id');
             $table->unsignedBigInteger('eleve_id');
             $table->unsignedBigInteger('matiere_id');
-            $table->unsignedBigInteger('typenote_id');
-            $table->float('note');
+            $table->unsignedBigInteger('semestre_id')->nullable();
+            $table->unsignedBigInteger('annee_academique_id');
+            $table->float('moyenne', 5, 2);
             $table->timestamps();
-            $table->foreign('semestre_id')->references('id')->on('semestres')->onDelete('cascade');
             $table->foreign('eleve_id')->references('id')->on('eleves')->onDelete('cascade');
             $table->foreign('matiere_id')->references('id')->on('matieres')->onDelete('cascade');
-            $table->foreign('typenote_id')->references('id')->on('type_notes')->onDelete('cascade');
+            $table->foreign('semestre_id')->references('id')->on('semestres')->onDelete('cascade');
+            $table->foreign('annee_academique_id')->references('id')->on('annee_academiques')->onDelete('cascade');
         });
     }
 
@@ -36,6 +35,6 @@ class CreateNotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists('moyennes');
     }
 }

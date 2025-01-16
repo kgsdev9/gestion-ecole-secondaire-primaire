@@ -11,9 +11,12 @@ class Inscription extends Model
 
     protected $fillable = [
         'eleve_id',
+        'niveau_id',
         'anneeacademique_id',
-        'id_classe',
+        'classe_id',
         'date_inscription'
     ];
 
 }
+
+

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCompositionsTable extends Migration
+class CreateTypeExamensTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,12 @@ class CreateCompositionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('compositions', function (Blueprint $table) {
+        Schema::create('type_examens', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->date('date_composition');
-            $table->string('description');
             $table->timestamps();
         });
     }
-
-
 
     /**
      * Reverse the migrations.
@@ -31,6 +27,6 @@ class CreateCompositionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('compositions');
+        Schema::dropIfExists('type_examens');
     }
 }

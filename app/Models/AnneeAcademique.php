@@ -16,3 +16,5 @@ class AnneeAcademique extends Model
     ];
 }
 
+
+

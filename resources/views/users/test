@@ -1,0 +1,58 @@
+@extends('layouts.app')
+
+@section('content')
+<div x-data="calendar({{ json_encode($emploisParJourEtHeure) }}, {{ json_encode($heures) }}, {{ json_encode($jours) }})">
+    <h1>Emploi du Temps</h1>
+
+    <table class="emploi-du-temps">
+        <thead>
+            <tr>
+                <th>Heure</th>
+                <!-- Affichage dynamique des jours -->
+                <template x-for="jour in jours" :key="jour.id">
+                    <th x-text="jour.name"></th> <!-- Nom du jour -->
+                </template>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Affichage des horaires -->
+            <template x-for="heure in heures" :key="heure">
+                <tr>
+                    <td x-text="formatHeure(heure)"></td> <!-- Affichage de l'heure -->
+                    <!-- Affichage des matières pour chaque jour et chaque heure -->
+                    <template x-for="jour in jours" :key="jour.id">
+                        <td>
+                            <template x-if="emploisParJourEtHeure[jour.name][heure]">
+                                <div>
+                                    <!-- Afficher les matières pour cette combinaison jour/heure -->
+                                    <template x-for="matiere in emploisParJourEtHeure[jour.name][heure]" :key="matiere">
+                                        <p x-text="matiere"></p>
+                                    </template>
+                                </div>
+                            </template>
+                            <template x-if="!emploisParJourEtHeure[jour.name][heure]">
+                                <p>Aucune matière</p> <!-- Si aucune matière n'est prévue -->
+                            </template>
+                        </td>
+                    </template>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function calendar(emploisParJourEtHeure, heures, jours) {
+        return {
+            emploisParJourEtHeure: emploisParJourEtHeure,
+            heures: heures,
+            jours: jours,
+
+            // Fonction pour formater l'heure
+            formatHeure(heure) {
+                return `${String(Math.floor(heure / 100)).padStart(2, '0')}:${String(heure % 100).padStart(2, '0')}`;
+            },
+        };
+    }
+</script>
+@endsection

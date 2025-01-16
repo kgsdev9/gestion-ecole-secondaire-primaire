@@ -15,11 +15,10 @@ class CreateVersementsTable extends Migration
     {
         Schema::create('versements', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('typeversement_id')->constrained('type_versements')->onDelete('cascade');
             $table->foreignId('eleve_id')->constrained('eleves')->onDelete('cascade');
             $table->decimal('montant', 10, 2);
             $table->date('date_versement');
-            // $table->enum('type_versement', ['Frais d\'inscription', 'Frais de scolarité', 'Examen', 'Autres']);
-            // $table->enum('statut_versement', ['Payé', 'Non payé', 'En retard']);
             $table->timestamps();
         });
     }

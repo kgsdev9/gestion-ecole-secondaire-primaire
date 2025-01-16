@@ -4,6 +4,7 @@ use App\Http\Controllers\Categorie\CategoryController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Commandes\CommandeController;
 use App\Http\Controllers\Depenses\DepensesController;
+use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
 use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Factures\FacturePersonnaliseController;
 use App\Http\Controllers\Home\HomeController;
@@ -60,6 +61,6 @@ Route::post('/ventes/{vente}/validate', [VenteController::class, 'validatVente']
 
 
 
-
+Route::get('/emplois-du-temps', [EmploiDuTempsController::class, 'index']);
 Route::get('/generatefactureVente/{codefacure}', [VenteController::class, 'generateFactureVente'])->name('facture.vente.generate');
 Route::post('/rapport/vente/days', [VenteController::class, 'PrintAllVente'])->name('facture.vente.rapport');

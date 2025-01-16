@@ -10,10 +10,6 @@ class Classe extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'niveau_id',
-        'annee_academique_id',
-        'salle_id'
     ];
 }
-
 

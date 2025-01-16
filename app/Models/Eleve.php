@@ -15,6 +15,8 @@ class Eleve extends Model
         'photo',
         'matricule',
         'classe_id',
+        'annee_academique_id',
+        'niveau_id',
         'date_naissance',
         'adresse',
         'telephone_parant',

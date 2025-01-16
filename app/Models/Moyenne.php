@@ -5,26 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Note extends Model
+class Moyenne extends Model
 {
     use HasFactory;
 
     // Définir les attributs qui peuvent être assignés en masse
     protected $fillable = [
-        'semestre_id',
         'eleve_id',
         'matiere_id',
-        'typenote_id',
-        'note',
+        'semestre_id',
+        'annee_academique_id',
+        'moyenne',
     ];
 
     // Définir les relations
-
-    // Relation avec le modèle Semestre
-    public function semestre()
-    {
-        return $this->belongsTo(Semestre::class);
-    }
 
     // Relation avec le modèle Eleve
     public function eleve()
@@ -38,10 +32,16 @@ class Note extends Model
         return $this->belongsTo(Matiere::class);
     }
 
-    // Relation avec le modèle TypeNote
-    public function typeNote()
+    // Relation avec le modèle Semestre
+    public function semestre()
     {
-        return $this->belongsTo(TypeNote::class);
+        return $this->belongsTo(Semestre::class);
+    }
+
+    // Relation avec le modèle AnneeAcademique
+    public function anneeAcademique()
+    {
+        return $this->belongsTo(AnneeAcademique::class);
     }
 
     // Ajouter des méthodes supplémentaires si nécessaire
