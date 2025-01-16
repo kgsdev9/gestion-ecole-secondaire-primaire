@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ParametreAction extends Model
+class ConfigurationEmploiDuTemps extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['classe_id', 'niveau_id', 'anne_academique_id'];
 }
