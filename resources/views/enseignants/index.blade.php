@@ -126,7 +126,7 @@
 
         <template x-if="showModal">
             <div class="modal fade show d-block" tabindex="-1" aria-modal="true" style="background-color: rgba(0,0,0,0.5)">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" x-text="isEdite ? 'Modification' : 'Création'"></h5>
@@ -134,57 +134,72 @@
                         </div>
                         <div class="modal-body">
                             <form @submit.prevent="submitForm">
-                                <div class="mb-3">
-                                    <label for="nom" class="form-label">Nom</label>
-                                    <input type="text" id="nom" class="form-control" x-model="formData.nom"
-                                        required>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3"> <!-- Première colonne de la grille -->
+                                        <label for="nom" class="form-label">Nom</label>
+                                        <input type="text" id="nom" class="form-control" x-model="formData.nom"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6 mb-3"> <!-- Deuxième colonne de la grille -->
+                                        <label for="prenom" class="form-label">Prénom</label>
+                                        <input type="text" id="prenom" class="form-control"
+                                            x-model="formData.prenom" required>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="prenom" class="form-label">Prénom</label>
-                                    <input type="text" id="prenom" class="form-control" x-model="formData.prenom"
-                                        required>
+                                <div class="row"> <!-- Nouvelle ligne pour les autres champs -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="matricule" class="form-label">Matricule</label>
+                                        <input type="text" id="matricule" class="form-control"
+                                            x-model="formData.matricule" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" id="email" class="form-control"
+                                            x-model="formData.email" required>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="matricule" class="form-label">Matricule</label>
-                                    <input type="text" id="matricule" class="form-control"
-                                        x-model="formData.matricule" required>
+                                <div class="row"> <!-- Autre ligne pour les champs restants -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="adresse" class="form-label">Adresse</label>
+                                        <input type="text" id="adresse" class="form-control"
+                                            x-model="formData.adresse" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="telephone" class="form-label">Téléphone</label>
+                                        <input type="text" id="telephone" class="form-control"
+                                            x-model="formData.telephone" required>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" id="email" class="form-control" x-model="formData.email"
-                                        required>
+                                <div class="row"> <!-- Dernière ligne pour la matière et la photo -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="matiere" class="form-label">Matière</label>
+                                        <select id="classe_id" x-model="formData.matiere_id" class="form-select"
+                                            required>
+                                            <option value="">Choisir une Classe</option>
+                                            @foreach ($matieres as $matiere)
+                                                <option value="{{ $matiere->id }}">{{ $matiere->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="photo" class="form-label">Photo</label>
+                                        <input type="file" id="photo" class="form-control"
+                                            @change="handleFileUpload" :disabled="isEdite">
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="adresse" class="form-label">Adresse</label>
-                                    <input type="text" id="adresse" class="form-control" x-model="formData.adresse"
-                                        required>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-primary"
+                                            x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="telephone" class="form-label">Téléphone</label>
-                                    <input type="text" id="telephone" class="form-control"
-                                        x-model="formData.telephone" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="matiere" class="form-label">Matière</label>
-                                    <select id="matiere" class="form-control" x-model="formData.matiere_id" required>
-                                        <option value="">Sélectionnez une matière</option>
-                                        <template x-for="matiere in matieres" :key="matiere.id">
-                                            <option :value="matiere.id" x-text="matiere.name"></option>
-                                        </template>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="photo" class="form-label">Photo</label>
-                                    <input type="file" id="photo" class="form-control" @change="handleFileUpload"
-                                        :disabled="isEdite">
-                                </div>
-                                <button type="submit" class="btn btn-primary"
-                                    x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
         </template>
 
     </div>
@@ -193,7 +208,6 @@
         function enseignantForm() {
             return {
                 searchTerm: '',
-                matieres: @json($matieres),
                 enseignants: @json($enseignants),
                 filteredEnseignants: [],
                 currentPage: 1,
@@ -227,6 +241,8 @@
                         this.currentEnseignant = {
                             ...enseignant
                         };
+
+
                         this.formData = {
                             nom: this.currentEnseignant.nom,
                             prenom: this.currentEnseignant.prenom,
@@ -282,20 +298,19 @@
                     formData.append('adresse', this.formData.adresse);
                     formData.append('telephone', this.formData.telephone);
                     formData.append('matiere_id', this.formData.matiere_id);
-                    if (this.formData.photo) {
-                        formData.append('photo', this.formData.photo); // Ajouter la photo si présente
+
+                    if (this.currentEnseignant) {
+                        formData.append('enseignant_id', this.currentEnseignant.id);
                     }
 
                     try {
-                        const response = await fetch(this.isEdite ?
-                            `{{ route('enseignants.update', ['enseignant' => '__ID__']) }}`.replace('__ID__', this
-                                .currentEnseignant.id) : '{{ route('enseignants.store') }}', {
-                                method: this.isEdite ? 'PUT' : 'POST',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                },
-                                body: formData,
-                            });
+                        const response = await fetch('{{ route('enseignants.store') }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: formData,
+                        });
 
                         if (response.ok) {
                             const data = await response.json();
@@ -364,6 +379,25 @@
                 goToPage(page) {
                     if (page > 0 && page <= this.totalPages) {
                         this.currentPage = page;
+                    }
+                },
+
+
+                deleteEnseignant(enseignantId) {
+                    if (confirm('Êtes-vous sûr de vouloir supprimer cet enseignant ?')) {
+                        fetch(`/enseignants/${enseignantId}`, {
+                                method: 'DELETE'
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.message === 'Enseignant supprimé avec succès') {
+                                    this.enseignants = this.enseignants.filter(enseignant => enseignant.id !==
+                                        enseignantId);
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Erreur:", error);
+                            });
                     }
                 },
 
