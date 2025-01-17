@@ -293,6 +293,8 @@
                     return this.filteredProducts.slice(start, end);
                 },
 
+                
+
 
                 filterProducts() {
 

@@ -10,11 +10,14 @@ use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Factures\FacturePersonnaliseController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Impression\Facture\ImpressionFactureController;
+use App\Http\Controllers\Matiere\MatiereController;
+use App\Http\Controllers\Niveau\NiveauController;
 use App\Http\Controllers\Pos\ProductPostController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Rapport\RapportController;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Salle\AnneAcademiqueController;
+use App\Http\Controllers\Salle\SalleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vente\VenteController;
 use Illuminate\Support\Facades\Route;
@@ -44,7 +47,15 @@ Route::resource('/eleves', EleveController::class);
 Route::resource('/product', ProductController::class);
 Route::resource('/categories', CategoryController::class);
 Route::resource('/ventes', VenteController::class);
-Route::resource('/roles', RoleController::class);
+Route::resource('/matieres', MatiereController::class);
+Route::resource('/niveaux', NiveauController::class);
+Route::resource('/salles', SalleController::class);
+
+
+
+
+
+
 Route::resource('/rapport', RapportController::class);
 Route::resource('/depenses', DepensesController::class);
 Route::resource('/commandes', CommandeController::class);

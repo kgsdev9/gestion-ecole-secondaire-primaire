@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="app-main flex-column flex-row-fluid mt-4" x-data="anneeAcademiqueManagement()" x-init="init()">
+    <div class="app-main flex-column flex-row-fluid mt-4" x-data="salleSearch()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
 
             <div class="app-toolbar py-3 py-lg-6">
                 <div class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                         <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                            GESTION DES ANNEES ACADEMIQUES
+                            GESTION DES SALLES
                         </h1>
                         <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                             <li class="breadcrumb-item text-muted">
@@ -17,7 +17,7 @@
                             <li class="breadcrumb-item">
                                 <span class="bullet bg-gray-500 w-5px h-2px"></span>
                             </li>
-                            <li class="breadcrumb-item text-muted">Année Académique</li>
+                            <li class="breadcrumb-item text-muted">Salles</li>
                         </ul>
                     </div>
                 </div>
@@ -26,26 +26,20 @@
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="card">
-
                         <div class="card-header border-0 pt-6">
                             <div class="card-title">
                                 <div class="d-flex align-items-center position-relative my-1">
                                     <i class='fas fa-search position-absolute ms-5'></i>
-                                    <input type="text" class="form-control form-control-solid w-250px ps-13 form-control-sm" placeholder="Rechercher" x-model="searchTerm" @input="filterAnneeAcademiques">
+                                    <input type="text"
+                                        class="form-control form-control-solid w-250px ps-13 form-control-sm"
+                                        placeholder="Rechercher" x-model="searchTerm" @input="filterSalles">
                                 </div>
                             </div>
-
                             <div class="card-toolbar">
                                 <div class="d-flex justify-content-end align-items-center gap-3">
-                                    <button @click="printAnneeAcademiques" class="btn btn-light-primary btn-sm">
-                                        <i class="fa fa-print"></i> Imprimer
-                                    </button>
-                                    <button @click="exportAnneeAcademiques" class="btn btn-light-primary btn-sm">
-                                        <i class='fas fa-file-export'></i> Export
-                                    </button>
-                                    <button @click="openModal()"
+                                    <button @click="showModal = true"
                                         class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm">
-                                        <i class="fa fa-add"></i> Création
+                                        <i class='fa fa-add'></i> Création
                                     </button>
                                 </div>
                             </div>
@@ -64,24 +58,21 @@
                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                                         <thead>
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                                                <th class="min-w-125px">Libellé Année</th>
-                                                <th class="min-w-125px">Date début</th>
-                                                <th class="min-w-125px">Date Fin</th>
+                                                <th class="min-w-125px">Libellé Salle</th>
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 fw-semibold">
-                                            <template x-for="annee in paginatedAnneeAcademiques" :key="annee.id">
+                                            <template x-for="salle in paginatedSalles" :key="salle.id">
                                                 <tr>
-                                                    <td x-text="annee.name"></td>
-                                                    <td x-text="formatDate(annee.date_debut)"></td>
-                                                    <td x-text="formatDate(annee.date_fin)"></td>
+                                                    <td x-text="salle.name"></td>
                                                     <td class="text-end">
-                                                        <button @click="openModal(annee)"
-                                                            class="btn btn-primary ms-2 btn-sm mx-2">
+                                                        <button @click="openModal(salle)"
+                                                            class="btn btn-primary btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <button @click="deleteAnneeAcademique(annee.id)" class="btn btn-danger btn-sm">
+                                                        <button @click="deleteSalle(salle.id)"
+                                                            class="btn btn-danger btn-sm">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </td>
@@ -91,15 +82,18 @@
                                     </table>
                                 </template>
                             </div>
+
                             <div class="row mt-4">
                                 <div class="col-sm-12 col-md-7 offset-md-5 d-flex justify-content-end">
                                     <nav>
                                         <ul class="pagination">
                                             <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                                                <button class="page-link" @click="goToPage(currentPage - 1)">Précédent</button>
+                                                <button class="page-link"
+                                                    @click="goToPage(currentPage - 1)">Précédent</button>
                                             </li>
                                             <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                                                <button class="page-link" @click="goToPage(currentPage + 1)">Suivant</button>
+                                                <button class="page-link"
+                                                    @click="goToPage(currentPage + 1)">Suivant</button>
                                             </li>
                                         </ul>
                                     </nav>
@@ -116,24 +110,18 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" x-text="isEdit ? 'Modification' : 'Création'"></h5>
-                            <button type="button" class="btn-close" @click="closeModal()"></button>
+                            <h5 class="modal-title" x-text="isEdite ? 'Modification' : 'Création'"></h5>
+                            <button type="button" class="btn-close" @click="hideModal()"></button>
                         </div>
                         <div class="modal-body">
                             <form @submit.prevent="submitForm">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Libellé Année Académique</label>
-                                    <input type="text" id="name" class="form-control" x-model="formData.name" required>
+                                    <label for="name" class="form-label">Libellé Salle</label>
+                                    <input type="text" id="name" class="form-control" x-model="formData.name"
+                                        required>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="date_debut" class="form-label">Date début</label>
-                                    <input type="date" id="date_debut" class="form-control" x-model="formData.date_debut" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="date_fin" class="form-label">Date fin</label>
-                                    <input type="date" id="date_fin" class="form-control" x-model="formData.date_fin" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary" x-text="isEdit ? 'Mettre à jour' : 'Enregistrer'"></button>
+                                <button type="submit" class="btn btn-primary"
+                                    x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
                             </form>
                         </div>
                     </div>
@@ -143,86 +131,57 @@
     </div>
 
     <script>
-        function anneeAcademiqueManagement() {
+        function salleSearch() {
             return {
                 searchTerm: '',
-                anneeAcademiques: @json($listeanneeacademique),
-                filteredAnneeAcademiques: [],
+                salles: @json($salles),
+                filteredSalles: [],
                 currentPage: 1,
-                anneeAcademiquesPerPage: 10,
+                sallesPerPage: 10,
                 totalPages: 0,
                 isLoading: true,
                 showModal: false,
-                isEdit: false,
+                isEdite: false,
                 formData: {
                     name: '',
-                    date_debut: '',
-                    date_fin: ''
                 },
-                currentAnneeAcademique: null,
+                currentSalle: null,
 
-                init() {
-                    this.filterAnneeAcademiques();
-                    this.isLoading = false;
+                hideModal() {
+                    this.showModal = false;
+                    this.currentSalle = null;
+                    this.resetForm();
+                    this.isEdite = false;
                 },
 
-                openModal(anneeAcademique = null) {
-                    this.isEdit = !!anneeAcademique;
-                    if (this.isEdit) {
-                        this.currentAnneeAcademique = { ...anneeAcademique };
-                        this.formData.name = anneeAcademique.name;
-                        this.formData.date_debut = anneeAcademique.date_debut;
-                        this.formData.date_fin = anneeAcademique.date_fin;
+                openModal(salle = null) {
+                    this.isEdite = salle !== null;
+                    if (this.isEdite) {
+                        this.currentSalle = {
+                            ...salle
+                        };
+                        this.formData = {
+                            name: this.currentSalle.name
+                        };
                     } else {
                         this.resetForm();
                     }
                     this.showModal = true;
                 },
 
-                goToPage(page) {
-                    if (page < 1 || page > this.totalPages) return;
-                    this.currentPage = page;
-                },
-
-                closeModal() {
-                    this.showModal = false;
-                    this.resetForm();
-                },
-
                 resetForm() {
                     this.formData = {
-                        name: '',
-                        date_debut: '',
-                        date_fin: ''
+                        name: ''
                     };
-                    this.isEdit = false;
-                    this.currentAnneeAcademique = null;
-                },
-
-                filterAnneeAcademiques() {
-                    const term = this.searchTerm.toLowerCase();
-                    this.filteredAnneeAcademiques = this.anneeAcademiques.filter(annee => annee.name.toLowerCase().includes(term));
-                    this.totalPages = Math.ceil(this.filteredAnneeAcademiques.length / this.anneeAcademiquesPerPage);
-                    this.currentPage = 1;
-                },
-
-                formatDate(date) {
-                    return new Date(date).toLocaleDateString('fr-FR');
-                },
-
-                get paginatedAnneeAcademiques() {
-                    const start = (this.currentPage - 1) * this.anneeAcademiquesPerPage;
-                    return this.filteredAnneeAcademiques.slice(start, start + this.anneeAcademiquesPerPage);
                 },
 
                 async submitForm() {
                     this.isLoading = true;
 
-                    if (!this.formData.name || this.formData.name.trim() === '') {
+                    if (!this.formData.name.trim()) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Le libellé de l\'année académique est requis.',
-                            showConfirmButton: true
+                            title: 'Le nom de la salle est requis.',
                         });
                         this.isLoading = false;
                         return;
@@ -230,77 +189,65 @@
 
                     const formData = new FormData();
                     formData.append('name', this.formData.name);
-                    formData.append('date_debut', this.formData.date_debut);
-                    formData.append('date_fin', this.formData.date_fin);
-                    formData.append('annee_academique_id', this.currentAnneeAcademique ? this.currentAnneeAcademique.id : null);
+                    formData.append('salle_id', this.currentSalle ? this.currentSalle.id : null);
 
                     try {
-                        const response = await fetch('{{ route('anneeacademique.store') }}', {
+                        const response = await fetch('{{ route('salles.store') }}', {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                             },
                             body: formData,
-                        }); 
+                        });
 
                         if (response.ok) {
                             const data = await response.json();
-                            const anneeAcademique = data.anneeAcademique;
+                            const salle = data.salle;
 
-                            if (anneeAcademique) {
+                            if (salle) {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Année académique enregistrée avec succès !',
+                                    title: 'Salle enregistrée avec succès !',
                                     showConfirmButton: false,
-                                    timer: 1500
+                                    timer: 1500,
                                 });
 
-                                if (this.isEdit) {
-                                    const index = this.anneeAcademiques.findIndex(p => p.id === anneeAcademique.id);
+                                if (this.isEdite) {
+                                    const index = this.salles.findIndex(s => s.id === salle.id);
                                     if (index !== -1) {
-                                        this.anneeAcademiques[index] = anneeAcademique;
+                                        this.salles[index] = salle;
                                     }
                                 } else {
-                                    this.anneeAcademiques.push(anneeAcademique);
-                                    this.anneeAcademiques.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                                    this.salles.push(salle);
+                                    this.salles.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                                 }
 
-                                this.filterAnneeAcademiques();
+                                this.filterSalles();
                                 this.resetForm();
-                                this.closeModal();
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Année académique non valide.',
-                                    showConfirmButton: true
-                                });
+                                this.hideModal();
                             }
                         } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Erreur lors de l\'enregistrement.',
-                                showConfirmButton: true
                             });
                         }
                     } catch (error) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Une erreur est survenue.',
-                            showConfirmButton: true
+                            title: 'Erreur serveur.',
                         });
                     } finally {
                         this.isLoading = false;
                     }
                 },
 
-                async deleteAnneeAcademique(anneeAcademiqueID) {
+                async deleteSalle(salleId) {
                     try {
-                        const url = `{{ route('anneeacademique.destroy', ['anneeacademique' => '__ID__']) }}`.replace("__ID__", anneeAcademiqueID);
-
-                        const response = await fetch(url, {
-                            method: "DELETE",
+                        const response = await fetch(`/salles/${salleId}`, {
+                            method: 'DELETE',
                             headers: {
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
                             },
                         });
 
@@ -308,35 +255,60 @@
                             const result = await response.json();
                             if (result.success) {
                                 Swal.fire({
-                                    icon: "success",
+                                    icon: 'success',
                                     title: result.message,
                                     showConfirmButton: false,
                                     timer: 1500,
                                 });
 
-                                this.anneeAcademiques = this.anneeAcademiques.filter(annee => annee.id !== anneeAcademiqueID);
-                                this.filterAnneeAcademiques();
+                                this.salles = this.salles.filter(salle => salle.id !== salleId);
+                                this.filterSalles();
                             } else {
                                 Swal.fire({
-                                    icon: "error",
+                                    icon: 'error',
                                     title: result.message,
                                     showConfirmButton: true,
                                 });
                             }
                         } else {
                             Swal.fire({
-                                icon: "error",
-                                title: "Erreur lors de la requête.",
+                                icon: 'error',
+                                title: 'Erreur lors de la requête.',
                                 showConfirmButton: true,
                             });
                         }
                     } catch (error) {
+                        console.error('Erreur réseau :', error);
                         Swal.fire({
-                            icon: "error",
-                            title: "Erreur réseau.",
+                            icon: 'error',
+                            title: 'Une erreur réseau s\'est produite.',
                             showConfirmButton: true,
                         });
                     }
+                },
+
+                get paginatedSalles() {
+                    let start = (this.currentPage - 1) * this.sallesPerPage;
+                    let end = start + this.sallesPerPage;
+                    return this.filteredSalles.slice(start, end);
+                },
+
+                changePage(page) {
+                    if (page < 1 || page > this.totalPages) return;
+                    this.currentPage = page;
+                },
+
+                filterSalles() {
+                    const term = this.searchTerm.toLowerCase();
+                    this.filteredSalles = this.salles.filter(salle =>
+                        salle.name.toLowerCase().includes(term)
+                    );
+                    this.totalPages = Math.ceil(this.filteredSalles.length / this.sallesPerPage);
+                },
+
+                init() {
+                    this.filterSalles();
+                    this.isLoading = false;
                 },
             };
         }
