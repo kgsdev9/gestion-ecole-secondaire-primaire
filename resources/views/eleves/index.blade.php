@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Liste des clients')
+@section('title', 'Liste des eleves')
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="userSearch()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
@@ -8,7 +8,7 @@
                 <div class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                         <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                            GESTION DES CLIENTS
+                            GESTION DES ELEVES
                         </h1>
                         <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                             <li class="breadcrumb-item text-muted">
@@ -17,7 +17,7 @@
                             <li class="breadcrumb-item">
                                 <span class="bullet bg-gray-500 w-5px h-2px"></span>
                             </li>
-                            <li class="breadcrumb-item text-muted">Clients</li>
+                            <li class="breadcrumb-item text-muted">Eleves</li>
                         </ul>
                     </div>
                 </div>
@@ -67,43 +67,41 @@
                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                                         <thead>
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                                                <th class="min-w-125px">Libelle</th>
-                                                <th class="min-w-125px">Télephone</th>
-                                                <th class="min-w-125px">Email </th>
-                                                <th class="min-w-125px">Fax </th>
-                                                <th class="min-w-125px">Date</th>
+                                                <th class="min-w-125px">Nom</th>
+                                                <th class="min-w-125px">Matricule</th>
+                                                <th class="min-w-125px">Classe</th>
+                                                <th class="min-w-125px">Niveau</th>
+                                                <th class="min-w-125px">Annéee Academique</th>
+                                                <th class="min-w-125px">Date </th>
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 fw-semibold">
-                                            <template x-for="client in paginatedUsers" :key="client.id">
+                                            <template x-for="eleve in paginatedEleves" :key="eleve.id">
                                                 <tr>
-                                                    <td x-text="client.libtiers">
+                                                    <td x-text="eleve.nom + ' ' + eleve.prenom"></td>
+                                                    <td x-text="eleve.matricule"></td>
+                                                    <td x-text="eleve.classe.name"></td>
+                                                    <td x-text="eleve.niveau.name"></td>
+                                                    <td x-text="eleve.anneeacademique.name"></td>
+                                                    <td x-text="new Date(eleve.created_at).toLocaleDateString('fr-FR')">
                                                     </td>
-                                                    <td x-text="client.telephone"></td>
-                                                    <td x-text="client.email "></td>
-                                                    <td x-text="client.fax "></td>
-                                                    <td x-text="new Date(client.created_at).toLocaleDateString('fr-FR')">
-                                                    </td>
-
                                                     <td class="text-end">
-                                                        <button @click="openModal(client)"
+                                                        <button @click="openModal(eleve)"
                                                             class="btn btn-primary btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
 
-                                                        <button @click="deleteClient(client.id)"
+                                                        <button @click="deleteEleve(eleve.id)"
                                                             class="btn btn-danger btn-sm mx-2">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
-
-
                                                     </td>
-
                                                 </tr>
                                             </template>
                                         </tbody>
                                     </table>
+
                                 </template>
                             </div>
 
@@ -140,104 +138,98 @@
                         <div class="modal-body">
                             <form @submit.prevent="submitForm">
                                 <div class="row">
-
-                                    <!-- Libellé tiers -->
+                                    <!-- Nom -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="libtiers" class="form-label">Libellé Tiers</label>
-                                        <input type="text" id="libtiers" class="form-control"
-                                            x-model="formData.libtiers" required>
+                                        <label for="nom" class="form-label">Nom</label>
+                                        <input type="text" id="nom" class="form-control" x-model="formData.nom"
+                                            required>
                                     </div>
 
-                                    <!-- Adresse postale -->
+                                    <!-- Prénom -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="adressepostale" class="form-label">Adresse Postale</label>
-                                        <input type="text" id="adressepostale" class="form-control"
-                                            x-model="formData.adressepostale">
+                                        <label for="prenom" class="form-label">Prénom</label>
+                                        <input type="text" id="prenom" class="form-control"
+                                            x-model="formData.prenom" required>
                                     </div>
 
-                                    <!-- Adresse géographique -->
+                                    <!-- Photo -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="adressegeo" class="form-label">Adresse Géographique</label>
-                                        <input type="text" id="adressegeo" class="form-control"
-                                            x-model="formData.adressegeo">
+                                        <label for="photo" class="form-label">Photo</label>
+                                        <input type="file" id="photo" class="form-control"
+                                            x-model="formData.photo">
                                     </div>
 
-                                    <!-- Fax -->
+                                    <!-- Matricule -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="fax" class="form-label">Fax</label>
-                                        <input type="text" id="fax" class="form-control"
-                                            x-model="formData.fax">
+                                        <label for="matricule" class="form-label">Matricule</label>
+                                        <input type="text" id="matricule" class="form-control"
+                                            x-model="formData.matricule" required>
                                     </div>
 
-                                    <!-- Email -->
+                                    <!-- Classe -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" id="email" class="form-control"
-                                            x-model="formData.email" required>
-                                    </div>
-
-                                    <!-- Téléphone -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="telephone" class="form-label">Téléphone</label>
-                                        <input type="text" id="telephone" class="form-control"
-                                            x-model="formData.telephone">
-                                    </div>
-
-                                    <!-- Numéro de contribuable -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="numerocomtribuabe" class="form-label">Numéro de Contribuable</label>
-                                        <input type="text" id="numerocomtribuabe" class="form-control"
-                                            x-model="formData.numerocomtribuabe">
-                                    </div>
-
-                                    <!-- Numéro de compte -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="numerodecompte" class="form-label">Numéro de Compte</label>
-                                        <input type="text" id="numerodecompte" class="form-control"
-                                            x-model="formData.numerodecompte">
-                                    </div>
-
-                                    <!-- Capital -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="capital" class="form-label">Capital</label>
-                                        <input type="text" id="capital" class="form-control"
-                                            x-model="formData.capital">
-                                    </div>
-
-                                    <!-- Régime fiscal -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="tregimefiscal_id" class="form-label">Régime Fiscal</label>
-                                        <select id="tregimefiscal_id" x-model="formData.tregimefiscal_id"
-                                            class="form-select">
-                                            <option value="">Choisir un régime fiscal</option>
-                                            @foreach ($listeregimesfiscaux as $fiscal)
-                                                <option value="{{ $fiscal->id }}">{{ $fiscal->libelleregimefiscale }}
-                                                </option>
+                                        <label for="classe_id" class="form-label">Classe</label>
+                                        <select id="classe_id" x-model="formData.classe_id" class="form-select" required>
+                                            <option value="">Choisir une Classe</option>
+                                            @foreach ($listeclasse as $classe)
+                                                <option value="{{ $classe->id }}">{{ $classe->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <!-- Code devise -->
+                                    <!-- Année académique -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="tcodedevise_id" class="form-label">Code Devise</label>
-                                        <select id="tcodedevise_id" x-model="formData.tcodedevise_id"
-                                            class="form-select">
-                                            <option value="">Choisir une devise</option>
-                                            @foreach ($listecodedevises as $devise)
-                                                <option value="{{ $devise->id }}">{{ $devise->libellecodedevise }}
-                                                </option>
+                                        <label for="annee_academique_id" class="form-label">Année Académique</label>
+                                        <select id="annee_academique_id" x-model="formData.annee_academique_id"
+                                            class="form-select" required>
+                                            <option value="">Choisir une Année Académique</option>
+                                            @foreach ($listeannee as $annee)
+                                                <option value="{{ $annee->id }}">{{ $annee->name }}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+
+                                    <!-- Niveau -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="niveau_id" class="form-label">Niveau</label>
+                                        <select id="niveau_id" x-model="formData.niveau_id" class="form-select" required>
+                                            <option value="">Choisir un Niveau</option>
+                                            @foreach ($listeniveaux as $niveau)
+                                                <option value="{{ $niveau->id }}">{{ $niveau->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Date de naissance -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="date_naissance" class="form-label">Date de Naissance</label>
+                                        <input type="date" id="date_naissance" class="form-control"
+                                            x-model="formData.date_naissance">
+                                    </div>
+
+                                    <!-- Adresse -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="adresse" class="form-label">Adresse</label>
+                                        <input type="text" id="adresse" class="form-control"
+                                            x-model="formData.adresse">
+                                    </div>
+
+                                    <!-- Téléphone Parent -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="telephone_parant" class="form-label">Téléphone Parent</label>
+                                        <input type="text" id="telephone_parant" class="form-control"
+                                            x-model="formData.telephone_parant">
                                     </div>
 
                                     <div class="col-md-6 mb-3 mt-8">
-                                        <label for="tcodedevise_id" class="form-label"></label>
+                                        <label for="submit" class="form-label"></label>
                                         <button type="submit" class="btn btn-primary"
                                             x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
                                     </div>
                                 </div>
                             </form>
                         </div>
+
                     </div>
                 </div>
 
@@ -251,81 +243,85 @@
         function userSearch() {
             return {
                 searchTerm: '',
-                users: @json($listeclients),
-                filteredUsers: [],
+                eleves: @json($eleves),
+                filteredEleves: [],
                 currentPage: 1,
-                usersPerPage: 10,
+                elevesPerPage: 10,
                 totalPages: 0,
                 isLoading: true,
                 showModal: false,
                 isEdite: false,
                 formData: {
-                    libtiers: '',
-                    adressepostale: '',
-                    adressegeo: '',
-                    fax: '',
-                    email: '',
-                    telephone: '',
-                    numerocomtribuabe: '',
-                    numerodecompte: '',
-                    capital: '',
-                    tregimefiscal_id: '',
-                    tcodedevise_id: '',
+                    nom: '',
+                    prenom: '',
+                    photo: '',
+                    matricule: '',
+                    classe_id: '',
+                    annee_academique_id: '',
+                    niveau_id: '',
+                    date_naissance: '',
+                    adresse: '',
+                    telephone_parant: '',
                 },
-                currentClient: null,
+
+                currentEleve: null,
 
                 hideModal() {
                     this.showModal = false;
-                    this.currentClient = null;
+                    this.currentEleve = null;
                     this.resetForm();
                     this.isEdite = false;
                 },
 
-                openModal(client = null) {
-                    this.isEdite = client !== null;
-
+                openModal(eleve = null) {
+                    this.isEdite = eleve !== null;
 
                     if (this.isEdite) {
-                        this.currentClient = {
-                            ...client
+                        this.currentEleve = {
+                            ...eleve
                         };
-
 
                         this.formData = {
-                            libtiers: this.currentClient.libtiers,
-                            email: this.currentClient.email,
-                            adressepostale: this.currentClient.adressepostale,
-                            adressegeo: this.currentClient.adressegeo,
-                            telephone: this.currentClient.telephone,
-                            fax: this.currentClient.fax,
-                            capital: this.currentClient.capital,
-                            numerodecompte: this.currentClient.capital,
-                            numerocomtribuabe: this.currentClient.numerocomtribuabe,
-                            tregimefiscal_id: this.currentClient.tregimefiscal_id,
-                            tcodedevise_id: this.currentClient.tcodedevise_id,
+                            nom: this.currentEleve.nom,
+                            prenom: this.currentEleve.prenom,
+                            photo: this.currentEleve.photo,
+                            matricule: this.currentEleve.matricule,
+                            classe_id: this.currentEleve.classe_id,
+                            annee_academique_id: this.currentEleve.anneeacademique_id,
+                            niveau_id: this.currentEleve.niveau_id,
+                            date_naissance: this.currentEleve.date_naissance,
+                            adresse: this.currentEleve.adresse,
+                            telephone_parant: this.currentEleve.telephone_parent,
                         };
-
 
                     } else {
                         this.resetForm();
                         this.isEdite = false;
                     }
+
                     this.showModal = true;
                 },
 
+
                 resetForm() {
                     this.formData = {
-                        name: '',
-                        email: '',
-                        role_id: '',
-                        password: ''
+                        nom: '',
+                        prenom: '',
+                        photo: '',
+                        matricule: '',
+                        classe_id: '',
+                        annee_academique_id: '',
+                        niveau_id: '',
+                        date_naissance: '',
+                        adresse: '',
+                        telephone_parant: '',
                     };
                 },
 
                 async deleteClient(clientId) {
                     try {
                         const url =
-                            `{{ route('clients.destroy', ['client' => '__ID__']) }}`.replace(
+                            `{{ route('eleves.destroy', ['elefe' => '__ID__']) }}`.replace(
                                 "__ID__",
                                 clientId
                             );
@@ -376,35 +372,24 @@
                     }
                 },
 
-
-
                 async submitForm() {
                     this.isLoading = true;
-                    if (!this.formData.libtiers || this.formData.libtiers.trim() === '') {
+
+                    // Validation for each field
+                    if (!this.formData.nom || this.formData.nom.trim() === '') {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Le libelle est requis.',
+                            title: 'Le nom est requis.',
                             showConfirmButton: true
                         });
                         this.isLoading = false;
                         return;
                     }
 
-                    if (!this.formData.capital || isNaN(this.formData.capital) || parseFloat(this.formData
-                            .prixachat) <= 0) {
+                    if (!this.formData.prenom || this.formData.prenom.trim() === '') {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Le captial doit être un nombre valide et supérieur à 0.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-                    if (!this.formData.fax || this.formData.fax.trim() === '') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Le fax est requis.',
+                            title: 'Le prénom est requis.',
                             showConfirmButton: true
                         });
                         this.isLoading = false;
@@ -412,31 +397,60 @@
                     }
 
 
-
-                    if (!this.formData.telephone || this.formData.telephone.trim() === '') {
+                    if (!this.formData.classe_id || this.formData.classe_id === '') {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Le télephone est requis.',
+                            title: 'La classe est requise.',
                             showConfirmButton: true
                         });
                         this.isLoading = false;
                         return;
                     }
 
-                    if (!this.formData.email || this.formData.email.trim() === '') {
+                    if (!this.formData.annee_academique_id || this.formData.annee_academique_id === '') {
                         Swal.fire({
                             icon: 'error',
-                            title: 'L\'email est requis.',
+                            title: 'L\'année académique est requise.',
                             showConfirmButton: true
                         });
                         this.isLoading = false;
                         return;
                     }
 
-                    if (!this.formData.adressepostale || this.formData.adressepostale.trim() === '') {
+                    if (!this.formData.niveau_id || this.formData.niveau_id === '') {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Adresse postale est requis.',
+                            title: 'Le niveau est requis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.date_naissance || this.formData.date_naissance.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'La date de naissance est requise.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.adresse || this.formData.adresse.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'L\'adresse est requise.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.telephone_parant || this.formData.telephone_parant.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le téléphone du parent est requis.',
                             showConfirmButton: true
                         });
                         this.isLoading = false;
@@ -444,28 +458,22 @@
                     }
 
                     const formData = new FormData();
-                    formData.append('libtiers', this.formData.libtiers);
-                    formData.append('adressepostale', this.formData.adressepostale);
-                    formData.append('adressegeo', this.formData.adressegeo);
-                    formData.append('fax', this.formData.fax);
-                    formData.append('email', this.formData.email);
-                    formData.append('telephone', this.formData.telephone);
-                    formData.append('numerocomtribuabe', this.formData.numerocomtribuabe);
-                    formData.append('numerodecompte', this.formData.numerodecompte);
-                    formData.append('capital', this.formData.capital);
-                    formData.append('tregimefiscal_id', this.formData.tregimefiscal_id);
-                    formData.append('tcodedevise_id', this.formData.tcodedevise_id);
-                    if (!this.currentClient) {
-                        formData.append('client_id', null);
-                    } else {
-                        formData.append('client_id', this.currentClient.id);
+                    formData.append('nom', this.formData.nom);
+                    formData.append('prenom', this.formData.prenom);
+                    formData.append('classe_id', this.formData.classe_id);
+                    formData.append('annee_academique_id', this.formData.annee_academique_id);
+                    formData.append('niveau_id', this.formData.niveau_id);
+                    formData.append('date_naissance', this.formData.date_naissance);
+                    formData.append('adresse', this.formData.adresse);
+                    formData.append('telephone_parant', this.formData.telephone_parant);
+
+                    // If updating an existing Eleve
+                    if (this.currentEleve) {
+                        formData.append('eleve_id', this.currentEleve.id);
                     }
 
-                    // formData.append('client_id', this.currentClient.id ? this.currentClient.id : null);
                     try {
-
-
-                        const response = await fetch('{{ route('clients.store') }}', {
+                        const response = await fetch('{{ route('eleves.store') }}', {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -475,31 +483,25 @@
 
                         if (response.ok) {
                             const data = await response.json();
-                            const client = data.client;
+                            const eleve = data.eleve;
 
-
-
-                            if (client) {
-
-
+                            if (eleve) {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Client enregistré avec succès!',
+                                    title: 'Élève enregistré avec succès!',
                                     showConfirmButton: false,
                                     timer: 1500
                                 });
 
                                 if (this.isEdite) {
-                                    const index = this.users.findIndex(u => u.id === client.id);
-                                    if (index !== -1) this.users[index] = client;
+                                    const index = this.eleves.findIndex(e => e.id === eleve.id);
+                                    if (index !== -1) this.eleves[index] = eleve;
                                 } else {
-                                    this.users.push(client);
-
-                                    this.users.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                                    this.eleves.push(eleve);
+                                    this.eleves.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                                 }
 
-
-                                this.filterUsers();
+                                this.filterEleves();
                                 this.resetForm();
                                 this.hideModal();
                             }
@@ -522,20 +524,20 @@
                     }
                 },
 
-                get paginatedUsers() {
-                    let start = (this.currentPage - 1) * this.usersPerPage;
-                    let end = start + this.usersPerPage;
-                    return this.filteredUsers.slice(start, end);
+
+                get paginatedEleves() {
+                    let start = (this.currentPage - 1) * this.elevesPerPage;
+                    let end = start + this.elevesPerPage;
+                    return this.filteredEleves.slice(start, end);
                 },
 
-                filterUsers() {
+                filterEleves() {
                     const term = this.searchTerm.toLowerCase();
-                    this.filteredUsers = this.users.filter(user => {
-                        return user.libtiers && user.libtiers.toLowerCase().includes(term) || user.telephone &&
-
-                            user.telephone.toLowerCase().includes(term);
+                    this.filteredEleves = this.eleves.filter(eleve => {
+                        return eleve.nom && eleve.nom.toLowerCase().includes(term) ||
+                            eleve.telephone_parant && eleve.telephone_parant.toLowerCase().includes(term);
                     });
-                    this.totalPages = Math.ceil(this.filteredUsers.length / this.usersPerPage);
+                    this.totalPages = Math.ceil(this.filteredEleves.length / this.elevesPerPage);
                     this.currentPage = 1;
                 },
 
@@ -545,7 +547,7 @@
                 },
 
                 init() {
-                    this.filterUsers();
+                    this.filterEleves();
                     this.isLoading = false;
                 }
             };
