@@ -590,7 +590,7 @@
                                         </div>
 
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('enseignants.index') ? 'active' : '' }}" href="{{ route('enseignants.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>

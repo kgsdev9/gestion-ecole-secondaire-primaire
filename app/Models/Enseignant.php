@@ -20,4 +20,10 @@ class Enseignant extends Model
         'matricule',
         'matiere_id'
     ];
+
+
+    public function matiere()
+    {
+        return $this->belongsTo(Matiere::class);
+    }
 }

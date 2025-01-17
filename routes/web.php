@@ -6,6 +6,7 @@ use App\Http\Controllers\Commandes\CommandeController;
 use App\Http\Controllers\Depenses\DepensesController;
 use App\Http\Controllers\Eleve\EleveController;
 use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
+use App\Http\Controllers\Enseignant\EnseignantController;
 use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Factures\FacturePersonnaliseController;
 use App\Http\Controllers\Home\HomeController;
@@ -50,6 +51,7 @@ Route::resource('/ventes', VenteController::class);
 Route::resource('/matieres', MatiereController::class);
 Route::resource('/niveaux', NiveauController::class);
 Route::resource('/salles', SalleController::class);
+Route::resource('/enseignants', EnseignantController::class);
 
 
 

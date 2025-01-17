@@ -98,7 +98,7 @@
                                     <!--begin::Item-->
                                     <div class="d-flex flex-stack">
                                         <!--begin::Section-->
-                                        <a href="{{ route('clients.index') }}"
+                                        <a href="{{ route('eleves.index') }}"
                                             class="text-primary fw-semibold fs-6 me-2">Gestion eleves
                                         </a>
                                         <!--end::Section-->
