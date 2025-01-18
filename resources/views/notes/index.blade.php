@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Gestion des notes')
 @section('content')
-    <div class="app-main flex-column flex-row-fluid mt-4" x-data="notesManager()" >
+    <div class="app-main flex-column flex-row-fluid mt-4" x-data="notesManager()">
         <div class="d-flex flex-column flex-column-fluid">
             <div class="app-toolbar py-3 py-lg-6">
                 <div class="app-container container-xxl d-flex flex-stack">
@@ -62,27 +62,32 @@
                             <div class="container mt-5">
                                 <div class="row mb-3">
                                     <div class="col-md-3">
-                                        <input type="text"
-                                            class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                            placeholder="Rechercher" @input="filterProducts">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select @change="filterByCategory" class="form-select form-select-sm"
+                                        <select class="form-select form-select-sm" x-model="formData.matiere_id"
                                             data-live-search="true">
-                                            <option value="">Toutes les classes</option>
-                                            <template x-for="classe in classes" :key="classe.id">
-                                                <option :value="classe.id" x-text="classe.name"></option>
+                                            <option value="">Toutes les matieres Matiere </option>
+                                            <template x-for="matiere in matieres" :key="matiere.id">
+                                                <option :value="matiere.id" x-text="matiere.name"></option>
                                             </template>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="text"
-                                            class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                            placeholder="Entrer une note">
+                                        <select class="form-select form-select-sm" x-model="formData.typenote_id"
+                                            data-live-search="true">
+                                            <option value="">Toutes les type de note </option>
+                                            <template x-for="typenote in typenotes" :key="typenote.id">
+                                                <option :value="typenote.id" x-text="typenote.name"></option>
+                                            </template>
+                                        </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <button class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm">
-                                            <i class="fa fa-add"></i> Création
+                                        <input type="number"
+                                            class="form-control form-control-solid w-250px ps-13 form-control-sm"
+                                            x-model="formData.note" placeholder="Entrer une note">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button @click="submitForm()"
+                                            class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm">
+                                            <i class="fa fa-add"></i> Ajouter
                                         </button>
                                     </div>
                                 </div>
@@ -107,10 +112,12 @@
                                                     <template x-for="matiere in matieres" :key="matiere.id">
                                                         <td>
                                                             <button
-                                                                :class="getNotes(eleve.eleve.id, matiere.id).length === 0 ? 'btn-danger' : 'btn-success'"
+                                                                :class="getNotes(eleve.eleve.id, matiere.id).length === 0 ?
+                                                                    'btn-danger' : 'btn-success'"
                                                                 class="btn btn-sm"
                                                                 @click="openModal(eleve.eleve.id, matiere.id)">
-                                                                <span x-text="getNotes(eleve.eleve.id, matiere.id).length === 0 ? 'Aucune note' : 'Voir les notes'"></span>
+                                                                <span
+                                                                    x-text="getNotes(eleve.eleve.id, matiere.id).length === 0 ? 'Aucune note' : 'Voir les notes'"></span>
                                                             </button>
                                                         </td>
                                                     </template>
@@ -176,9 +183,16 @@
             function notesManager() {
                 return {
                     eleves: @json($eleves),
-                    matieres: @json(    $matieres),
+                    matieres: @json($matieres),
                     classes: @json($classes),
                     niveaux: @json($niveaux),
+                    typenotes: @json($typenotes),
+                    semestresEnCours: @json($semestresEnCours),
+                    formData: {
+                        matiere_id: '',
+                        typenote_id: '',
+                        note: '',
+                    },
                     currentNotesCount: 0,
                     showModal: false,
                     currentNotes: [],
@@ -207,7 +221,6 @@
                         return notes;
                     },
 
-
                     openModal(eleveId, matiereId) {
                         this.currentEleveId = eleveId;
                         this.currentMatiere = this.matieres.find(m => m.id === matiereId) || {};
@@ -227,8 +240,98 @@
                         this.currentNotes = [];
                         this.currentMatiere = {};
                         this.showModal = false;
-
                     },
+
+
+                    async submitForm() {
+
+                        this.isLoading = true;
+
+                        // Validation des champs du formulaire
+                        if (!this.formData.matiere_id) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'La matière est requise.',
+                            });
+                            this.isLoading = false;
+                            return;
+                        }
+
+                        if (!this.formData.typenote_id) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Le type de note est requis.',
+                            });
+                            this.isLoading = false;
+                            return;
+                        }
+
+                        if (!this.formData.note || this.formData.note.trim() === '') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'La note est requise.',
+                            });
+                            this.isLoading = false;
+                            return;
+                        }
+
+                        // Créer une instance de FormData
+                        const formData = new FormData();
+                        formData.append('matiere_id', this.formData.matiere_id);
+                        formData.append('typenote_id', this.formData.typenote_id);
+                        formData.append('note', this.formData.note);
+                        formData.append('eleve_id', this.currentEleveId);
+
+                        try {
+                            const response = await fetch('{{ route('notes.store') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                },
+                                body: formData,
+                            });
+
+                            if (response.ok) {
+                                const data = await response.json();
+                                const note = data.note;
+
+                                if (note) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Note enregistrée avec succès.',
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                    });
+
+                                    // Ajouter la note à l'élève et à la matière concernée
+                                    const eleve = this.eleves.find(e => e.eleve.id === this.currentEleveId);
+                                    if (eleve) {
+                                        // Mettre à jour les notes de l'élève
+                                        eleve.eleve.notes.push(note);
+
+                                        // Mettre à jour les notes dans le tableau de l'interface
+                                        this.currentNotes.push(note); // Ajouter la nouvelle note à l'affichage
+                                    }
+
+
+                                    this.closeModal();
+                                }
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erreur lors de l\'enregistrement de la note.',
+                                });
+                            }
+                        } catch (error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur serveur.',
+                            });
+                        } finally {
+                            this.isLoading = false;
+                        }
+                    }
+
 
                 };
             }
