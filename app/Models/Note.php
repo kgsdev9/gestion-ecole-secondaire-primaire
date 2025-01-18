@@ -40,11 +40,8 @@ class Note extends Model
     }
 
     // Relation avec le modèle TypeNote
-    public function typeNote()
+    public function typenote()
     {
-
         return $this->belongsTo(TypeNote::class, 'typenote_id');
     }
-
-    // Ajouter des méthodes supplémentaires si nécessaire
 }

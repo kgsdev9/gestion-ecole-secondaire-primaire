@@ -287,13 +287,13 @@
                 },
 
 
-                get paginatedProducts() {
+
                     let start = (this.currentPage - 1) * this.productsPerPage;
                     let end = start + this.productsPerPage;
                     return this.filteredProducts.slice(start, end);
                 },
+                get paginatedProducts() {
 
-                
 
 
                 filterProducts() {
@@ -393,7 +393,7 @@
                                     showConfirmButton: false,
                                     timer: 1500,
                                 });
-                                
+
                                 // Retirer le produit de la liste `this.products`
                                 this.products = this.products.filter(product => product.id !== categorieId);
 

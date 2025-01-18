@@ -27,7 +27,7 @@ class NoteController extends Controller
         $niveaux = Niveau::all();
         $classes  = Classe::all();
         $listeAffectionAcademique = AffectionAcademique::all();
-        $eleves = Inscription::with(['eleve.notes'])->get();
+        $eleves = Inscription::with(['eleve.notes.typenote'])->get();
         $matieres = Matiere::all();
         return view('notes.index', compact('listeAffectionAcademique', 'classes', 'niveaux', 'eleves', 'matieres'));
     }

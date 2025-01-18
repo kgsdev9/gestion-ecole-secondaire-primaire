@@ -1,7 +1,7 @@
 @extends('layouts.app')
-
+@section('title', 'Gestion des notes')
 @section('content')
-    <div class="app-main flex-column flex-row-fluid mt-4" x-data="productSearch()" x-init="init()">
+    <div class="app-main flex-column flex-row-fluid mt-4" x-data="notesManager()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
             <div class="app-toolbar py-3 py-lg-6">
                 <div class="app-container container-xxl d-flex flex-stack">
@@ -22,44 +22,38 @@
                 </div>
             </div>
 
-
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="card">
                         <div class="card-header border-0 pt-6">
                             <div class="card-title">
                                 <div class="d-flex align-items-center position-relative my-1">
-                                    <i class='fas fa-search  position-absolute ms-5'></i>
+                                    <i class="fas fa-search position-absolute ms-5"></i>
                                     <input type="text"
                                         class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                        placeholder="Rechercher" x-model="searchTerm">
+                                        placeholder="Rechercher">
                                 </div>
                             </div>
                             <div class="card-toolbar">
                                 <div class="d-flex justify-content-end align-items-center gap-3">
                                     <div>
-                                        <select x-model="selectedCategory" @change="filterClasse"
-                                            class="form-select form-select-sm" data-live-search="true">
-                                            <option value="">Toutes les classes </option>
+                                        <select @change="filterClasse" class="form-select form-select-sm"
+                                            data-live-search="true">
+                                            <option value="">Toutes les classes</option>
                                             <template x-for="classe in classes" :key="classe.id">
-                                                <option :value="classe.id" x-text="classe.name">
-                                                </option>
+                                                <option :value="classe.id" x-text="classe.name"></option>
                                             </template>
                                         </select>
                                     </div>
-
                                     <div>
-                                        <select x-model="selectedCategory" @change="filterLevel"
-                                            class="form-select form-select-sm" data-live-search="true">
-                                            <option value="">Toutes les Niveau</option>
+                                        <select @change="filterLevel" class="form-select form-select-sm"
+                                            data-live-search="true">
+                                            <option value="">Tous les niveaux</option>
                                             <template x-for="niveau in niveaux" :key="niveau.id">
-                                                <option :value="niveau.id" x-text="niveau.name">
-                                                </option>
+                                                <option :value="niveau.id" x-text="niveau.name"></option>
                                             </template>
                                         </select>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -70,31 +64,27 @@
                                     <div class="col-md-3">
                                         <input type="text"
                                             class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                            placeholder="Rechercher" x-model="searchTerm" @input="filterProducts">
+                                            placeholder="Rechercher" @input="filterProducts">
                                     </div>
                                     <div class="col-md-3">
-                                        <select x-model="selectedCategory" @change="filterByCategory"
-                                            class="form-select form-select-sm" data-live-search="true">
-                                            <option value="">Toutes les classes </option>
+                                        <select @change="filterByCategory" class="form-select form-select-sm"
+                                            data-live-search="true">
+                                            <option value="">Toutes les classes</option>
                                             <template x-for="classe in classes" :key="classe.id">
-                                                <option :value="classe.id" x-text="classe.name">
-                                                </option>
+                                                <option :value="classe.id" x-text="classe.name"></option>
                                             </template>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
                                         <input type="text"
                                             class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                            placeholder="Entrer un note " x-model="searchTerm">
+                                            placeholder="Entrer une note">
                                     </div>
-
                                     <div class="col-md-3">
-                                        <button @click="showModal = true"
-                                            class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm">
+                                        <button class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm">
                                             <i class="fa fa-add"></i> Création
                                         </button>
                                     </div>
-
                                 </div>
 
                                 <div class="table-responsive mt-4">
@@ -103,442 +93,175 @@
                                             <tr>
                                                 <th>Nom</th>
                                                 <th>Prénom</th>
-                                                @foreach ($matieres as $matiere)
-                                                    <th>{{ $matiere->name }}</th>
-                                                @endforeach
+                                                <template x-for="matiere in matieres" :key="matiere.id">
+                                                    <th x-text="matiere.name"></th>
+                                                </template>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($eleves as $inscription)
+                                            <template x-for="eleve in eleves" :key="eleve.id">
                                                 <tr>
-                                                    <td>{{ $inscription->eleve->nom }}</td>
-                                                    <td>{{ $inscription->eleve->prenom }}</td>
-                                                    @foreach ($matieres as $matiere)
+                                                    <td x-text="eleve.eleve.nom"></td>
+                                                    <td x-text="eleve.eleve.prenom"></td>
+                                                    <template x-for="matiere in matieres" :key="matiere.id">
                                                         <td>
-                                                            @php
-                                                                $notes = $inscription->eleve->notes
-                                                                    ->where('matiere_id', $matiere->id);
-                                                            @endphp
-                                    
-                                                            @if ($notes->isNotEmpty())
-                                                                <!-- Bouton pour afficher les notes -->
-                                                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                                                    data-bs-target="#notesModal-{{ $inscription->eleve->id }}-{{ $matiere->id }}">
+                                                            <button class="btn btn-primary btn-sm"
+                                                                @click="openModal(eleve.eleve.id, matiere.id)">
+                                                                <span x-show="getNotes(eleve.id, matiere.id).length > 0">
                                                                     Voir notes
-                                                                </button>
-                                                            @else
-                                                                <span class="text-muted">Aucune note</span>
-                                                            @endif
-                                    
-                                                            <!-- Modal contenant les notes -->
-                                                            <div class="modal fade" id="notesModal-{{ $inscription->eleve->id }}-{{ $matiere->id }}" tabindex="-1" aria-labelledby="notesModalLabel" aria-hidden="true">
-                                                                <div class="modal-dialog">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title" id="notesModalLabel">
-                                                                                Notes pour {{ $matiere->name }} - {{ $inscription->eleve->nom }} {{ $inscription->eleve->prenom }}
-                                                                            </h5>
-                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                            @foreach ($notes as $note)
-                                                                                <div class="card mb-2">
-                                                                                    <div class="card-body">
-                                                                                        <p class="mb-1"><strong>Note :</strong> {{ $note->note }}</p>
-                                                                                        <p class="mb-0"><strong>Type :</strong> {{ $note->typenote->name ?? 'N/A' }}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            @endforeach
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                                </span>
+                                                                <span
+                                                                    x-show="getNotes(eleve.eleve.id, matiere.id).length === 0">
+                                                                    Aucune note
+                                                                </span>
+                                                            </button>
                                                         </td>
-                                                    @endforeach
+                                                    </template>
                                                     <td>
-                                                        <button class="btn btn-danger btn-sm">
+                                                        <button class="btn btn-danger btn-sm"
+                                                            @click="deleteEleve(eleve.id)">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </td>
                                                 </tr>
-                                            @endforeach
+                                            </template>
                                         </tbody>
                                     </table>
-                                    
                                 </div>
                             </div>
                         </div>
+                        {{-- news modal --}}
+                        <template x-if="showModal">
+                            <div class="modal fade show d-block" tabindex="-1" aria-modal="true"
+                                style="background-color: rgba(0,0,0,0.5)">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Notes pour <span x-text="currentMatiere.name"></span>
+                                            </h5>
+                                            <button type="button" class="btn-close" @click="closeModal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <template x-if="currentNotes.length > 0">
+                                                <template x-for="note in currentNotes" :key="note.id">
+                                                    <div class="card mb-2">
+                                                        <div class="card-body">
+                                                            <p class="mb-1"><strong>Note :</strong> <span
+                                                                    x-text="note.note"></span></p>
+                                                            <p class="mb-0"><strong>Type :</strong>
+                                                                <!-- Vérification si typenote est défini -->
+                                                                <span
+                                                                    x-text="note.typenote ? note.typenote.name : 'Inconnu'"></span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                            <template x-if="currentNotes.length === 0">
+                                                <p class="text-muted">Aucune note disponible.</p>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        {{-- fin news modal --}}
                     </div>
                 </div>
             </div>
         </div>
 
-
-
-        <template x-if="showModal">
-            <div class="modal fade show d-block" tabindex="-1" aria-modal="true" style="background-color: rgba(0,0,0,0.5)">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" x-text="isEdite ? 'Modification' : 'Création'"></h5>
-                            <button type="button" class="btn-close" @click="hideModal()"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form @submit.prevent="submitForm">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Libellé du Produit</label>
-                                    <input type="text" id="name" class="form-control" x-model="formData.name"
-                                        required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="prixachat" class="form-label">Prix d'Achat</label>
-                                    <input type="number" id="prixachat" class="form-control"
-                                        x-model="formData.prixachat" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="prixvente" class="form-label">Prix de Vente</label>
-                                    <input type="number" id="prixvente" class="form-control"
-                                        x-model="formData.prixvente" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="qtedisponible" class="form-label">Qte disponible</label>
-                                    <input type="number" id="qtedisponible" class="form-control"
-                                        x-model="formData.qtedisponible" required>
-                                </div>
-
-                                {{-- <div class="mb-3">
-                                    <label for="name" class="form-label">Catégorie</label>
-                                    <select x-model="formData.category_id" class="form-select">
-                                        <option value="">Choisir un produit</option>
-                                        @foreach ($listecategorie as $category)
-                                            <option value="{{ $category->id }}">{{ $category->libellecategorieproduct }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div> --}}
-                                <div class="mb-3">
-                                    <label for="image" class="form-label">Image</label>
-                                    <input type="file" id="image" class="form-control" @change="handleFileChange"
-                                        :required="!isEdite">
-                                </div>
-
-
-                                <div v-if="formData.imagePreview" class="mt-3">
-                                    <img :src="formData.imagePreview" alt="Image Preview" class="img-fluid"
-                                        style="max-height:100px;">
-                                </div>
-
-                                <button type="submit" class="btn btn-primary"
-                                    x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
-
-
-    </div>
-
-    <script>
-        function productSearch() {
-            return {
-                searchTerm: '',
-                niveaux: @json($niveaux),
-                classes: @json($classes),
-                products: [],
-                filteredProducts: [],
-                selectedCategory: '',
-                showCategorySelect: true,
-                currentPage: 1,
-                productsPerPage: 10,
-                totalPages: 0,
-                isLoading: true,
-                showModal: false,
-                isEdite: false,
-                formData: {
-                    name: '',
-                    prixachat: '',
-                    qtedisponible: '',
-                    prixvente: '',
-                    image: '',
-                    imagePreview: null,
-                    category_id: ''
-                },
-                currentProduct: null,
-
-                hideModal() {
-
-                    this.showModal = false;
-                    this.currentProduct = null;
-                    this.resetForm();
-                    this.isEdite = false;
-                },
-
-                openModal(product = null) {
-                    this.isEdite = product !== null;
-                    if (this.isEdite) {
-                        this.currentProduct = {
-                            ...product
-                        };
-                        this.formData = {
-                            name: this.currentProduct.libelleproduct,
-                            prixachat: this.currentProduct.prixachat,
-                            prixvente: this.currentProduct.prixvente,
-                            qtedisponible: this.currentProduct.qtedisponible,
-                            category_id: this.currentProduct.category.id,
-                            image: null,
-                            imagePreview: this.currentProduct.image_url || '/default-image.jpg',
-                        };
-                    } else {
-                        this.resetForm();
-
-                        this.isEdite = false;
-                    }
-                    this.showModal = true;
-                },
-
-
-                handleFileChange(event) {
-                    // Récupère le fichier sélectionné
-                    const file = event.target.files[0];
-
-                    if (file) {
-                        // Met à jour l'image dans formData
-                        this.formData.image = file;
-
-                        // Crée un aperçu de l'image en utilisant FileReader
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                            this.formData.imagePreview = reader.result; // Met à jour l'aperçu
-                        };
-                        reader.readAsDataURL(file); // Lire l'image en tant qu'URL base64
-                    }
-                },
-
-                resetForm() {
-                    this.formData = {
-                        name: '',
-                        prixachat: '',
-                        prixvente: '',
-                        category_id: '',
-                        qtedisponible: '',
-                        imagePreview: null,
-                        image: null,
-                    };
-                    document.getElementById('image').value = '';
-                },
-
-
-                async submitForm() {
-                    this.isLoading = true;
-
-                    if (!this.formData.name || this.formData.name.trim() === '') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Le nom du produit est requis.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-                    if (!this.formData.prixachat || isNaN(this.formData.prixachat) || parseFloat(this.formData
-                            .prixachat) <= 0) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Le prix du produit doit être un nombre valide et supérieur à 0.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-
-                    if (!this.formData.prixvente || isNaN(this.formData.prixvente) || parseFloat(this.formData
-                            .prixvente) <= 0) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Le prix de vente du produit doit être un nombre valide et supérieur à 0.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-
-                    if (!this.formData.qtedisponible || isNaN(this.formData.qtedisponible) || parseFloat(this.formData
-                            .qtedisponible) <= 0) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'La quantité disponible doit être un nombre valide et supérieur à 0.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-                    const formData = new FormData();
-                    formData.append('name', this.formData.name);
-                    formData.append('prixachat', this.formData.prixachat);
-                    formData.append('prixvente', this.formData.prixvente);
-                    formData.append('category_id', this.formData.category_id);
-                    formData.append('qtedisponible', this.formData.qtedisponible);
-                    formData.append('product_id', this.currentProduct ? this.currentProduct.id : null);
-                    if (this.formData.image) {
-                        formData.append('image', this.formData.image);
-                    }
-
-                    try {
-                        const response = await fetch('{{ route('product.store') }}', {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            },
-                            body: formData,
-                        });
-
-                        if (response.ok) {
-                            const data = await response.json();
-                            const product = data.product;
-
-                            if (product) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Produit enregistré avec succès !',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
-
-                                if (this.isEdite) {
-                                    const index = this.products.findIndex(p => p.id === product.id);
-                                    if (index !== -1) {
-                                        this.products[index] = product;
-                                    }
-
-                                } else {
-                                    this.products.push(product);
-                                    this.products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                                }
-
-                                this.filterProducts();
-                                this.resetForm();
-                                this.hideModal();
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Produit non valide.',
-                                    showConfirmButton: true
-                                });
-                            }
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erreur lors de l\'enregistrement.',
-                                showConfirmButton: true
-                            });
+        <script>
+            function notesManager() {
+                return {
+                    eleves: @json($eleves),
+                    matieres: @json($matieres),
+                    classes: @json($classes),
+                    niveaux: @json($niveaux),
+                    showModal: false,
+                    currentNotes: [],
+                    currentMatiere: {},
+                    currentEleveId: null,
+                    filteredEleves: [],
+                    filteredClasses: [],
+                    filteredNiveaux: [],
+                    init() {
+                        this.filteredEleves = this.eleves;
+                        this.filteredClasses = this.classes;
+                        this.filteredNiveaux = this.niveaux;
+                    },
+                    getNotes(eleveId, matiereId) {
+                        const eleve = this.eleves.find(e => e.eleve.id === eleveId);
+                        if (!eleve) {
+                            console.log('Élève non trouvé');
+                            return [];
                         }
-                    } catch (error) {
-                        console.error('Erreur réseau :', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Une erreur est survenue.',
-                            showConfirmButton: true
-                        });
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
 
-
-
-                filterByCategory() {
-                    // Réinitialiser filteredProducts à la liste complète des produits
-                    this.filteredProducts = this.products;
-
-                    if (this.selectedCategory) {
-                        // Appliquer le filtre sur les produits par catégorie
-                        this.filteredProducts = this.filteredProducts.filter(product => product.category.id === parseInt(
-                            this.selectedCategory));
-                    }
-
-                    // Optionnel : Appliquer également un filtrage par recherche textuelle (si nécessaire)
-                    if (this.searchTerm) {
-                        this.filteredProducts = this.filteredProducts.filter(product => {
-                            return product.libelleproduct.toLowerCase().includes(this.searchTerm.toLowerCase());
-                        });
-                    }
-
-                    // Calculer le nombre de pages en fonction du nombre de produits filtrés
-                    this.totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
-                },
-
-                async deleteProduct(productId) {
-                    try {
-                        const url =
-                            `{{ route('product.destroy', ['product' => '__ID__']) }}`.replace(
-                                "__ID__",
-                                productId
-                            );
-
-                        const response = await fetch(url, {
-                            method: "DELETE",
-                            headers: {
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                            },
-                        });
-
-                        if (response.ok) {
-                            const result = await response.json();
-                            if (result.success) {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: result.message,
-                                    showConfirmButton: false,
-                                    timer: 1500,
-                                });
-
-                                // Retirer le produit de la liste `this.products`
-                                this.products = this.products.filter(product => product.id !== productId);
-
-                                // Après suppression, appliquer le filtre pour mettre à jour la liste affichée
-                                this.filterProducts();
-                            } else {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: result.message,
-                                    showConfirmButton: true,
-                                });
-                            }
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Erreur lors de la requête.",
-                                showConfirmButton: true,
-                            });
+                        if (!eleve.eleve.notes || eleve.eleve.notes.length === 0) {
+                            console.log('Aucune note trouvée pour cet élève');
+                            return [];
                         }
-                    } catch (error) {
-                        console.error("Erreur réseau :", error);
-                        Swal.fire({
-                            icon: "error",
-                            title: "Une erreur réseau s'est produite.",
-                            showConfirmButton: true,
+
+                        const notes = eleve.eleve.notes.filter(note => note.matiere_id === matiereId);
+                        console.log('Notes trouvées :', notes);
+                        return notes;
+                    },
+
+                    openModal(eleveId, matiereId) {
+                        this.currentEleveId = eleveId;
+                        this.currentMatiere = this.matieres.find(m => m.id === matiereId) || {};
+                        this.currentNotes = this.getNotes(eleveId, matiereId);
+
+                        console.log('Current Notes:', this.currentNotes); // Ajout d'un log pour déboguer
+
+                        this.showModal = true;
+                    },
+
+
+                    closeModal() {
+                        this.isModalOpen = false;
+                        this.currentNotes = [];
+                        this.currentMatiere = {};
+                        this.showModal = false;
+
+                    },
+
+                    deleteEleve(eleveId) {
+                        if (confirm("Êtes-vous sûr de vouloir supprimer cet élève ?")) {
+                            // Ajoutez ici l'appel pour supprimer l'élève via AJAX ou API.
+                            this.eleves = this.eleves.filter(e => e.id !== eleveId);
+                            alert("Élève supprimé avec succès.");
+                        }
+                    },
+
+                    filterClasse(event) {
+                        const classeId = event.target.value;
+                        if (!classeId) {
+                            this.filteredEleves = this.eleves; // Afficher tous les élèves
+                        } else {
+                            this.filteredEleves = this.eleves.filter(eleve => eleve.classe_id === parseInt(classeId));
+                        }
+                    },
+
+                    filterLevel(event) {
+                        const niveauId = event.target.value;
+                        if (!niveauId) {
+                            this.filteredEleves = this.eleves; // Afficher tous les élèves
+                        } else {
+                            this.filteredEleves = this.eleves.filter(eleve => eleve.niveau_id === parseInt(niveauId));
+                        }
+                    },
+
+                    filterProducts(event) {
+                        const search = event.target.value.toLowerCase();
+                        this.filteredEleves = this.eleves.filter(eleve => {
+                            const fullName = `${eleve.eleve.nom} ${eleve.eleve.prenom}`.toLowerCase();
+                            return fullName.includes(search);
                         });
                     }
-                },
+                };
+            }
+        </script>
 
-                goToPage(page) {
-                    if (page < 1 || page > this.totalPages) return;
-                    this.currentPage = page;
-                },
-
-                init() {
-                    this.filterProducts();
-                    this.isLoading = false;
-                }
-            };
-        }
-    </script>
-@endsection
+    @endsection
