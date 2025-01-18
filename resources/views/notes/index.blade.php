@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Gestion des notes')
 @section('content')
-    <div class="app-main flex-column flex-row-fluid mt-4" x-data="notesManager()" x-init="init()">
+    <div class="app-main flex-column flex-row-fluid mt-4" x-data="notesManager()" >
         <div class="d-flex flex-column flex-column-fluid">
             <div class="app-toolbar py-3 py-lg-6">
                 <div class="app-container container-xxl d-flex flex-stack">
@@ -106,18 +106,18 @@
                                                     <td x-text="eleve.eleve.prenom"></td>
                                                     <template x-for="matiere in matieres" :key="matiere.id">
                                                         <td>
-                                                            <button class="btn btn-primary btn-sm"
+                                                            <button
+                                                                :class="getNotes(eleve.eleve.id, matiere.id).length === 0 ? 'btn-danger' : 'btn-success'"
+                                                                class="btn btn-sm"
                                                                 @click="openModal(eleve.eleve.id, matiere.id)">
-                                                                <span x-show="getNotes(eleve.id, matiere.id).length > 0">
-                                                                    Voir notes
-                                                                </span>
-                                                                <span
-                                                                    x-show="getNotes(eleve.eleve.id, matiere.id).length === 0">
-                                                                    Aucune note
-                                                                </span>
+                                                                <span x-text="getNotes(eleve.eleve.id, matiere.id).length === 0 ? 'Aucune note' : 'Voir les notes'"></span>
                                                             </button>
                                                         </td>
                                                     </template>
+
+
+
+
                                                     <td>
                                                         <button class="btn btn-danger btn-sm"
                                                             @click="deleteEleve(eleve.id)">
@@ -176,9 +176,10 @@
             function notesManager() {
                 return {
                     eleves: @json($eleves),
-                    matieres: @json($matieres),
+                    matieres: @json(    $matieres),
                     classes: @json($classes),
                     niveaux: @json($niveaux),
+                    currentNotesCount: 0,
                     showModal: false,
                     currentNotes: [],
                     currentMatiere: {},
@@ -186,38 +187,40 @@
                     filteredEleves: [],
                     filteredClasses: [],
                     filteredNiveaux: [],
-                    init() {
-                        this.filteredEleves = this.eleves;
-                        this.filteredClasses = this.classes;
-                        this.filteredNiveaux = this.niveaux;
-                    },
+
                     getNotes(eleveId, matiereId) {
                         const eleve = this.eleves.find(e => e.eleve.id === eleveId);
                         if (!eleve) {
                             console.log('Élève non trouvé');
-                            return [];
+                            return []; // Retourne un tableau vide si l'élève n'est pas trouvé
                         }
 
+                        // Vérifier si l'élève a des notes et si ces notes sont disponibles
                         if (!eleve.eleve.notes || eleve.eleve.notes.length === 0) {
                             console.log('Aucune note trouvée pour cet élève');
-                            return [];
+                            return []; // Retourne un tableau vide si aucune note n'est trouvée
                         }
 
+                        // Filtrer les notes pour la matière donnée
                         const notes = eleve.eleve.notes.filter(note => note.matiere_id === matiereId);
-                        console.log('Notes trouvées :', notes);
+                        console.log('Notes trouvées pour l\'élève:', notes);
                         return notes;
                     },
+
 
                     openModal(eleveId, matiereId) {
                         this.currentEleveId = eleveId;
                         this.currentMatiere = this.matieres.find(m => m.id === matiereId) || {};
+
+                        // Appel de la méthode getNotes pour récupérer les notes de l'élève et de la matière spécifiés
                         this.currentNotes = this.getNotes(eleveId, matiereId);
+                        this.currentNotesCount = this.currentNotes.length; // Calcul du nombre de notes
 
-                        console.log('Current Notes:', this.currentNotes); // Ajout d'un log pour déboguer
-
+                        // Affichage du modal
                         this.showModal = true;
-                    },
 
+                        console.log('Current Notes:', this.currentNotes); // Log pour déboguer
+                    },
 
                     closeModal() {
                         this.isModalOpen = false;
@@ -227,39 +230,6 @@
 
                     },
 
-                    deleteEleve(eleveId) {
-                        if (confirm("Êtes-vous sûr de vouloir supprimer cet élève ?")) {
-                            // Ajoutez ici l'appel pour supprimer l'élève via AJAX ou API.
-                            this.eleves = this.eleves.filter(e => e.id !== eleveId);
-                            alert("Élève supprimé avec succès.");
-                        }
-                    },
-
-                    filterClasse(event) {
-                        const classeId = event.target.value;
-                        if (!classeId) {
-                            this.filteredEleves = this.eleves; // Afficher tous les élèves
-                        } else {
-                            this.filteredEleves = this.eleves.filter(eleve => eleve.classe_id === parseInt(classeId));
-                        }
-                    },
-
-                    filterLevel(event) {
-                        const niveauId = event.target.value;
-                        if (!niveauId) {
-                            this.filteredEleves = this.eleves; // Afficher tous les élèves
-                        } else {
-                            this.filteredEleves = this.eleves.filter(eleve => eleve.niveau_id === parseInt(niveauId));
-                        }
-                    },
-
-                    filterProducts(event) {
-                        const search = event.target.value.toLowerCase();
-                        this.filteredEleves = this.eleves.filter(eleve => {
-                            const fullName = `${eleve.eleve.nom} ${eleve.eleve.prenom}`.toLowerCase();
-                            return fullName.includes(search);
-                        });
-                    }
                 };
             }
         </script>
