@@ -123,24 +123,25 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="classe" class="form-label">Classe</label>
-                                        <input type="text" id="classe" x-model="formData.name" class="form-control"
-                                            required>
-                                    </div>
-                                </div>
-
-
-                                <div class="row">
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="classe" class="form-label">Salle</label>
-                                        <select id="classe_id" x-model="formData.salle_id" class="form-select" required>
-                                            <option value="">Choisir une Salle</option>
-                                            @foreach ($salles as $salles)
-                                                <option value="{{ $salles->id }}">{{ $salles->name }}</option>
+                                        <select id="classe_id" x-model="formData.classe_id" class="form-select" required>
+                                            <option value="">Choisir une classe</option>
+                                            @foreach ($classe as $classeroom)
+                                                <option value="{{ $classeroom->id }}">{{ $classeroom->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
+                                </div>
 
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="salle" class="form-label">Salle</label>
+                                        <select id="salle_id" x-model="formData.salle_id" class="form-select" required>
+                                            <option value="">Choisir une Salle</option>
+                                            @foreach ($salles as $salle)
+                                                <option value="{{ $salle->id }}">{{ $salle->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label for="annee_academique" class="form-label">Année académique</label>
@@ -152,8 +153,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
-
                                 </div>
 
                                 <div class="row">
@@ -168,7 +167,6 @@
                 </div>
             </div>
         </template>
-
     </div>
 
     <script>
@@ -185,7 +183,7 @@
                 isEdite: false,
                 formData: {
                     niveau_id: '',
-                    name: '',
+                    classe_id: '',
                     salle_id: '',
                     annee_academique_id: '',
                 },
@@ -207,7 +205,7 @@
                         this.formData = {
                             niveau_id: this.currentClasse.niveau_id,
                             salle_id: this.currentClasse.salle_id,
-                            name: this.currentClasse.classe.name,
+                            classe_id: this.currentClasse.classe_id,
                             annee_academique_id: this.currentClasse.annee_academique_id,
                         };
                     } else {
@@ -220,14 +218,15 @@
                 resetForm() {
                     this.formData = {
                         niveau_id: '',
-                        name: '',
-                        annee_academique_id: '',
+                        classe_id: '',
                         salle_id: '',
+                        annee_academique_id: '',
                     };
                 },
 
                 async submitForm() {
-                    if (!this.formData.niveau_id || !this.formData.name || !this.formData.annee_academique_id) {
+                    if (!this.formData.niveau_id || !this.formData.classe_id || !this.formData.salle_id || !this
+                        .formData.annee_academique_id) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Tous les champs sont requis.',
@@ -235,16 +234,14 @@
                         });
                         return;
                     }
-
-                   
                     const formData = new FormData();
                     formData.append('niveau_id', this.formData.niveau_id);
-                    formData.append('name', this.formData.name);
+                    formData.append('classe_id', this.formData.classe_id);
                     formData.append('salle_id', this.formData.salle_id);
                     formData.append('annee_academique_id', this.formData.annee_academique_id);
 
                     if (this.currentClasse) {
-                        formData.append('classe_id', this.currentClasse.id);
+                        formData.append('affectionacademique_id', this.currentClasse.id);
                     }
 
                     try {
@@ -311,7 +308,7 @@
 
                 filterClasses() {
                     this.filteredClasses = this.classes.filter(classe => {
-                        return classe.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        return classe.classe.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             classe.niveau.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             classe.annee_academique.name.toLowerCase().includes(this.searchTerm.toLowerCase());
                     });

@@ -569,11 +569,23 @@
                                         </div>
 
                                         <div class="menu-item">
-                                            <a class="menu-link {{ request()->routeIs('classes.index') ? 'active' : '' }}" href="{{ route('classes.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('classes.index') ? 'active' : '' }}"
+                                                href="{{ route('classes.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Classes</span>
+                                            </a>
+
+                                        </div>
+
+                                        <div class="menu-item">
+                                            <a class="menu-link {{ request()->routeIs('affectionacademique.index') ? 'active' : '' }}"
+                                                href="{{ route('affectionacademique.index') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Afection Academique</span>
                                             </a>
 
                                         </div>

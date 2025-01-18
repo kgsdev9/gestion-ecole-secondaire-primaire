@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Categorie\CategoryController;
+use App\Http\Controllers\Classe\AffectionAcademiqueController;
 use App\Http\Controllers\Classe\ClasseController;
 use App\Http\Controllers\Commandes\CommandeController;
 use App\Http\Controllers\Depenses\DepensesController;
@@ -55,6 +56,7 @@ Route::resource('/salles', SalleController::class);
 Route::resource('/enseignants', EnseignantController::class);
 Route::resource('/scolarites', ScolariteController::class);
 Route::resource('/classes', ClasseController::class);
+Route::resource('/affectionacademique', AffectionAcademiqueController::class);
 
 
 
