@@ -242,9 +242,7 @@
                         this.showModal = false;
                     },
 
-
                     async submitForm() {
-
                         this.isLoading = true;
 
                         // Validation des champs du formulaire
@@ -313,8 +311,12 @@
                                         this.currentNotes.push(note); // Ajouter la nouvelle note à l'affichage
                                     }
 
+                                    // Pour déclencher un rafraîchissement de l'interface, vous pouvez faire ceci :
+                                    this.$nextTick(() => {
 
-                                    this.closeModal();
+                                        alert('sss');
+                                        this.eleves = [...this.eleves]; // Cela va forcer la réactivité
+                                    });
                                 }
                             } else {
                                 Swal.fire({
@@ -331,6 +333,8 @@
                             this.isLoading = false;
                         }
                     }
+
+
 
 
                 };
