@@ -17,7 +17,7 @@ class Note extends Model
         'typenote_id',
         'note',
     ];
-    
+
 
     // Définir les relations
 
@@ -42,7 +42,8 @@ class Note extends Model
     // Relation avec le modèle TypeNote
     public function typeNote()
     {
-        return $this->belongsTo(TypeNote::class);
+
+        return $this->belongsTo(TypeNote::class, 'typenote_id');
     }
 
     // Ajouter des méthodes supplémentaires si nécessaire
