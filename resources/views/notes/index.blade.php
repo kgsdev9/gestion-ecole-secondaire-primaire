@@ -110,54 +110,67 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($eleves as $eleve)
+                                            @foreach ($eleves as $inscription)
                                                 <tr>
-                                                    <td>{{ $eleve->eleve->nom }}</td>
-                                                    <td>{{ $eleve->eleve->prenom }}</td>
+                                                    <td>{{ $inscription->eleve->nom }}</td>
+                                                    <td>{{ $inscription->eleve->prenom }}</td>
                                                     @foreach ($matieres as $matiere)
                                                         <td>
                                                             @php
-                                                                $note = $eleve->eleve->notes
-                                                                    ->where('matiere_id', $matiere->id)
-                                                                    ->first();
+                                                                $notes = $inscription->eleve->notes
+                                                                    ->where('matiere_id', $matiere->id);
                                                             @endphp
-                                                            <input type="number" class="form-control"
-                                                                value="{{ $note->note ?? '' }}">
+                                    
+                                                            @if ($notes->isNotEmpty())
+                                                                <!-- Bouton pour afficher les notes -->
+                                                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                                                    data-bs-target="#notesModal-{{ $inscription->eleve->id }}-{{ $matiere->id }}">
+                                                                    Voir notes
+                                                                </button>
+                                                            @else
+                                                                <span class="text-muted">Aucune note</span>
+                                                            @endif
+                                    
+                                                            <!-- Modal contenant les notes -->
+                                                            <div class="modal fade" id="notesModal-{{ $inscription->eleve->id }}-{{ $matiere->id }}" tabindex="-1" aria-labelledby="notesModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="notesModalLabel">
+                                                                                Notes pour {{ $matiere->name }} - {{ $inscription->eleve->nom }} {{ $inscription->eleve->prenom }}
+                                                                            </h5>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            @foreach ($notes as $note)
+                                                                                <div class="card mb-2">
+                                                                                    <div class="card-body">
+                                                                                        <p class="mb-1"><strong>Note :</strong> {{ $note->note }}</p>
+                                                                                        <p class="mb-0"><strong>Type :</strong> {{ $note->typenote->name ?? 'N/A' }}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                     @endforeach
+                                                    <td>
+                                                        <button class="btn btn-danger btn-sm">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             @endforeach
-                                            <tr>
-                                             
-                                                <td>
-                                                    <button class="btn btn-danger btn-sm">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <!-- Ajouter dynamiquement d'autres lignes -->
                                         </tbody>
                                     </table>
+                                    
                                 </div>
                             </div>
 
 
-                            <div class="row mt-4">
-                                <div class="col-sm-12 col-md-7 offset-md-5 d-flex justify-content-end">
-                                    <nav>
-                                        <ul class="pagination">
-                                            <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                                                <button class="page-link"
-                                                    @click="goToPage(currentPage - 1)">Précedent</button>
-                                            </li>
-                                            <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                                                <button class="page-link"
-                                                    @click="goToPage(currentPage + 1)">Suivant</button>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>
