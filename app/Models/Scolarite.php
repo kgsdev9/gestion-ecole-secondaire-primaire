@@ -15,6 +15,20 @@ class Scolarite extends Model
         'annee_academique_id',
         'montant_scolarite',
     ];
+
+
+    public function niveau()
+    {
+        return $this->belongsTo(Niveau::class);
+    }
+
+    public function classe()
+    {
+        return $this->belongsTo(Classe::class);
+    }
+
+    public function anneeAcademique()
+    {
+        return $this->belongsTo(AnneeAcademique::class);
+    }
 }
-
-

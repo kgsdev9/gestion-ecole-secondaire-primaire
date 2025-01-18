@@ -18,40 +18,10 @@ class EmploiDuTempsController extends Controller
 
 
 
-
-    //  public function index()
-    //  {
-    //      // Récupération des emplois du temps avec les relations
-    //      $emplois = EmploiDuTemps::with(['matiere', 'classe', 'jour'])->get();
-
-    //      // Récupérer les jours et plages horaires uniques
-    //      $jours = Jour::all();
-    //      $heures = $emplois->flatMap(function ($emploi) {
-    //          return [$emploi->heure_debut, $emploi->heure_fin];
-    //      })->unique()->sort()->values(); // Trier et supprimer les doublons
-
-    //      // Organiser les emplois par jour et heure
-    //      $emploisParJourEtHeure = [];
-    //      foreach ($emplois as $emploi) {
-    //          $jour = $emploi->jour->name;
-    //          $heureDebut = $emploi->heure_debut;
-
-    //          // Ajouter les données dans la structure
-    //          $emploisParJourEtHeure[$jour][$heureDebut][] = [
-    //              'matiere' => $emploi->matiere->name,
-    //              'classe' => $emploi->classe->name,
-    //              'heure_debut' => $emploi->heure_debut,
-    //              'heure_fin' => $emploi->heure_fin,
-    //          ];
-    //      }
-
-    //      // Retourner les données à la vue
-    //      return view('emploidutemps', compact('emploisParJourEtHeure', 'jours', 'heures'));
-    //  }
-
-
-
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
     public function index()

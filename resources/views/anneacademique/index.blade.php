@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Annne academique ')
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="anneeAcademiqueManagement()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
@@ -31,7 +31,9 @@
                             <div class="card-title">
                                 <div class="d-flex align-items-center position-relative my-1">
                                     <i class='fas fa-search position-absolute ms-5'></i>
-                                    <input type="text" class="form-control form-control-solid w-250px ps-13 form-control-sm" placeholder="Rechercher" x-model="searchTerm" @input="filterAnneeAcademiques">
+                                    <input type="text"
+                                        class="form-control form-control-solid w-250px ps-13 form-control-sm"
+                                        placeholder="Rechercher" x-model="searchTerm" @input="filterAnneeAcademiques">
                                 </div>
                             </div>
 
@@ -81,7 +83,8 @@
                                                             class="btn btn-primary ms-2 btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <button @click="deleteAnneeAcademique(annee.id)" class="btn btn-danger btn-sm">
+                                                        <button @click="deleteAnneeAcademique(annee.id)"
+                                                            class="btn btn-danger btn-sm">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </td>
@@ -96,10 +99,12 @@
                                     <nav>
                                         <ul class="pagination">
                                             <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                                                <button class="page-link" @click="goToPage(currentPage - 1)">Précédent</button>
+                                                <button class="page-link"
+                                                    @click="goToPage(currentPage - 1)">Précédent</button>
                                             </li>
                                             <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                                                <button class="page-link" @click="goToPage(currentPage + 1)">Suivant</button>
+                                                <button class="page-link"
+                                                    @click="goToPage(currentPage + 1)">Suivant</button>
                                             </li>
                                         </ul>
                                     </nav>
@@ -113,7 +118,7 @@
 
         <template x-if="showModal">
             <div class="modal fade show d-block" tabindex="-1" aria-modal="true" style="background-color: rgba(0,0,0,0.5)">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg"> 
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" x-text="isEdit ? 'Modification' : 'Création'"></h5>
@@ -121,25 +126,75 @@
                         </div>
                         <div class="modal-body">
                             <form @submit.prevent="submitForm">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Libellé Année Académique</label>
-                                    <input type="text" id="name" class="form-control" x-model="formData.name" required>
+                                <div class="row">
+                                    <!-- Année académique form -->
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Libellé Année Académique</label>
+                                            <input type="text" id="name" class="form-control"
+                                                x-model="formData.name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="date_debut" class="form-label">Date début</label>
+                                            <input type="date" id="date_debut" class="form-control"
+                                                x-model="formData.date_debut" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="date_fin" class="form-label">Date fin</label>
+                                            <input type="date" id="date_fin" class="form-control"
+                                                x-model="formData.date_fin" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Semestres form (tableau) -->
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="semestres" class="form-label">Semestres</label>
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Libellé Semestre</th>
+                                                        <th scope="col">Date début</th>
+                                                        <th scope="col">Date fin</th>
+                                                   
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <template x-for="(semestre, index) in formData.semestres"
+                                                        :key="index">
+                                                        <tr>
+                                                            <td><input type="text" class="form-control"
+                                                                    x-model="semestre.name" required></td>
+                                                            <td><input type="date" class="form-control"
+                                                                    x-model="semestre.date_debut" required></td>
+                                                            <td><input type="date" class="form-control"
+                                                                    x-model="semestre.date_fin" required></td>
+                                                          
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger"
+                                                                    @click="removeSemestre(index)"><i class="fa fa-trash"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                            </table>
+                                            <button type="button" class="btn btn-success" @click="addSemestre()">Ajouter
+                                                un semestre</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="date_debut" class="form-label">Date début</label>
-                                    <input type="date" id="date_debut" class="form-control" x-model="formData.date_debut" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="date_fin" class="form-label">Date fin</label>
-                                    <input type="date" id="date_fin" class="form-control" x-model="formData.date_fin" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary" x-text="isEdit ? 'Mettre à jour' : 'Enregistrer'"></button>
+
+                                <button type="submit" class="btn btn-primary"
+                                    x-text="isEdit ? 'Mettre à jour' : 'Enregistrer'"></button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </template>
+
+      
     </div>
 
     <script>
@@ -154,12 +209,26 @@
                 isLoading: true,
                 showModal: false,
                 isEdit: false,
+
                 formData: {
                     name: '',
                     date_debut: '',
-                    date_fin: ''
+                    date_fin: '',
+                    semestres: []
                 },
                 currentAnneeAcademique: null,
+
+                addSemestre() {
+                    this.formData.semestres.push({
+                        name: '',
+                        date_debut: '',
+                        date_fin: '',
+                    });
+                },
+
+                removeSemestre(index) {
+                    this.formData.semestres.splice(index, 1);
+                },
 
                 init() {
                     this.filterAnneeAcademiques();
@@ -169,7 +238,9 @@
                 openModal(anneeAcademique = null) {
                     this.isEdit = !!anneeAcademique;
                     if (this.isEdit) {
-                        this.currentAnneeAcademique = { ...anneeAcademique };
+                        this.currentAnneeAcademique = {
+                            ...anneeAcademique
+                        };
                         this.formData.name = anneeAcademique.name;
                         this.formData.date_debut = anneeAcademique.date_debut;
                         this.formData.date_fin = anneeAcademique.date_fin;
@@ -193,7 +264,8 @@
                     this.formData = {
                         name: '',
                         date_debut: '',
-                        date_fin: ''
+                        date_fin: '',
+                        semestres: []
                     };
                     this.isEdit = false;
                     this.currentAnneeAcademique = null;
@@ -201,7 +273,8 @@
 
                 filterAnneeAcademiques() {
                     const term = this.searchTerm.toLowerCase();
-                    this.filteredAnneeAcademiques = this.anneeAcademiques.filter(annee => annee.name.toLowerCase().includes(term));
+                    this.filteredAnneeAcademiques = this.anneeAcademiques.filter(annee => annee.name.toLowerCase().includes(
+                        term));
                     this.totalPages = Math.ceil(this.filteredAnneeAcademiques.length / this.anneeAcademiquesPerPage);
                     this.currentPage = 1;
                 },
@@ -232,7 +305,8 @@
                     formData.append('name', this.formData.name);
                     formData.append('date_debut', this.formData.date_debut);
                     formData.append('date_fin', this.formData.date_fin);
-                    formData.append('annee_academique_id', this.currentAnneeAcademique ? this.currentAnneeAcademique.id : null);
+                    formData.append('annee_academique_id', this.currentAnneeAcademique ? this.currentAnneeAcademique
+                        .id : null);
 
                     try {
                         const response = await fetch('{{ route('anneeacademique.store') }}', {
@@ -241,7 +315,7 @@
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                             },
                             body: formData,
-                        }); 
+                        });
 
                         if (response.ok) {
                             const data = await response.json();
@@ -262,7 +336,8 @@
                                     }
                                 } else {
                                     this.anneeAcademiques.push(anneeAcademique);
-                                    this.anneeAcademiques.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                                    this.anneeAcademiques.sort((a, b) => new Date(b.created_at) - new Date(a
+                                        .created_at));
                                 }
 
                                 this.filterAnneeAcademiques();
@@ -295,7 +370,8 @@
 
                 async deleteAnneeAcademique(anneeAcademiqueID) {
                     try {
-                        const url = `{{ route('anneeacademique.destroy', ['anneeacademique' => '__ID__']) }}`.replace("__ID__", anneeAcademiqueID);
+                        const url = `{{ route('anneeacademique.destroy', ['anneeacademique' => '__ID__']) }}`.replace(
+                            "__ID__", anneeAcademiqueID);
 
                         const response = await fetch(url, {
                             method: "DELETE",
@@ -314,7 +390,8 @@
                                     timer: 1500,
                                 });
 
-                                this.anneeAcademiques = this.anneeAcademiques.filter(annee => annee.id !== anneeAcademiqueID);
+                                this.anneeAcademiques = this.anneeAcademiques.filter(annee => annee.id !==
+                                    anneeAcademiqueID);
                                 this.filterAnneeAcademiques();
                             } else {
                                 Swal.fire({

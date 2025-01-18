@@ -11,6 +11,7 @@ class MatiereController extends Controller
     public function index()
     {
         $matieres = Matiere::get();
+        
       
         return view('matieres.index', compact('matieres'));
     }

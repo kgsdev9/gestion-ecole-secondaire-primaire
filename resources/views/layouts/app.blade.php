@@ -569,7 +569,7 @@
                                         </div>
 
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('classes.index') ? 'active' : '' }}" href="{{ route('classes.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
@@ -590,7 +590,8 @@
                                         </div>
 
                                         <div class="menu-item">
-                                            <a class="menu-link {{ request()->routeIs('enseignants.index') ? 'active' : '' }}" href="{{ route('enseignants.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('enseignants.index') ? 'active' : '' }}"
+                                                href="{{ route('enseignants.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
@@ -598,8 +599,9 @@
                                             </a>
                                         </div>
 
-                                        <div class="menu-item">
-                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                        <div
+                                            class="menu-item {{ request()->routeIs('scolarites.index') ? 'active' : '' }}">
+                                            <a class="menu-link" href="{{ route('scolarites.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>

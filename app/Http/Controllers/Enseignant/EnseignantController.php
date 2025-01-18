@@ -5,16 +5,23 @@ namespace App\Http\Controllers\Enseignant;
 use App\Http\Controllers\Controller;
 use App\Models\Enseignant;
 use App\Models\Matiere;
+use App\Models\Semestre;
 use Illuminate\Http\Request;
 
 class EnseignantController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     // Affiche la liste des enseignants
     public function index()
     {
         $matieres = Matiere::all();
         $enseignants = Enseignant::with('matiere')->get();
 
+         
         return view('enseignants.index', compact('matieres', 'enseignants'));
     }
 

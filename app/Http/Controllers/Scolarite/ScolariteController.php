@@ -3,9 +3,79 @@
 namespace App\Http\Controllers\Scolarite;
 
 use App\Http\Controllers\Controller;
+use App\Models\Scolarite;
+use App\Models\Niveau;
+use App\Models\Classe;
+use App\Models\AnneeAcademique;
 use Illuminate\Http\Request;
 
 class ScolariteController extends Controller
 {
-    //
+    public function index()
+    {
+        $scolarites = Scolarite::with(['niveau', 'classe', 'anneeAcademique'])->get();
+        $niveaux = Niveau::all();
+        $classes = Classe::all();
+        $anneesAcademiques = AnneeAcademique::all();
+
+        return view('scolarites.index', compact('scolarites', 'niveaux', 'classes', 'anneesAcademiques'));
+    }
+
+
+    public function store(Request $request)
+    {
+        // Vérifier si l'ID de la scolarité existe dans la requête
+        $scolariteId = $request->input('scolarite_id');
+
+        if ($scolariteId) {
+            // Si l'ID de la scolarité existe, on modifie la scolarité
+            $scolarite = Scolarite::find($scolariteId);
+
+            // Si la scolarité n'existe pas, on crée une nouvelle scolarité
+            if (!$scolarite) {
+                return $this->createScolarite($request);
+            }
+
+            // Si la scolarité existe, on procède à la mise à jour
+            return $this->updateScolarite($scolarite, $request);
+        } else {
+            // Si l'ID de la scolarité est absent, on crée une nouvelle scolarité
+            return $this->createScolarite($request);
+        }
+    }
+
+    private function updateScolarite($scolarite, Request $request)
+    {
+        // Mise à jour des informations de la scolarité
+        $scolarite->update([
+            'niveau_id' => $request->niveau_id,
+            'classe_id' => $request->classe_id,
+            'annee_academique_id' => $request->annee_academique_id,
+            'montant_scolarite' => $request->montant_scolarite,
+        ]);
+
+        $scolarite->load(['niveau', 'classe', 'anneeAcademique']);
+
+        return response()->json([
+            'message' => 'Scolarité mise à jour avec succès',
+            'scolarite' => $scolarite
+        ], 200);
+    }
+
+    private function createScolarite(Request $request)
+    {
+        // Création d'une nouvelle scolarité
+        $scolarite = Scolarite::create([
+            'niveau_id' => $request->niveau_id,
+            'classe_id' => $request->classe_id,
+            'annee_academique_id' => $request->annee_academique_id,
+            'montant_scolarite' => $request->montant_scolarite,
+        ]);
+
+        $scolarite->load(['niveau', 'classe', 'anneeAcademique']);
+        return response()->json([
+            'message' => 'Scolarité créée avec succès',
+            'scolarite' => $scolarite
+        ], 201);
+    }
 }

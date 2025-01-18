@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Categorie\CategoryController;
-use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Classe\ClasseController;
 use App\Http\Controllers\Commandes\CommandeController;
 use App\Http\Controllers\Depenses\DepensesController;
 use App\Http\Controllers\Eleve\EleveController;
@@ -19,6 +19,7 @@ use App\Http\Controllers\Rapport\RapportController;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Salle\AnneAcademiqueController;
 use App\Http\Controllers\Salle\SalleController;
+use App\Http\Controllers\Scolarite\ScolariteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vente\VenteController;
 use Illuminate\Support\Facades\Route;
@@ -52,9 +53,8 @@ Route::resource('/matieres', MatiereController::class);
 Route::resource('/niveaux', NiveauController::class);
 Route::resource('/salles', SalleController::class);
 Route::resource('/enseignants', EnseignantController::class);
-
-
-
+Route::resource('/scolarites', ScolariteController::class);
+Route::resource('/classes', ClasseController::class);
 
 
 
