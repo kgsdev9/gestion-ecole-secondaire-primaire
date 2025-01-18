@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Gestion des notes')
 @section('content')
-    <div class="app-main flex-column flex-row-fluid mt-4" x-data="notesManager()">
+    <div class="app-main flex-column flex-row-fluid mt-4" x-data="notesManager()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
             <div class="app-toolbar py-3 py-lg-6">
                 <div class="app-container container-xxl d-flex flex-stack">
@@ -31,7 +31,8 @@
                                     <i class="fas fa-search position-absolute ms-5"></i>
                                     <input type="text"
                                         class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                        placeholder="Rechercher">
+                                        placeholder="Rechercher un étudiant" x-model="searchTerm" @input="filterEleves" />
+
                                 </div>
                             </div>
                             <div class="card-toolbar">
@@ -105,7 +106,36 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <template x-for="eleve in eleves" :key="eleve.id">
+                                            <template x-for="eleve in filteredEleves" :key="eleve.id">
+                                                <tr>
+                                                    <td x-text="eleve.eleve.nom"></td>
+                                                    <td x-text="eleve.eleve.prenom"></td>
+                                                    <template x-for="matiere in matieres" :key="matiere.id">
+                                                        <td>
+                                                            <button
+                                                                :class="{
+                                                                    'btn btn-sm btn-danger': getNotes(eleve.eleve.id,
+                                                                        matiere.id).length === 0,
+                                                                    'btn btn-sm btn-success': getNotes(eleve.eleve.id,
+                                                                        matiere.id).length > 0
+                                                                }"
+                                                                @click="openModal(eleve.eleve.id, matiere.id)">
+                                                                <span
+                                                                    x-text="getNotes(eleve.eleve.id, matiere.id).length === 0 ? 'Aucune note' : 'Voir les notes'">
+                                                                </span>
+                                                            </button>
+                                                        </td>
+                                                    </template>
+                                                    <td>
+                                                        <button class="btn btn-danger btn-sm"
+                                                            @click="deleteEleve(eleve.id)">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </template>
+
+                                            {{-- <template x-for="eleve in eleves" :key="eleve.id">
                                                 <tr>
                                                     <td x-text="eleve.eleve.nom"></td>
                                                     <td x-text="eleve.eleve.prenom"></td>
@@ -132,7 +162,7 @@
                                                         </button>
                                                     </td>
                                                 </tr>
-                                            </template>
+                                            </template> --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -187,6 +217,7 @@
                     classes: @json($classes),
                     niveaux: @json($niveaux),
                     typenotes: @json($typenotes),
+                    searchTerm: '',
                     semestresEnCours: @json($semestresEnCours),
                     formData: {
                         matiere_id: '',
@@ -234,6 +265,29 @@
 
                         console.log('Current Notes:', this.currentNotes); // Log pour déboguer
                     },
+
+
+                    filterEleves() {
+                        const term = this.searchTerm.toLowerCase().trim();
+                        if (term === '') {
+                            this.filteredEleves = this.eleves;
+                        } else {
+                            this.filteredEleves = this.eleves.filter(eleve =>
+                                eleve.eleve.nom.toLowerCase().includes(term) ||
+                                eleve.eleve.prenom.toLowerCase().includes(term)
+                            );
+                        }
+                    },
+
+
+                    init() {
+                        // Par exemple, initialiser les élèves filtrés avec tous les élèves au départ
+                        this.filteredEleves = this.eleves;
+
+                        // Vous pouvez également appeler d'autres méthodes d'initialisation ici
+                        this.filterEleves(); // Exemple : préfiltrer les élèves
+                    },
+
 
                     closeModal() {
                         this.isModalOpen = false;
@@ -333,10 +387,6 @@
                             this.isLoading = false;
                         }
                     }
-
-
-
-
                 };
             }
         </script>
