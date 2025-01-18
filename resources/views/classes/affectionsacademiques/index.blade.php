@@ -245,7 +245,7 @@
                     }
 
                     try {
-                        const response = await fetch('{{ route('classes.store') }}', {
+                        const response = await fetch('{{ route('affectionacademique.store') }}', {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
