@@ -623,7 +623,8 @@
                                         </div>
 
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{ route('roles.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('inscription.index') ? 'active' : '' }}"
+                                                href="{{ route('inscription.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
@@ -689,13 +690,19 @@
                                     <div class="menu-sub menu-sub-accordion">
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                                             <!--begin:Menu link-->
-                                            <span class="menu-link">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">Notes</span>
+                                            <div
+                                                class="menu-item {{ request()->routeIs('notes.index') ? 'active' : '' }}">
+                                                <a class="menu-link" href="{{ route('notes.index') }}">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Notes</span>
+                                                </a>
 
-                                            </span>
+                                            </div>
+                                            
+                                            
+                                          
 
                                             <span class="menu-link">
                                                 <span class="menu-bullet">

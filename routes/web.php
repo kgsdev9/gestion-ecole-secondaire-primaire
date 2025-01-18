@@ -12,8 +12,10 @@ use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Factures\FacturePersonnaliseController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Impression\Facture\ImpressionFactureController;
+use App\Http\Controllers\Inscription\InscriptionController;
 use App\Http\Controllers\Matiere\MatiereController;
 use App\Http\Controllers\Niveau\NiveauController;
+use App\Http\Controllers\Note\NoteController;
 use App\Http\Controllers\Pos\ProductPostController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Rapport\RapportController;
@@ -57,6 +59,8 @@ Route::resource('/enseignants', EnseignantController::class);
 Route::resource('/scolarites', ScolariteController::class);
 Route::resource('/classes', ClasseController::class);
 Route::resource('/affectionacademique', AffectionAcademiqueController::class);
+Route::resource('/inscription', InscriptionController::class);
+Route::resource('/notes', NoteController::class);
 
 
 

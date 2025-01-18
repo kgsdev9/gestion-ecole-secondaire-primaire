@@ -17,6 +17,7 @@ class Note extends Model
         'typenote_id',
         'note',
     ];
+    
 
     // Définir les relations
 

@@ -29,6 +29,11 @@ class Eleve extends Model
         return $this->belongsTo(Classe::class);
     }
 
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
+
     // Define the relationship to AnneeAcademique
     public function anneeacademique()
     {
