@@ -16,8 +16,6 @@ class EmploiDuTempsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -31,8 +29,6 @@ class EmploiDuTempsController extends Controller
 
         // Récupérer les jours sous forme d'un tableau de noms de jours
         $jours = Jour::pluck('name')->toArray(); // Convertit la Collection en un tableau simple
-
-
 
         // Récupérer les heures de début uniques
         $heures = $emplois->pluck('heure_debut')->unique()->sort()->values(); // Récupère uniquement les heures de début uniques

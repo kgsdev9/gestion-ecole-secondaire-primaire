@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 class SalleController extends Controller
 {
 
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $salles = Salle::all();

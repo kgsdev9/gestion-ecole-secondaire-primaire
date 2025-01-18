@@ -700,9 +700,9 @@
                                                 </a>
 
                                             </div>
-                                            
-                                            
-                                          
+
+
+
 
                                             <span class="menu-link">
                                                 <span class="menu-bullet">
@@ -723,7 +723,6 @@
                                 </div>
 
 
-
                                 <div class="menu-item pt-5">
                                     <div class="menu-content">
                                         <span class="menu-heading fw-bold text-uppercase fs-7">Comptabilité</span>
@@ -736,15 +735,22 @@
                                         <span class="menu-icon">
                                             <!--begin::Svg Icon | path: icons/duotune/layouts/lay008.svg-->
                                             <span class="svg-icon svg-icon-2">
-                                                <svg width="24" height="24" viewBox="0 0 24 24"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M20 7H3C2.4 7 2 6.6 2 6V3C2 2.4 2.4 2 3 2H20C20.6 2 21 2.4 21 3V6C21 6.6 20.6 7 20 7ZM7 9H3C2.4 9 2 9.4 2 10V20C2 20.6 2.4 21 3 21H7C7.6 21 8 20.6 8 20V10C8 9.4 7.6 9 7 9Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.3"
-                                                        d="M20 21H11C10.4 21 10 20.6 10 20V10C10 9.4 10.4 9 11 9H20C20.6 9 21 9.4 21 10V20C21 20.6 20.6 21 20 21Z"
-                                                        fill="currentColor" />
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path 
+                                                        d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM12 20C7.6 20 4 16.4 4 12C4 7.6 7.6 4 12 4C16.4 4 20 7.6 20 12C20 16.4 16.4 20 12 20Z" 
+                                                        fill="currentColor" 
+                                                    />
+                                                    <path 
+                                                        opacity="0.3" 
+                                                        d="M13 7H10C9.4 7 9 7.4 9 8C9 8.6 9.4 9 10 9H11C12.1 9 13 9.9 13 11C13 12.1 12.1 13 11 13H10C9.4 13 9 13.4 9 14C9 14.6 9.4 15 10 15H13C13.6 15 14 14.6 14 14C14 13.4 13.6 13 13 13H12C10.9 13 10 12.1 10 11C10 9.9 10.9 9 12 9H13C13.6 9 14 8.6 14 8C14 7.4 13.6 7 13 7Z" 
+                                                        fill="currentColor" 
+                                                    />
+                                                    <path 
+                                                        d="M12 6C12.6 6 13 5.6 13 5C13 4.4 12.6 4 12 4C11.4 4 11 4.4 11 5C11 5.6 11.4 6 12 6ZM12 18C12.6 18 13 17.6 13 17C13 16.4 12.6 16 12 16C11.4 16 11 16.4 11 17C11 17.6 11.4 18 12 18Z" 
+                                                        fill="currentColor" 
+                                                    />
                                                 </svg>
+                                                
                                             </span>
                                             <!--end::Svg Icon-->
                                         </span>
@@ -782,6 +788,34 @@
 
                                     <!--end:Menu sub-->
                                 </div>
+
+
+                                <div class="menu-item menu-accordion">
+                                    <a href="{{ route('emplois-du-temps.index') }}"
+                                        class="menu-link {{ request()->routeIs('emplois-du-temps.index') ? 'active' : '' }}">
+                                        <span class="menu-icon">
+                                            <span class="svg-icon svg-icon-2">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path 
+                                                        d="M20 7H4C3.4 7 3 6.6 3 6V4C3 3.4 3.4 3 4 3H20C20.6 3 21 3.4 21 4V6C21 6.6 20.6 7 20 7ZM7 9H4C3.4 9 3 9.4 3 10V20C3 20.6 3.4 21 4 21H7C7.6 21 8 20.6 8 20V10C8 9.4 7.6 9 7 9Z" 
+                                                        fill="currentColor" 
+                                                    />
+                                                    <path 
+                                                        opacity="0.3" 
+                                                        d="M20 21H11C10.4 21 10 20.6 10 20V10C10 9.4 10.4 9 11 9H20C20.6 9 21 9.4 21 10V20C21 20.6 20.6 21 20 21ZM15 11H13V13H15V11ZM17 13H15V15H17V13ZM13 15H15V17H13V15Z" 
+                                                        fill="currentColor" 
+                                                    />
+                                                </svg>
+                                                
+                                            </span>
+
+                                        </span>
+                                        <span class="menu-title">Emploi Du Temps</span>
+
+                                    </a>
+
+                                </div>
+
 
 
                                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">

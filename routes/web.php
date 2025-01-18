@@ -8,6 +8,7 @@ use App\Http\Controllers\Depenses\DepensesController;
 use App\Http\Controllers\Eleve\EleveController;
 use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
 use App\Http\Controllers\Enseignant\EnseignantController;
+use App\Http\Controllers\Examen\ExamenController;
 use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Factures\FacturePersonnaliseController;
 use App\Http\Controllers\Home\HomeController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Salle\SalleController;
 use App\Http\Controllers\Scolarite\ScolariteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vente\VenteController;
+use App\Models\EmploiDuTemps;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,8 +63,8 @@ Route::resource('/classes', ClasseController::class);
 Route::resource('/affectionacademique', AffectionAcademiqueController::class);
 Route::resource('/inscription', InscriptionController::class);
 Route::resource('/notes', NoteController::class);
-
-
+Route::resource('/examens', ExamenController::class);
+Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
 
 Route::resource('/rapport', RapportController::class);
 Route::resource('/depenses', DepensesController::class);
@@ -81,6 +83,6 @@ Route::post('/ventes/{vente}/validate', [VenteController::class, 'validatVente']
 
 
 
-Route::get('/emplois-du-temps', [EmploiDuTempsController::class, 'index']);
+
 Route::get('/generatefactureVente/{codefacure}', [VenteController::class, 'generateFactureVente'])->name('facture.vente.generate');
 Route::post('/rapport/vente/days', [VenteController::class, 'PrintAllVente'])->name('facture.vente.rapport');

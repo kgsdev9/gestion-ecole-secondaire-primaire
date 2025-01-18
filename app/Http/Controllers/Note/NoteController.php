@@ -9,14 +9,20 @@ use App\Models\Classe;
 use App\Models\Inscription;
 use App\Models\Matiere;
 use App\Models\Niveau;
-use App\Models\Note;
 use Illuminate\Http\Request;
 
 class NoteController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function index()
     {
-        $listenotes = Note::all();
+
         $listeannee = AnneeAcademique::all();
         $niveaux = Niveau::all();
         $classes  = Classe::all();
