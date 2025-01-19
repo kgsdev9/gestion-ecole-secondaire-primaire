@@ -18,7 +18,7 @@ class EleveController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
 
     public function index()
     {
@@ -28,6 +28,7 @@ class EleveController extends Controller
         $listeannee  = AnneeAcademique::all();
         $listeniveaux  = Niveau::all();
         $listeclasse  = Classe::all();
+       
         return view('eleves.index', compact('eleves', 'listeannee', 'listeclasse', 'listeniveaux'));
     }
 

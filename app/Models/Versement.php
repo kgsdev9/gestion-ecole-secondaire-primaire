@@ -14,18 +14,16 @@ class Versement extends Model
         'reference',
         'typeversement_id',
         'eleve_id',
-        'montant',
         'date_versement',
         'montant_verse',
         'montant_restant',
-        // 'statut',
     ];
 
 
     // Relation avec le type de versement
     public function typeVersement()
     {
-        return $this->belongsTo(TypeVersement::class);
+        return $this->belongsTo(TypeVersement::class, 'typeversement_id');
     }
 
     // Relation avec l'élève

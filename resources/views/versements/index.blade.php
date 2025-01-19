@@ -74,7 +74,7 @@
 
                                                 <template x-for="client in filteredClients()" :key="client.id">
                                                     <li class="dropdown-item d-flex align-items-center"
-                                                        @click="updateClientInfo(client.id, client.nom, client.prenom, client.matricule, client.telephone_parent, 'https://via.placeholder.com/40')"
+                                                        @click="updateClientInfo(client.id, client.nom, client.prenom, client.matricule, client.telephone_parent, 'https://via.placeholder.com/40', client.classe_id,client.niveau_id,client.anneeacademique_id)"
                                                         style="cursor: pointer;">
                                                         <img src="{{ asset('avatar.png') }}" alt="Avatar"
                                                             class="rounded-circle me-2" width="40" height="40" />
@@ -86,6 +86,13 @@
                                                     </li>
                                                 </template>
                                             </ul>
+
+                                            <div>
+                                                <strong>Montant de la scolarité :</strong>
+                                                <span x-text="selectedClient.montantScolarite || 'Montant non disponible'"></span>
+                                            </div>
+
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +122,7 @@
                                                 </colgroup>
                                                 <thead class="border-bottom border-gray-200 fs-7 fw-bold">
                                                     <tr class="text-start text-muted text-uppercase gs-0">
-                                                        <th class="min-w-100px">Réference
+                                                        <th class="min-w-100px">Eleve
                                                         </th>
                                                         <th class="min-w-100px">
                                                             Montant Versé
@@ -125,9 +132,8 @@
                                                         <th class="min-w-100px">Type Versement
                                                         </th>
 
-                                                        <th class="min-w-100px">Type Versement
+                                                        <th class="min-w-100px">Date
                                                         </th>
-
 
 
                                                     </tr>
@@ -139,8 +145,8 @@
                                                             <td x-text="versement.eleve.nom"></td>
                                                             <td x-text="versement.montant_verse"></td>
                                                             <td x-text="versement.montant_restant"></td>
+                                                            <td x-text="versement.type_versement.name"></td>
                                                             <td x-text="versement.date_versement"></td>
-                                                            <td x-text="versement.eleve.nom"></td>
 
                                                         </tr>
                                                     </template>
@@ -209,6 +215,8 @@
                 searchQuery: '',
                 clients: @json($listeleves),
                 versements: @json($versements),
+                scolarites: @json($listescolarite),
+
                 selectedClient: {
                     id: '',
                     nom: '',
@@ -217,17 +225,19 @@
                     adressegeographique: '',
                     telephone: '',
                     fax: '',
-                    avatar: 'https://via.placeholder.com/40'
-                },
+                    avatar: 'https://via.placeholder.com/40',
+                    classe_id: '',
+                    niveau_id: '',
+                    annee_academique_id: '',
+                    montantScolarite: '',
 
-                // Méthode pour filtrer les clients selon la recherche
+                },
                 filteredClients() {
                     return this.clients.filter(client => client.nom.toLowerCase().includes(this.searchQuery.toLowerCase()));
                 },
+                updateClientInfo(clientId, nom, prenom, matricule, telephone, avatar, classe_id, niveau_id,
+                    annee_academique_id) {
 
-                // Méthode pour mettre à jour les informations du client sélectionné
-                updateClientInfo(clientId, nom, prenom, matricule, telephone, avatar) {
-                    // Mettre à jour les informations du client sélectionné
                     this.selectedClient = {
                         id: clientId,
                         nom: nom || '',
@@ -235,10 +245,34 @@
                         matricule: matricule || '',
                         telephone: telephone || '',
                         avatar: avatar || 'https://via.placeholder.com/40',
+                        classe_id: classe_id,
+                        niveau_id: niveau_id,
+                        annee_academique_id: annee_academique_id,
                     };
+                    // Filtrer les scolarités en fonction de l'élève sélectionné
+
+                    this.filterScolarite();
 
                     // Filtrer les versements en fonction du client sélectionné
                     this.filteredVersements(); // Appel de la fonction pour filtrer les versements
+                },
+
+                filterScolarite() {
+
+                    const scolarite = this.scolarites.find(s =>
+                        s.niveau_id === this.selectedClient.niveau_id &&
+                        s.classe_id === this.selectedClient.classe_id &&
+                        s.annee_academique_id === this.selectedClient.annee_academique_id
+                    );
+
+                    // Si une scolarité correspondante est trouvée, on met à jour le montant de la scolarité
+                    if (scolarite) {
+
+                        this.selectedClient.montantScolarite = scolarite.montant_scolarite;
+                    } else {
+                        this.selectedClient.montantScolarite =
+                            0;
+                    }
                 },
 
                 // Filtrer les versements pour le client sélectionné
