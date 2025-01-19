@@ -233,6 +233,8 @@
                                                         :value="totalMontantReste()" readonly>
                                                 </div>
 
+
+
                                                 <!-- Bouton de soumission -->
                                                 <button type="submit" class="btn btn-primary"
                                                     x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
@@ -282,10 +284,22 @@
                     montant_verse: '',
                     montant_restant: '',
                     typeversement_id: '',
+                    date_versement: '',
+                    montant_reliquat: 0,
                 },
 
                 filteredEleves() {
                     return this.eleves.filter(eleve => eleve.nom.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                },
+
+                resetForm() {
+                    this.formData = {
+                        montant_verse: '',
+                        montant_restant: '',
+                        typeversement_id: '',
+                        date_versement: '',
+                    };
+                    this.montantError = false; // Réinitialiser l'erreur de montant
                 },
 
                 openModal() {
@@ -296,10 +310,11 @@
                     }
                 },
 
+
                 hideModal() {
                     this.showModal = false;
                     this.currentVersement = null;
-                    // this.resetForm();
+                    this.resetForm();
                     this.isEdite = false;
                 },
                 // Mettre à jour les informations de l'élève sélectionné
@@ -372,6 +387,84 @@
                     // Si aucun élève n'est sélectionné, retourner un tableau vide
                     return [];
                 },
+
+                async submitForm() {
+
+                    // this.isLoading = true;
+
+                    // Vérifiez si le montant versé est supérieur au montant restant
+                    if (parseFloat(this.formData.montant_verse) > this.totalMontantReste()) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le montant versé ne peut pas être supérieur au montant restant.',
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    // Préparer les données à envoyer
+                    const formData = new FormData();
+                    formData.append('montant_verse', this.formData.montant_verse);
+                    formData.append('montant_reliquat', this.totalMontantReste() - this.formData.montant_verse);
+                    formData.append('typeversement_id', this.formData.typeversement_id);
+                    formData.append('date_versement', this.formData.date_versement);
+                    formData.append('eleve_id', this.selectedEleve.id);
+
+                    // alert(this.totalMontantReste() - this.formData.montant_verse);
+                    //  console.log(formData);
+                    // return;
+                    try {
+                        const response = await fetch(
+                            '{{ route('versements.store') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                },
+                                body: formData,
+                            });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            const versement = data.versement;
+
+                            if (versement) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Versement enregistré avec succès.',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                });
+
+                                // Mettre à jour la liste des versements (si nécessaire)
+                                if (this.isEdite) {
+                                    const index = this.versements.findIndex(v => v.id === versement.id);
+                                    if (index !== -1) {
+                                        this.versements[index] = versement;
+                                    }
+                                } else {
+                                    this.versements.push(versement);
+                                    this.versements.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                                }
+
+                                this.hideModal();
+                                this.resetForm();
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur lors de l\'enregistrement du versement.',
+                            });
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erreur serveur.',
+                        });
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+
             };
         }
     </script>

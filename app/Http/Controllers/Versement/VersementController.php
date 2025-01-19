@@ -20,4 +20,26 @@ class VersementController extends Controller
         $typeversement  = TypeVersement::all();
         return view('versements.index', compact('listeleves', 'versements', 'listescolarite', 'typeversement'));
     }
+
+
+
+    public function store(Request $request)
+    {
+        // Création du versement sans validation (en supposant que les données sont valides)
+        $versement = Versement::create([
+            'montant_verse' => $request->montant_verse,
+            'montant_restant' => $request->montant_reliquat,
+            'typeversement_id' => $request->typeversement_id,
+            'date_versement' => $request->date_versement,
+            'eleve_id' => $request->eleve_id,
+            'reference' => rand(1000, 34445),
+        ]);
+
+        $versement->load(['typeVersement', 'eleve']);
+        // Réponse JSON pour indiquer que le versement a été créé
+        return response()->json([
+            'message' => 'Versement créé avec succès.',
+            'versement' => $versement
+        ], 201);
+    }
 }
