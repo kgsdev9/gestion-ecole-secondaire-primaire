@@ -11,8 +11,8 @@ class MatiereController extends Controller
     public function index()
     {
         $matieres = Matiere::get();
-        
-      
+
+
         return view('matieres.index', compact('matieres'));
     }
 
@@ -21,8 +21,6 @@ class MatiereController extends Controller
     // Méthode pour créer ou modifier une matière
     public function store(Request $request)
     {
-
-
         // Vérifier si l'ID de la matière est fourni
         $matiereId = $request->input('matiere_id');
 

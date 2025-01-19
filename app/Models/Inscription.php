@@ -20,11 +20,11 @@ class Inscription extends Model
     // Relation avec le modèle Eleve
     public function eleve()
     {
-        return $this->belongsTo(Eleve::class, 'eleve_id');
+        return $this->belongsTo(Eleve::class);
     }
 
 
-    
+
 
     // Relation avec le modèle Niveau
     public function niveau()

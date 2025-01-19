@@ -26,13 +26,13 @@ class Examen extends Model
     // Relation avec le modèle AnneeAcademique
     public function anneeAcademique()
     {
-        return $this->belongsTo(AnneeAcademique::class);
+        return $this->belongsTo(AnneeAcademique::class, 'anneeacademique_id');
     }
 
     // Relation avec le modèle TypeExamen
     public function typeExamen()
     {
-        return $this->belongsTo(TypeExamen::class);
+        return $this->belongsTo(TypeExamen::class, 'typeexamen_id');
     }
 
     // Relation avec le modèle Classe

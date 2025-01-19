@@ -135,34 +135,7 @@
                                                 </tr>
                                             </template>
 
-                                            {{-- <template x-for="eleve in eleves" :key="eleve.id">
-                                                <tr>
-                                                    <td x-text="eleve.eleve.nom"></td>
-                                                    <td x-text="eleve.eleve.prenom"></td>
-                                                    <template x-for="matiere in matieres" :key="matiere.id">
-                                                        <td>
-                                                            <button
-                                                                :class="getNotes(eleve.eleve.id, matiere.id).length === 0 ?
-                                                                    'btn-danger' : 'btn-success'"
-                                                                class="btn btn-sm"
-                                                                @click="openModal(eleve.eleve.id, matiere.id)">
-                                                                <span
-                                                                    x-text="getNotes(eleve.eleve.id, matiere.id).length === 0 ? 'Aucune note' : 'Voir les notes'"></span>
-                                                            </button>
-                                                        </td>
-                                                    </template>
 
-
-
-
-                                                    <td>
-                                                        <button class="btn btn-danger btn-sm"
-                                                            @click="deleteEleve(eleve.id)">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </template> --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -226,47 +199,37 @@
                     },
                     currentNotesCount: 0,
                     showModal: false,
-                    currentNotes: [],
+                    currentNotes: [], // Initialiser à un tableau vide
                     currentMatiere: {},
                     currentEleveId: null,
                     filteredEleves: [],
                     filteredClasses: [],
                     filteredNiveaux: [],
 
+                    // Récupérer les notes filtrées
                     getNotes(eleveId, matiereId) {
                         const eleve = this.eleves.find(e => e.eleve.id === eleveId);
                         if (!eleve) {
-                            console.log('Élève non trouvé');
-                            return []; // Retourne un tableau vide si l'élève n'est pas trouvé
+                            return [];
                         }
 
-                        // Vérifier si l'élève a des notes et si ces notes sont disponibles
                         if (!eleve.eleve.notes || eleve.eleve.notes.length === 0) {
-                            console.log('Aucune note trouvée pour cet élève');
-                            return []; // Retourne un tableau vide si aucune note n'est trouvée
+                            return [];
                         }
 
-                        // Filtrer les notes pour la matière donnée
                         const notes = eleve.eleve.notes.filter(note => note.matiere_id === matiereId);
-                        console.log('Notes trouvées pour l\'élève:', notes);
                         return notes;
                     },
 
                     openModal(eleveId, matiereId) {
                         this.currentEleveId = eleveId;
                         this.currentMatiere = this.matieres.find(m => m.id === matiereId) || {};
-
-                        // Appel de la méthode getNotes pour récupérer les notes de l'élève et de la matière spécifiés
                         this.currentNotes = this.getNotes(eleveId, matiereId);
-                        this.currentNotesCount = this.currentNotes.length; // Calcul du nombre de notes
-
-                        // Affichage du modal
+                        this.currentNotesCount = this.currentNotes.length;
                         this.showModal = true;
-
-                        console.log('Current Notes:', this.currentNotes); // Log pour déboguer
                     },
 
-
+                    // Filtrer les élèves par recherche
                     filterEleves() {
                         const term = this.searchTerm.toLowerCase().trim();
                         if (term === '') {
@@ -279,23 +242,14 @@
                         }
                     },
 
-
+                    // Initialisation des données
                     init() {
-                        // Par exemple, initialiser les élèves filtrés avec tous les élèves au départ
-                        this.filteredEleves = this.eleves;
-
-                        // Vous pouvez également appeler d'autres méthodes d'initialisation ici
-                        this.filterEleves(); // Exemple : préfiltrer les élèves
+                        this.filterEleves(); // Appeler filterEleves correctement
+                        this.currentNotes = []; // Réinitialiser les notes
+                        this.currentNotesCount = 0;
                     },
 
-
-                    closeModal() {
-                        this.isModalOpen = false;
-                        this.currentNotes = [];
-                        this.currentMatiere = {};
-                        this.showModal = false;
-                    },
-
+                    // Validation et soumission du formulaire
                     async submitForm() {
                         this.isLoading = true;
 
@@ -327,51 +281,57 @@
                             return;
                         }
 
-                        // Créer une instance de FormData
+                        // Préparation des données à envoyer
                         const formData = new FormData();
                         formData.append('matiere_id', this.formData.matiere_id);
                         formData.append('typenote_id', this.formData.typenote_id);
                         formData.append('note', this.formData.note);
-                        formData.append('eleve_id', this.currentEleveId);
+                        formData.append('eleve_id', 11); // Test avec ID 11
 
                         try {
+                            // Soumettre les données au contrôleur avec fetch
                             const response = await fetch('{{ route('notes.store') }}', {
                                 method: 'POST',
                                 headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                        'content'),
                                 },
                                 body: formData,
                             });
 
                             if (response.ok) {
                                 const data = await response.json();
-                                const note = data.note;
+                                console.log('Note ajoutée:', data);
 
-                                if (note) {
+                                // Mise à jour des notes dans l'élève
+                                const updatedEleve = this.eleves.find(eleve => eleve.eleve.id === 11); // Test avec ID 11
+                                if (updatedEleve) {
+                                    updatedEleve.eleve.notes.push(data.note); // Ajouter la note
+
+                                    // **Forcer Alpine à re-rendre en réinitialisant l'élément élève**
+                                    // Nous allons mettre à jour l'ensemble des élèves pour forcer la vue à se rafraîchir
+                                    this.eleves = [...this.eleves];
+
+                                    // Réinitialiser filteredEleves pour forcer Alpine.js à mettre à jour la vue
+                                    this.filterEleves();
+
+                                    // Réactualiser les notes
+                                    this.currentNotes = updatedEleve.eleve.notes.filter(note => note.matiere_id === this
+                                        .formData.matiere_id);
+                                    this.currentNotesCount = this.currentNotes.length;
+                                    console.log('Notes actualisées:', this.currentNotes);
+                                }
+
+                                // Rafraîchir la vue
+                                this.$nextTick(() => {
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'Note enregistrée avec succès.',
-                                        showConfirmButton: false,
-                                        timer: 1500,
                                     });
 
-                                    // Ajouter la note à l'élève et à la matière concernée
-                                    const eleve = this.eleves.find(e => e.eleve.id === this.currentEleveId);
-                                    if (eleve) {
-                                        // Mettre à jour les notes de l'élève
-                                        eleve.eleve.notes.push(note);
-
-                                        // Mettre à jour les notes dans le tableau de l'interface
-                                        this.currentNotes.push(note); // Ajouter la nouvelle note à l'affichage
-                                    }
-
-                                    // Pour déclencher un rafraîchissement de l'interface, vous pouvez faire ceci :
-                                    this.$nextTick(() => {
-
-                                        alert('sss');
-                                        this.eleves = [...this.eleves]; // Cela va forcer la réactivité
-                                    });
-                                }
+                                    // Fermer le modal
+                                    this.closeModal();
+                                });
                             } else {
                                 Swal.fire({
                                     icon: 'error',
@@ -379,14 +339,24 @@
                                 });
                             }
                         } catch (error) {
+                            console.error('Erreur dans le traitement de la requête:', error);
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Erreur serveur.',
+                                title: 'Une erreur est survenue, veuillez réessayer.',
                             });
                         } finally {
                             this.isLoading = false;
                         }
-                    }
+                    },
+
+
+                    // Fermer le modal
+                    closeModal() {
+                        this.currentNotes = [];
+                        this.currentMatiere = {};
+                        this.showModal = false;
+                    },
+
                 };
             }
         </script>
