@@ -25,7 +25,7 @@
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="d-flex flex-column flex-xl-row">
-                        <!-- Sidebar (information de l'élève) -->
+
                         <div class="flex-column flex-lg-row-auto w-100 w-xl-350px mb-10">
                             <div class="card mb-5 mb-xl-8">
                                 <div class="card-body pt-15">

@@ -115,7 +115,7 @@
                                 </a>
                                 <!--end:Menu item-->
                                 <!--begin:Menu item-->
-                                <a href="{{ route('vente.rapport') }}"
+                                <a href="#"
                                     class="menu-item menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
@@ -136,21 +136,21 @@
                                 </a>
 
 
-                                <a href="{{ route('ventes.index') }}"
+                                <a href="{{ route('versements.index') }}"
                                     class="menu-item menu-lg-down-accordion me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
-                                        <span class="menu-title">Versments</span>
+                                        <span class="menu-title">Versements</span>
                                         <span class=" d-lg-none"></span>
                                     </span>
 
                                 </a>
 
-                                <a href="{{ route('product.pos') }}"
+                                <a href="{{ route('examens.index') }}"
                                     class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
-                                        <span class="menu-title">Composition</span>
+                                        <span class="menu-title">Examens</span>
                                         <span class="d-lg-none"></span>
                                     </span>
 
@@ -766,7 +766,8 @@
                                         <!--begin:Menu item-->
                                         <div class="menu-item">
                                             <!--begin:Menu link-->
-                                            <a class="menu-link" href="{{ route('factures.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('versements.index') ? 'active' : '' }}"
+                                                href="{{ route('versements.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
