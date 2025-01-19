@@ -43,11 +43,10 @@ class NoteController extends Controller
 
     public function store(Request $request)
     {
-
         // Enregistrer la note directement
         $note = Note::create([
-            'semestre_id' => $request->semestre_id ?? 2,
-            'eleve_id'    => 11,
+            'semestre_id' => $request->semestre_id ?? 1,
+            'eleve_id'    => 1,
             'matiere_id'  => $request->matiere_id,
             'typenote_id' => $request->typenote_id,
             'note'        => $request->note,

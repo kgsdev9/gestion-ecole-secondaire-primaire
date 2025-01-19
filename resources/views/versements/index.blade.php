@@ -115,42 +115,37 @@
                                                 </colgroup>
                                                 <thead class="border-bottom border-gray-200 fs-7 fw-bold">
                                                     <tr class="text-start text-muted text-uppercase gs-0">
-                                                        <th class="min-w-100px">order
-                                                            No.
+                                                        <th class="min-w-100px">Réference
+                                                        </th>
+                                                        <th class="min-w-100px">
+                                                            Montant Versé
+                                                        </th>
+                                                        <th class="min-w-100px">Montnat Restant
+                                                        </th>
+                                                        <th class="min-w-100px">Type Versement
                                                         </th>
 
-                                                        <th class="min-w-100px">order
-                                                            No.
+                                                        <th class="min-w-100px">Type Versement
                                                         </th>
 
-                                                        <th class="min-w-100px">order
-                                                            No.
-                                                        </th>
 
-                                                        <th class="min-w-100px">order
-                                                            No.
-                                                        </th>
 
                                                     </tr>
                                                 </thead>
                                                 <tbody class="fs-6 fw-semibold text-gray-600">
-                                                    <tr>
-                                                        <td>
-                                                            <a href="/keen/demo1/apps/ecommerce/sales/details.html"
-                                                                class="text-gray-600 text-hover-primary mb-1">#14469</a>
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge badge-light-success">Successful</span>
-                                                        </td>
-                                                        <td class="dt-type-numeric">
-                                                            $1,200.00 </td>
-                                                        <td data-order="2025-01-12T00:00:00+01:00">
-                                                            120 </td>
-                                                        <td>
-                                                            14 Dec 2020, 8:43 pm </td>
-                                                    </tr>
+                                                    <template x-for="versement in filteredVersements()"
+                                                        :key="versement.id">
+                                                        <tr>
+                                                            <td x-text="versement.eleve.nom"></td>
+                                                            <td x-text="versement.montant_verse"></td>
+                                                            <td x-text="versement.montant_restant"></td>
+                                                            <td x-text="versement.date_versement"></td>
+                                                            <td x-text="versement.eleve.nom"></td>
 
+                                                        </tr>
+                                                    </template>
                                                 </tbody>
+
 
                                             </table>
                                         </div>
@@ -192,7 +187,7 @@
                                     </div>
 
                                 </div>
-                                
+
                             </div>
 
                         </div>
@@ -213,6 +208,7 @@
             return {
                 searchQuery: '',
                 clients: @json($listeleves),
+                versements: @json($versements),
                 selectedClient: {
                     id: '',
                     nom: '',
@@ -224,87 +220,37 @@
                     avatar: 'https://via.placeholder.com/40'
                 },
 
-                // Méthode de filtrage des clients selon la recherche
+                // Méthode pour filtrer les clients selon la recherche
                 filteredClients() {
-                    return this.clients.filter(client => client.nom.toLowerCase().includes(this.searchQuery
-                        .toLowerCase()));
+                    return this.clients.filter(client => client.nom.toLowerCase().includes(this.searchQuery.toLowerCase()));
                 },
-                // Méthode pour mettre à jour les informations du client sélectionné
-                updateClientInfo(clientId, nom, email, adressepostale, telephone, avatar) {
 
+                // Méthode pour mettre à jour les informations du client sélectionné
+                updateClientInfo(clientId, nom, prenom, matricule, telephone, avatar) {
+                    // Mettre à jour les informations du client sélectionné
                     this.selectedClient = {
                         id: clientId,
                         nom: nom || '',
-                        email: email || '',
-                        adressepostale: adressepostale || '',
+                        prenom: prenom || '',
+                        matricule: matricule || '',
                         telephone: telephone || '',
                         avatar: avatar || 'https://via.placeholder.com/40',
                     };
-                    this.clientid = clientId;
+
+                    // Filtrer les versements en fonction du client sélectionné
+                    this.filteredVersements(); // Appel de la fonction pour filtrer les versements
                 },
 
-                async submitInvoice() {
-                    // Vérifier si un client est sélectionné
-                    if (!this.selectedClient.id) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Veuillez sélectionner un client.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
+                // Filtrer les versements pour le client sélectionné
+                filteredVersements() {
+                    // Si un client est sélectionné, on filtre les versements par client_id
+                    if (this.selectedClient.id) {
+                        return this.versements.filter(versement => versement.eleve_id == this.selectedClient.id);
                     }
-
-                    // Vérification qu'il y a au moins une ligne renseignée dans items
-                    const isItemsValid = this.items.some(item => item.name && item.quantity > 0 && item.price > 0);
-
-                    if (!isItemsValid) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Veuillez renseigner au moins une ligne.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-                    // Construction des données à envoyer
-                    const data = {
-                        items: this.items,
-                        total_ht: this.totalHT(),
-                        total_tva: this.totalTVA(),
-                        total_ttc: this.totalTTC(),
-                        echeance: this.echeanceDate,
-                        clientid: this.selectedClient.id,
-                        tvainclus: this.isTVAIncluded,
-                    };
-                    try {
-                        // Envoi de la requête avec les données
-                        const response = await fetch("{{ route('facturepersonnalite.store') }}", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                    'content'),
-                            },
-                            body: JSON.stringify(data),
-                        });
-
-                        const result = await response.json();
-
-                        if (response.ok) {
-                            alert('Facture enregistrée avec succès !');
-                            window.location.href = "{{ route('facturepersonnalite.index') }}";
-                        } else {
-                            console.error(result);
-                        }
-                    } catch (error) {
-                        console.error(error);
-                        alert('Une erreur est survenue.');
-                    }
-                },
-
-            };
+                    // Si aucun client n'est sélectionné, retourner tous les versements
+                    return this.versements;
+                }
+            }
         }
     </script>
 @endpush

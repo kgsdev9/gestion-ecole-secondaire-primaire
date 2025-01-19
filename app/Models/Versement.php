@@ -11,12 +11,16 @@ class Versement extends Model
 
     // Définir les attributs qui peuvent être assignés en masse
     protected $fillable = [
+        'reference',
         'typeversement_id',
         'eleve_id',
         'montant',
         'date_versement',
-        'statut',
+        'montant_verse',
+        'montant_restant',
+        // 'statut',
     ];
+
 
     // Relation avec le type de versement
     public function typeVersement()
@@ -27,7 +31,7 @@ class Versement extends Model
     // Relation avec l'élève
     public function eleve()
     {
-        return $this->belongsTo(Eleve::class);
+        return $this->belongsTo(Eleve::class, 'eleve_id');
     }
 
     /**
