@@ -26,6 +26,7 @@ use App\Http\Controllers\Salle\SalleController;
 use App\Http\Controllers\Scolarite\ScolariteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vente\VenteController;
+use App\Http\Controllers\Versement\VersementController;
 use App\Models\EmploiDuTemps;
 use Illuminate\Support\Facades\Route;
 
@@ -65,6 +66,9 @@ Route::resource('/inscription', InscriptionController::class);
 Route::resource('/notes', NoteController::class);
 Route::resource('/examens', ExamenController::class);
 Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
+Route::resource('/versements', VersementController::class);
+
+
 
 Route::resource('/rapport', RapportController::class);
 Route::resource('/depenses', DepensesController::class);
