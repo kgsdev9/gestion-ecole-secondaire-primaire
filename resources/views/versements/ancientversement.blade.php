@@ -3,6 +3,7 @@
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="versementManager()">
         <div class="d-flex flex-column flex-column-fluid">
+
             <div class="app-toolbar py-3 py-lg-6">
                 <div class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
@@ -16,7 +17,7 @@
                             <li class="breadcrumb-item">
                                 <span class="bullet bg-gray-500 w-5px h-2px"></span>
                             </li>
-                            <li class="breadcrumb-item text-muted">Versements</li>
+                            <li class="breadcrumb-item text-muted">Scolarites</li>
                         </ul>
                     </div>
                 </div>
@@ -25,40 +26,44 @@
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="d-flex flex-column flex-xl-row">
-                        <!-- Sidebar (information de l'élève) -->
                         <div class="flex-column flex-lg-row-auto w-100 w-xl-350px mb-10">
                             <div class="card mb-5 mb-xl-8">
                                 <div class="card-body pt-15">
                                     <div class="d-flex flex-center flex-column mb-5">
-                                        <!-- Avatar -->
+                                        <!--begin::Avatar-->
                                         <div class="symbol symbol-150px symbol-circle mb-7">
                                             <img src="{{ asset('avatar.png') }}" alt="image">
                                         </div>
+                                        <!--end::Avatar-->
 
-                                        <!-- Nom de l'élève -->
+                                        <!--begin::Name-->
                                         <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bold mb-1">
-                                            <span x-text="selectedEleve.nom"></span></a>
-                                        <a href="#" class="fs-5 fw-semibold text-muted text-hover-primary mb-6">
-                                            <span x-text="selectedEleve.email"></span></a>
-                                    </div>
+                                            Max Smith </a>
+                                        <!--end::Name-->
 
+                                        <!--begin::Email-->
+                                        <a href="#" class="fs-5 fw-semibold text-muted text-hover-primary mb-6">
+                                            max@kt.com </a>
+                                        <!--end::Email-->
+                                    </div>
                                     <div class="custom-select-container">
                                         <div class="dropdown">
                                             <button class="btn btn-light dropdown-toggle w-100" type="button"
                                                 id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <template x-if="selectedEleve.nom">
+                                                <template x-if="selectedClient.nom">
                                                     <div class="d-flex align-items-center">
-                                                        <img src="{{ asset('avatar.png') }}" alt="Avatar"
-                                                            class="rounded-circle me-2" width="40" height="40" />
+                                                        <img x-bind:src="selectedClient.avatar ||
+                                                            'https://via.placeholder.com/40'"
+                                                            alt="Avatar" class="rounded-circle me-2" width="40"
+                                                            height="40" />
                                                         <div>
-                                                            <strong x-text="selectedEleve.nom"></strong>
+                                                            <strong x-text="selectedClient.nom"></strong>
                                                             <br />
-                                                            <span class="text-muted"
-                                                                x-text="selectedEleve.matricule"></span>
+                                                            <span class="text-muted" x-text="selectedClient.email"></span>
                                                         </div>
                                                     </div>
                                                 </template>
-                                                <span x-text="selectedEleve.nom ? '' : 'Aucun élève sélectionné'"></span>
+                                                <span x-text="selectedClient.nom ? '' : 'Aucun client sélectionné'"></span>
                                             </button>
 
                                             <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
@@ -67,78 +72,70 @@
                                                         x-model="searchQuery" />
                                                 </li>
 
-                                                <template x-for="eleve in filteredEleves()" :key="eleve.id">
+                                                <template x-for="client in filteredClients()" :key="client.id">
                                                     <li class="dropdown-item d-flex align-items-center"
-                                                        @click="updateEleveInfo(eleve.id, eleve.nom, eleve.prenom, eleve.matricule, eleve.telephone_parent, 'https://via.placeholder.com/40', eleve.classe_id, eleve.niveau_id, eleve.anneeacademique_id)"
+                                                        @click="updateClientInfo(client.id, client.nom, client.prenom, client.matricule, client.telephone_parent, 'https://via.placeholder.com/40', client.classe_id,client.niveau_id,client.anneeacademique_id)"
                                                         style="cursor: pointer;">
                                                         <img src="{{ asset('avatar.png') }}" alt="Avatar"
                                                             class="rounded-circle me-2" width="40" height="40" />
                                                         <div>
-                                                            <strong x-text="eleve.nom"></strong>
+                                                            <strong x-text="client.nom"></strong>
                                                             <br />
-                                                            <span class="text-muted" x-text="eleve.matricule"></span>
+                                                            <span class="text-muted" x-text="client.matricule"></span>
                                                         </div>
                                                     </li>
                                                 </template>
                                             </ul>
-                                            <div class="pb-5 fs-6">
-                                                <div class="fw-bold mt-5">Montant De la Scolarite</div>
-                                                <div class="text-gray-600">
-                                                    <span x-text="selectedEleve.montantScolarite || 'Aucune scolarité trouvée'"></span>
-                                                </div>
-                                                <div class="fw-bold mt-5">Montant Restant </div>
-                                                <div class="text-gray-600"><a href="#"
-                                                        class="text-gray-600 text-hover-primary">info@keenthemes.com</a>
-                                                </div>
+
+                                            <div>
+                                                <strong>Montant de la scolarité :</strong>
+                                                <span x-text="selectedClient.montantScolarite || 'Oufs Rien trouvé'"></span>
                                             </div>
+
+
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
+
                         </div>
 
-
-
-
-                        <!-- Historique des versements -->
                         <div class="flex-lg-row-fluid ms-lg-15">
                             <div class="card pt-4 mb-6 mb-xl-9">
-                                <div class="card-header border-0 pt-6">
+                                <div class="card-header border-0">
                                     <div class="card-title">
-                                        <div class="d-flex align-items-center position-relative my-1">
-                                            <i class='fas fa-search  position-absolute ms-5'></i>
-                                            <input type="text"
-                                                class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                                placeholder="Rechercher" x-model="searchTerm" @input="filterUsers">
-                                        </div>
-                                    </div>
-                                    <div class="card-toolbar">
-                                        <div class="d-flex justify-content-end align-items-center gap-3">
-                                            <button @click="printRapport" class="btn btn-light-dark btn-sm">
-                                                <i class="fa fa-print"></i> Imprimer
-                                            </button>
-                                            <button @click="exportRaport" class="btn btn-light-success btn-sm">
-                                                <i class='fas fa-file-export'></i> Export
-                                            </button>
-                                            <button @click="showModal = true"
-                                                class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm">
-                                                <i class="fa fa-add"></i> Création
-                                            </button>
-                                        </div>
+                                        <h2>Historique des versements </h2>
                                     </div>
                                 </div>
                                 <div class="card-body pt-0 pb-5">
                                     <div class="dt-container dt-bootstrap5 dt-empty-footer">
-                                        <div  class="table-responsive">
+                                        <div id="" class="table-responsive">
                                             <table class="table align-middle table-row-dashed gy-5 dataTable"
                                                 style="width: 100%;">
+                                                <colgroup>
+                                                    <col style="width: 118.344px;">
+                                                    <col style="width: 100.469px;">
+                                                    <col style="width: 88.1406px;">
+                                                    <col style="width: 118.344px;">
+                                                    <col style="width: 160.703px;">
+                                                </colgroup>
                                                 <thead class="border-bottom border-gray-200 fs-7 fw-bold">
                                                     <tr class="text-start text-muted text-uppercase gs-0">
-                                                        <th class="min-w-100px">Élève</th>
-                                                        <th class="min-w-100px">Montant Versé</th>
-                                                        <th class="min-w-100px">Montant Restant</th>
-                                                        <th class="min-w-100px">Type Versement</th>
-                                                        <th class="min-w-100px">Date</th>
+                                                        <th class="min-w-100px">Eleve
+                                                        </th>
+                                                        <th class="min-w-100px">
+                                                            Montant Versé
+                                                        </th>
+                                                        <th class="min-w-100px">Montnat Restant
+                                                        </th>
+                                                        <th class="min-w-100px">Type Versement
+                                                        </th>
+
+                                                        <th class="min-w-100px">Date
+                                                        </th>
+
+
                                                     </tr>
                                                 </thead>
                                                 <tbody class="fs-6 fw-semibold text-gray-600">
@@ -150,96 +147,110 @@
                                                             <td x-text="versement.montant_restant"></td>
                                                             <td x-text="versement.type_versement.name"></td>
                                                             <td x-text="versement.date_versement"></td>
+
                                                         </tr>
                                                     </template>
                                                 </tbody>
+
+
                                             </table>
                                         </div>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
+
     </div>
 @endsection
+
 
 @push('scripts')
     <script>
         function versementManager() {
             return {
                 searchQuery: '',
-                eleves: @json($listeleves),
+                clients: @json($listeleves),
                 versements: @json($versements),
                 scolarites: @json($listescolarite),
-                selectedEleve: {
+
+                selectedClient: {
                     id: '',
                     nom: '',
-                    prenom: '',
-                    matricule: '',
                     email: '',
+                    adressepostale: '',
+                    adressegeographique: '',
+                    telephone: '',
+                    fax: '',
                     avatar: 'https://via.placeholder.com/40',
                     classe_id: '',
                     niveau_id: '',
                     annee_academique_id: '',
                     montantScolarite: '',
-                },
 
-                // Filtrer les élèves en fonction de la recherche
-                filteredEleves() {
-                    return this.eleves.filter(eleve => eleve.nom.toLowerCase().includes(this.searchQuery.toLowerCase()));
                 },
+                filteredClients() {
+                    return this.clients.filter(client => client.nom.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                },
+                updateClientInfo(clientId, nom, prenom, matricule, telephone, avatar, classe_id, niveau_id,
+                    annee_academique_id) {
 
-                // Mettre à jour les informations de l'élève sélectionné
-                updateEleveInfo(id, nom, prenom, matricule, email, avatar, classe_id, niveau_id, annee_academique_id) {
-                    this.selectedEleve = {
-                        id: id,
+                    this.selectedClient = {
+                        id: clientId,
                         nom: nom || '',
                         prenom: prenom || '',
                         matricule: matricule || '',
-                        email: email || '',
+                        telephone: telephone || '',
                         avatar: avatar || 'https://via.placeholder.com/40',
                         classe_id: classe_id,
                         niveau_id: niveau_id,
                         annee_academique_id: annee_academique_id,
                     };
+                    // Filtrer les scolarités en fonction de l'élève sélectionné
 
-                    // Filtrer les versements pour l'élève sélectionné
-                    this.filteredVersements();
-                    // Filtrer la scolarité de l'élève
                     this.filterScolarite();
+
+                    // Filtrer les versements en fonction du client sélectionné
+                    this.filteredVersements(); // Appel de la fonction pour filtrer les versements
                 },
 
-                // Filtrer la scolarité de l'élève
                 filterScolarite() {
+
                     const scolarite = this.scolarites.find(s =>
-                        s.niveau_id === this.selectedEleve.niveau_id &&
-                        s.classe_id === this.selectedEleve.classe_id &&
-                        s.annee_academique_id === this.selectedEleve.annee_academique_id
+                        s.niveau_id === this.selectedClient.niveau_id &&
+                        s.classe_id === this.selectedClient.classe_id &&
+                        s.annee_academique_id === this.selectedClient.annee_academique_id
                     );
 
-
-                    // Si une scolarité est trouvée, mettre à jour le montant de la scolarité
+                    // Si une scolarité correspondante est trouvée, on met à jour le montant de la scolarité
                     if (scolarite) {
 
-                        this.selectedEleve.montantScolarite = scolarite.montant_scolarite;
+                        this.selectedClient.montantScolarite = scolarite.montant_scolarite;
                     } else {
-                        this.selectedEleve.montantScolarite = 0;
+                        this.selectedClient.montantScolarite =
+                            0;
                     }
                 },
 
-                // Filtrer les versements pour l'élève sélectionné
+                // Filtrer les versements pour le client sélectionné
                 filteredVersements() {
-                    // Si un élève est sélectionné, filtrer les versements par élève_id
-                    if (this.selectedEleve.id) {
-                        return this.versements.filter(versement => versement.eleve_id == this.selectedEleve.id);
+                    // Si un client est sélectionné, on filtre les versements par client_id
+                    if (this.selectedClient.id) {
+                        return this.versements.filter(versement => versement.eleve_id == this.selectedClient.id);
                     }
-                    // Si aucun élève n'est sélectionné, retourner un tableau vide
-                    return [];
-                },
-            };
+                    // Si aucun client n'est sélectionné, retourner tous les versements
+                    return this.versements;
+                }
+            }
         }
     </script>
 @endpush
