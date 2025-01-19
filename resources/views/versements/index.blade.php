@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Liste des versements')
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="versementManager()">
         <div class="d-flex flex-column flex-column-fluid">
@@ -125,7 +125,7 @@
                                             <button @click="exportRaport" class="btn btn-light-success btn-sm">
                                                 <i class='fas fa-file-export'></i> Export
                                             </button>
-                                            <button @click="showModal = true"
+                                            <button @click="openModal()"
                                                 class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm">
                                                 <i class="fa fa-add"></i> Création
                                             </button>
@@ -169,10 +169,21 @@
                         <template x-if="showModal">
                             <div class="modal fade show d-block" tabindex="-1" aria-modal="true"
                                 style="background-color: rgba(0,0,0,0.5)">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-lg"> <!-- Classe modal-lg ajoutée ici -->
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" x-text="isEdite ? 'Modification' : 'Création'"></h5>
+                                            <!-- Affichage des informations de l'élève dans le header -->
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ asset('avatar.png') }}" alt="Avatar"
+                                                    class="rounded-circle me-2" width="40" height="40" />
+                                                <div>
+                                                    <h5 class="modal-title"
+                                                        x-text="isEdite ? 'Modification' : 'Création'"></h5>
+                                                    <p class="text-muted"
+                                                        x-text="'Nom: ' + selectedEleve.nom + ' - Matricule: ' + selectedEleve.matricule">
+                                                    </p>
+                                                </div>
+                                            </div>
                                             <button type="button" class="btn-close" @click="hideModal()"></button>
                                         </div>
                                         <div class="modal-body">
@@ -185,10 +196,11 @@
                                                     <select id="typeversement_id" class="form-control"
                                                         x-model="formData.typeversement_id" required>
                                                         <option value="">Sélectionner un type de versement</option>
-                                                        <!-- Remplir les options avec les types de versements disponibles -->
-                                                        <template x-for="type in typesVersement" :key="type.id">
-                                                            <option :value="type.id" x-text="type.name"></option>
-                                                        </template>
+                                                        @foreach ($typeversement as $type)
+                                                            <option value="{{ $type->id }}">{{ $type->name }}
+                                                            </option>
+                                                        @endforeach
+
                                                     </select>
                                                 </div>
 
@@ -204,7 +216,13 @@
                                                 <div class="mb-3">
                                                     <label for="montant_verse" class="form-label">Montant Versé</label>
                                                     <input type="number" id="montant_verse" class="form-control"
-                                                        x-model="formData.montant_verse" required>
+                                                        x-model="formData.montant_verse" :max="totalMontantReste()"
+                                                        required min="1" x-bind:disabled="totalMontantReste() <= 0"
+                                                        x-bind:placeholder="totalMontantReste() > 0 ? 'Montant à verser' :
+                                                            'Le montant restant est 0'"
+                                                        @input="checkMontantVerse()">
+                                                    <p x-show="montantError" class="text-danger mt-1">Le montant versé ne
+                                                        peut pas dépasser le montant restant.</p>
                                                 </div>
 
                                                 <!-- Montant Restant -->
@@ -212,7 +230,7 @@
                                                     <label for="montant_restant" class="form-label">Montant
                                                         Restant</label>
                                                     <input type="number" id="montant_restant" class="form-control"
-                                                        x-model="formData.montant_restant" required>
+                                                        :value="totalMontantReste()" readonly>
                                                 </div>
 
                                                 <!-- Bouton de soumission -->
@@ -220,11 +238,11 @@
                                                     x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
                                             </form>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </template>
+
                         {{-- fin modal versement --}}
 
 
@@ -241,6 +259,7 @@
             return {
                 searchQuery: '',
                 showModal: '',
+                searchTerm: '',
                 eleves: @json($listeleves),
                 versements: @json($versements),
                 scolarites: @json($listescolarite),
@@ -258,10 +277,23 @@
                 },
                 currentVersement: null,
                 isEdite: false,
+                montantError: false,
+                formData: {
+                    montant_verse: '',
+                    montant_restant: '',
+                    typeversement_id: '',
+                },
 
-                // Filtrer les élèves en fonction de la recherche
                 filteredEleves() {
                     return this.eleves.filter(eleve => eleve.nom.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                },
+
+                openModal() {
+                    if (this.selectedEleve.id) {
+                        this.showModal = true;
+                    } else {
+                        alert("Veuillez sélectionner un élève avant d'ajouter un versement.");
+                    }
                 },
 
                 hideModal() {
@@ -312,6 +344,17 @@
                     const versements = this.filteredVersements();
                     return versements.reduce((total, versement) => total + parseFloat(versement.montant_verse || 0), 0);
                 },
+
+                checkMontantVerse() {
+                    if (this.formData.montant_verse > this.totalMontantReste()) {
+                        this.montantError = true;
+                        // Vider le champ de montant versé
+                        this.formData.montant_verse = 0;
+                    } else {
+                        this.montantError = false;
+                    }
+                },
+
 
                 // Calculer la somme des montants restants pour l'élève sélectionné
                 totalMontantReste() {
