@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Versement;
 
 use App\Http\Controllers\Controller;
+use App\Models\Eleve;
 use Illuminate\Http\Request;
 
 class VersementController extends Controller
@@ -10,6 +11,7 @@ class VersementController extends Controller
 
     public function index()
     {
-        return view('versements.index');
+        $listeleves = Eleve::all();
+        return view('versements.index', compact('listeleves'));
     }
 }
