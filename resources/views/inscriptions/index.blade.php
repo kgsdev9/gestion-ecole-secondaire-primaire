@@ -140,7 +140,7 @@
 
                 filterInscriptions() {
                     this.filteredInscriptions = this.inscriptions.filter(inscription => {
-                        return inscription.eleve.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        return inscription.eleve.nom.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             inscription.classe.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             inscription.niveau.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             inscription.annee_academique.name.toLowerCase().includes(this.searchTerm.toLowerCase());

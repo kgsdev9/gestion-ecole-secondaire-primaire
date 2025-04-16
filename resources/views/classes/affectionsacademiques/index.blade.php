@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Salle de classe')
+@section('title', 'Gestion des salles de classe par année académique')
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="classeForm()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
@@ -225,6 +225,7 @@
                 },
 
                 async submitForm() {
+                    // Vérifier si tous les champs sont remplis
                     if (!this.formData.niveau_id || !this.formData.classe_id || !this.formData.salle_id || !this
                         .formData.annee_academique_id) {
                         Swal.fire({
@@ -234,6 +235,34 @@
                         });
                         return;
                     }
+
+                    // Vérifier si une affection académique existe déjà avec la même salle et année académique
+                    const responseCheck = await fetch('{{ route('affectionacademique.check') }}', {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        params: {
+                            niveau_id: this.formData.niveau_id,
+                            classe_id: this.formData.classe_id,
+                            salle_id: this.formData.salle_id,
+                            annee_academique_id: this.formData.annee_academique_id
+                        }
+                    });
+
+                    if (!responseCheck.ok) {
+                        const data = await responseCheck.json();
+                        if (data.exists) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Il est impossible d\'affecter deux classes dans la même salle pour la même année académique.',
+                                showConfirmButton: true,
+                            });
+                            return; // Retourner si l'affectation existe déjà
+                        }
+                    }
+
+                    // Préparer les données du formulaire
                     const formData = new FormData();
                     formData.append('niveau_id', this.formData.niveau_id);
                     formData.append('classe_id', this.formData.classe_id);
@@ -300,6 +329,7 @@
                         });
                     }
                 },
+
 
                 get paginatedClasses() {
                     return this.filteredClasses.slice((this.currentPage - 1) * this.classesPerPage, this.currentPage *

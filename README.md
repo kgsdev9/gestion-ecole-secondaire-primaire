@@ -5,6 +5,11 @@
 git remote set-url origin https://github.com/kgsdev9/gestion-ecole-secondaire-primaire.git
 
 
+
+# module à developpper 
+gestion des notes  par semestre ou trimestre 
+emploi du temps 
+
 SI L'eleve à une seule note on peut plus modfier une information sur l'eleve 
 
 ni supprimer 
