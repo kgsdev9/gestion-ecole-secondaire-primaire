@@ -241,6 +241,19 @@
                             return;
                         }
 
+                        const debut = new Date(this.formData.date_debut);
+                        const fin = new Date(this.formData.date_fin);
+
+                        // ✅ Vérification des dates
+                        if (debut >= fin) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'La date de début doit être inférieure à la date de fin.',
+                            });
+                            this.isLoading = false;
+                            return;
+                        }
+
                         const formData = new FormData();
                         formData.append('name', this.formData.name);
                         formData.append('date_debut', this.formData.date_debut);
@@ -302,6 +315,7 @@
                             this.isLoading = false;
                         }
                     },
+
 
                     async deleteAnneeAcademique(id) {
                         try {
