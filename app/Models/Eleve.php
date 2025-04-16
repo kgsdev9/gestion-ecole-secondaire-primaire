@@ -23,6 +23,12 @@ class Eleve extends Model
         'anneeacademique_id'
     ];
 
+
+    public function inscriptions()
+    {
+        return $this->hasMany(Inscription::class);
+    }
+
     // Define the relationship to Classe
     public function classe()
     {

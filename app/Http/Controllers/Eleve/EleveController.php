@@ -28,7 +28,7 @@ class EleveController extends Controller
         $listeannee  = AnneeAcademique::all();
         $listeniveaux  = Niveau::all();
         $listeclasse  = Classe::all();
-       
+
         return view('eleves.index', compact('eleves', 'listeannee', 'listeclasse', 'listeniveaux'));
     }
 
@@ -58,6 +58,22 @@ class EleveController extends Controller
 
     private function updateEleve($eleve, Request $request)
     {
+        // Vérification de doublon : même élève, même config, mais une autre inscription
+        $doublon = Inscription::where('eleve_id', $eleve->id)
+            ->where('anneeacademique_id', $request->annee_academique_id)
+            ->where('niveau_id', $request->niveau_id)
+            ->where('classe_id', $request->classe_id)
+            ->where('id', '!=', optional($eleve->inscriptions()->first())->id)
+            ->exists();
+
+        if ($doublon) {
+            return response()->json([
+                'message' => 'Échec : cet élève est déjà inscrit avec ces informations.',
+                'type' => 'duplicate'
+            ], 409);
+        }
+
+        // Mise à jour des infos élève
         $eleve->update([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
@@ -69,15 +85,17 @@ class EleveController extends Controller
             'telephone_parent' => $request->telephone_parant,
         ]);
 
-        // Mettre à jour l'inscription
+        // Mise à jour ou création de l'inscription
         $this->updateInscription($eleve, $request);
 
         $eleve->load('classe', 'anneeacademique', 'niveau');
+
         return response()->json([
             'message' => 'Élève mis à jour avec succès',
             'eleve' => $eleve
         ], 200);
     }
+
 
     private function generateMatricule()
     {
@@ -91,6 +109,20 @@ class EleveController extends Controller
 
     private function createEleve(Request $request)
     {
+        // Vérification de l'existence d'une inscription identique pour l'élève
+        $existe = Inscription::where('eleve_id', $request->eleve_id)
+            ->where('anneeacademique_id', $request->annee_academique_id)
+            ->where('classe_id', $request->classe_id)
+            ->where('niveau_id', $request->niveau_id)
+            ->exists();
+
+        if ($existe) {
+            return response()->json([
+                'message' => 'Cet élève est déjà inscrit dans cette classe pour cette année académique.',
+                'type' => 'duplicate'
+            ], 409); // 409 = Conflict
+        }
+
         // Création d'un nouvel élève
         $eleve = Eleve::create([
             'nom' => $request->nom,
@@ -104,7 +136,7 @@ class EleveController extends Controller
             'telephone_parent' => $request->telephone_parant,
         ]);
 
-        // Créer une inscription pour l'élève
+        // Création de l'inscription
         $this->createInscription($eleve, $request);
 
         $eleve->load('classe', 'anneeacademique', 'niveau');
@@ -114,6 +146,7 @@ class EleveController extends Controller
             'eleve' => $eleve
         ], 201);
     }
+
 
     // Méthode pour créer une inscription
     private function createInscription($eleve, Request $request)

@@ -375,7 +375,7 @@
                 async submitForm() {
                     this.isLoading = true;
 
-                    // Validation for each field
+                    // Validation des champs obligatoires
                     if (!this.formData.nom || this.formData.nom.trim() === '') {
                         Swal.fire({
                             icon: 'error',
@@ -395,7 +395,6 @@
                         this.isLoading = false;
                         return;
                     }
-
 
                     if (!this.formData.classe_id || this.formData.classe_id === '') {
                         Swal.fire({
@@ -467,7 +466,6 @@
                     formData.append('adresse', this.formData.adresse);
                     formData.append('telephone_parant', this.formData.telephone_parant);
 
-                    // If updating an existing Eleve
                     if (this.currentEleve) {
                         formData.append('eleve_id', this.currentEleve.id);
                     }
@@ -506,11 +504,21 @@
                                 this.hideModal();
                             }
                         } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erreur lors de l\'enregistrement.',
-                                showConfirmButton: true
-                            });
+                            if (response.status === 409) {
+                                const errorData = await response.json();
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: errorData.message ||
+                                        'Cet élève est déjà inscrit avec cette configuration.',
+                                    showConfirmButton: true
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erreur lors de l\'enregistrement.',
+                                    showConfirmButton: true
+                                });
+                            }
                         }
                     } catch (error) {
                         console.error('Erreur réseau :', error);
@@ -523,6 +531,7 @@
                         this.isLoading = false;
                     }
                 },
+
 
 
                 get paginatedEleves() {
