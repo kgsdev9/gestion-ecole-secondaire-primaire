@@ -10,6 +10,8 @@ use Codedge\Fpdf\Fpdf\Fpdf;
 
 class ImpressionFactureController extends Controller
 {
+
+    
     public function generateFacture($codefacture)
     {
         if (str_starts_with($codefacture, 'VP')) {

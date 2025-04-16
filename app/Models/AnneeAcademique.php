@@ -26,6 +26,6 @@ class AnneeAcademique extends Model
 
     public function semestres()
     {
-        return $this->hasMany(Semestre::class); // Un anneeAcademique a plusieurs semestres
+        return $this->hasMany(Semestre::class);
     }
 }

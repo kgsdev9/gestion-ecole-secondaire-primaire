@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Liste des examens')
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="examenSearch()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
@@ -71,16 +71,26 @@
                                                     </td>
                                                     <td x-text="new Date(examen.date_fin).toLocaleDateString('fr-FR')"></td>
                                                     <td x-text="examen.cloture ? 'Oui' : 'Non'"></td>
-                                                    <td class="text-end">
+                                                    <td class="text-end d-flex justify-content-start">
                                                         <button @click="openModal(examen)"
-                                                            class="btn btn-primary btn-sm mx-2">
+                                                                class="btn btn-primary btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
                                                         <button @click="deleteExamen(examen.id)"
-                                                            class="btn btn-danger btn-sm">
+                                                                class="btn btn-danger btn-sm mx-2">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
+                                                        <button @click="openModal(examen)"
+                                                                class="btn btn-success btn-sm mx-2">
+                                                            <i class="fa fa-calendar-check"></i>
+                                                        </button>
+
+                                                        <button @click="enregistrerNotes(examen.id)"
+                                                        class="btn btn-success btn-sm mx-2">
+                                                    <i class="fa fa-save"></i> 
+                                                </button>
                                                     </td>
+
                                                 </tr>
                                             </template>
                                         </tbody>
@@ -145,10 +155,6 @@
                                     </select>
                                 </div>
 
-
-
-
-
                                 <div class="mb-3">
                                     <label for="date_debut" class="form-label">Date de début</label>
                                     <input type="date" id="date_debut" class="form-control"
@@ -162,7 +168,7 @@
                                 <div class="mb-3">
                                     <label for="cloture" class="form-label">Clôture</label>
                                     <input type="checkbox" id="cloture" x-model="formData.cloture"
-                                        class="form-check-input" >
+                                        class="form-check-input">
                                 </div>
                                 <button type="submit" class="btn btn-primary"
                                     x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>

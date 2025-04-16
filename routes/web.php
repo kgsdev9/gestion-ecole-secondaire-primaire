@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Bulletin\BulletinConroller;
 use App\Http\Controllers\Categorie\CategoryController;
 use App\Http\Controllers\Classe\AffectionAcademiqueController;
 use App\Http\Controllers\Classe\ClasseController;
@@ -20,10 +21,12 @@ use App\Http\Controllers\Note\NoteController;
 use App\Http\Controllers\Pos\ProductPostController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Rapport\RapportController;
+use App\Http\Controllers\Rapport\SuiviVersement;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Salle\AnneAcademiqueController;
 use App\Http\Controllers\Salle\SalleController;
 use App\Http\Controllers\Scolarite\ScolariteController;
+use App\Http\Controllers\Semestre\SemestreController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vente\VenteController;
 use App\Http\Controllers\Versement\VersementController;
@@ -67,6 +70,8 @@ Route::resource('/notes', NoteController::class);
 Route::resource('/examens', ExamenController::class);
 Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
 Route::resource('/versements', VersementController::class);
+Route::resource('/bulletin', BulletinConroller::class);
+Route::resource('/suiviversement', SuiviVeX1rsement::class);
 
 
 
@@ -90,3 +95,7 @@ Route::post('/ventes/{vente}/validate', [VenteController::class, 'validatVente']
 
 Route::get('/generatefactureVente/{codefacure}', [VenteController::class, 'generateFactureVente'])->name('facture.vente.generate');
 Route::post('/rapport/vente/days', [VenteController::class, 'PrintAllVente'])->name('facture.vente.rapport');
+Route::get('/gestion/semestre/{id}', [SemestreController::class, 'gestionSemestre'])->name('gestion.semestre');
+Route::post('/store', [SemestreController::class, 'store'])->name('semestre.store');
+Route::post('/cloture-semestre', [SemestreController::class, 'toggleCloture'])->name('semestre.toggleCloture');
+Route::post('/delete/semestre/{id}', [SemestreController::class, 'destroy'])->name('semestre.destroy');

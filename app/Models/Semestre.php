@@ -18,6 +18,9 @@ class Semestre extends Model
         'date_fin',
     ];
 
+
+
+    
     // Relation avec l'année académique
     public function anneeAcademique()
     {
@@ -37,7 +40,7 @@ class Semestre extends Model
     /**
      * Clôturer un semestre, empêchant l'ajout de nouvelles notes.
      */
-    public function cloturer()
+    public function closeSemestre()
     {
         $this->cloture = true;
         $this->save();
@@ -46,7 +49,7 @@ class Semestre extends Model
     /**
      * Ouvrir un semestre pour permettre l'ajout de nouvelles notes.
      */
-    public function ouvrir()
+    public function openSemestre()
     {
         $this->cloture = false;
         $this->save();

@@ -18,6 +18,8 @@ class CreateSemestresTable extends Migration
             $table->unsignedBigInteger('annee_academique_id');
             $table->string('name');
             $table->boolean('cloture')->default(false);
+            $table->date('date_debut');
+            $table->date('date_fin');
             $table->timestamps();
             $table->foreign('annee_academique_id')->references('id')->on('annee_academiques')->onDelete('cascade');
         });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\EmploiDutemps;
 
 use App\Http\Controllers\Controller;
+use App\Models\AffectionAcademique;
 use App\Models\EmploiDuTemps;
 use App\Models\Jour;
 use Carbon\Carbon;
@@ -22,16 +23,18 @@ class EmploiDuTempsController extends Controller
     }
 
 
+
+
     public function index()
     {
         // Récupérer tous les emplois du temps avec les relations
         $emplois = EmploiDuTemps::with(['matiere', 'classe', 'jour'])->get();
 
         // Récupérer les jours sous forme d'un tableau de noms de jours
-        $jours = Jour::pluck('name')->toArray(); // Convertit la Collection en un tableau simple
+        $jours = Jour::pluck('name')->toArray();
 
-        // Récupérer les heures de début uniques
-        $heures = $emplois->pluck('heure_debut')->unique()->sort()->values(); // Récupère uniquement les heures de début uniques
+        // Récupérer les heures de début uniques triées
+        $heures = $emplois->pluck('heure_debut')->unique()->sort()->values();
 
         // Organiser les emplois par jour et heure
         $emploisParJourEtHeure = [];
@@ -39,7 +42,6 @@ class EmploiDuTempsController extends Controller
             $jour = $emploi->jour->name;
             $heureDebut = $emploi->heure_debut;
 
-            // Ajouter les données dans la structure
             $emploisParJourEtHeure[$jour][$heureDebut][] = [
                 'matiere' => $emploi->matiere->name,
                 'classe' => $emploi->classe->name,
@@ -48,9 +50,12 @@ class EmploiDuTempsController extends Controller
             ];
         }
 
-        // Retourner les données à la vue
-        return view('emploidutemps', compact('emploisParJourEtHeure', 'jours', 'heures'));
+        // Récupérer les classes liées à AffectionAcademique
+        $classes = AffectionAcademique::with('classe')->get();
+
+        return view('emploidutemps', compact('emploisParJourEtHeure', 'jours', 'heures', 'classes'));
     }
+
 
 
 

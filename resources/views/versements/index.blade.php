@@ -392,7 +392,7 @@
 
                     // this.isLoading = true;
 
-                    // Vérifiez si le montant versé est supérieur au montant restant
+
                     if (parseFloat(this.formData.montant_verse) > this.totalMontantReste()) {
                         Swal.fire({
                             icon: 'error',
@@ -402,6 +402,17 @@
                         return;
                     }
 
+                    if (!this.formData.montant_verse || this.formData.montant_verse <= 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le montant versé doit être supérieur à 0.',
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+
+
                     // Préparer les données à envoyer
                     const formData = new FormData();
                     formData.append('montant_verse', this.formData.montant_verse);
@@ -409,10 +420,6 @@
                     formData.append('typeversement_id', this.formData.typeversement_id);
                     formData.append('date_versement', this.formData.date_versement);
                     formData.append('eleve_id', this.selectedEleve.id);
-
-                    // alert(this.totalMontantReste() - this.formData.montant_verse);
-                    //  console.log(formData);
-                    // return;
                     try {
                         const response = await fetch(
                             '{{ route('versements.store') }}', {
