@@ -48,4 +48,25 @@ class SemestreController extends Controller
         ]);
     }
 
+
+    public function toggleCloture(Request $request)
+    {
+        $semestre = Semestre::find($request->id);
+
+        if (!$semestre) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Semestre introuvable.'
+            ], 404);
+        }
+
+        $semestre->cloture = !$semestre->cloture;
+        $semestre->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Statut de clôture mis à jour.',
+            'cloture' => $semestre->cloture,
+        ]);
+    }
 }

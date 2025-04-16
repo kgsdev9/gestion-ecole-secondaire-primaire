@@ -71,16 +71,20 @@
                                                     <td x-text="formatDate(semestre.date_debut)"></td>
                                                     <td x-text="formatDate(semestre.date_fin)"></td>
                                                     <td>
-                                                        <span :class="semestre.cloture ? 'badge bg-success' : 'badge bg-warning'">
-                                                            <i :class="semestre.cloture ? 'fa fa-lock' : 'fa fa-unlock'"></i>
+                                                        <span
+                                                            :class="semestre.cloture ? 'badge bg-success' : 'badge bg-warning'">
+                                                            <i
+                                                                :class="semestre.cloture ? 'fa fa-lock' : 'fa fa-unlock'"></i>
                                                             <span x-text="semestre.cloture ? 'Clôturé' : 'Ouvert'"></span>
                                                         </span>
                                                     </td>
                                                     <td class="text-end">
                                                         <button @click="toggleCloture(semestre)"
                                                             class="btn btn-secondary ms-2 btn-sm">
-                                                            <i class="fa" :class="semestre.cloture ? 'fa-unlock' : 'fa-lock'"></i>
-                                                            <span x-text="semestre.cloture ? 'Déclôturer' : 'Clôturer'"></span>
+                                                            <i class="fa"
+                                                                :class="semestre.cloture ? 'fa-unlock' : 'fa-lock'"></i>
+                                                            <span
+                                                                x-text="semestre.cloture ? 'Déclôturer' : 'Clôturer'"></span>
                                                         </button>
                                                         <button @click="deleteSemestre(semestre.id)"
                                                             class="btn btn-danger btn-sm">
@@ -105,8 +109,8 @@
                                             <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
                                                 <button class="page-link"
                                                     @click="goToPage(currentPage + 1)">Suivant</button>
-                                            </ul>
-                                        </nav>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>
@@ -128,15 +132,18 @@
                                 <form @submit.prevent="addSemestre">
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Libellé</label>
-                                        <input type="text" id="name" class="form-control" x-model="form.name" required>
+                                        <input type="text" id="name" class="form-control" x-model="form.name"
+                                            required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="date_debut" class="form-label">Date début</label>
-                                        <input type="date" id="date_debut" class="form-control" x-model="form.date_debut" required>
+                                        <input type="date" id="date_debut" class="form-control" x-model="form.date_debut"
+                                            required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="date_fin" class="form-label">Date fin</label>
-                                        <input type="date" id="date_fin" class="form-control" x-model="form.date_fin" required>
+                                        <input type="date" id="date_fin" class="form-control"
+                                            x-model="form.date_fin" required>
                                     </div>
                                     <button class="btn btn-primary" type="submit">Enregistrer</button>
                                 </form>
@@ -264,24 +271,24 @@
                     },
 
                     async toggleCloture(semestre) {
-                        const response = await fetch('{{ route('semestre.toggleCloture') }}', {
+                        const response = await fetch(`{{ route('semestre.toggleCloture') }}`, {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Content-Type': 'application/json',
+                                'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({ id: semestre.id }),
+                            body: JSON.stringify({
+                                id: semestre.id
+                            })
                         });
 
                         if (response.ok) {
-                            semestre.cloture = !semestre.cloture;
+                            semestre.cloture = !semestre.cloture; // <-- mise à jour locale
                         } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erreur lors du changement de statut.',
-                            });
+                            alert('Erreur lors du changement de statut.');
                         }
                     }
+
                 };
             }
         </script>
