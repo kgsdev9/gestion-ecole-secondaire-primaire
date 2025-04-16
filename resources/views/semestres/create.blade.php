@@ -208,6 +208,20 @@
 
                     async addSemestre() {
                         this.isLoading = true;
+
+                        // 🛑 Vérification des dates
+                        const debut = new Date(this.form.date_debut);
+                        const fin = new Date(this.form.date_fin);
+
+                        if (debut >= fin) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'La date de début doit être inférieure à la date de fin.',
+                            });
+                            this.isLoading = false;
+                            return;
+                        }
+
                         const response = await fetch('{{ route('semestre.store') }}', {
                             method: 'POST',
                             headers: {
@@ -231,6 +245,7 @@
                                 title: 'Erreur lors de l\'ajout.',
                             });
                         }
+
                         this.isLoading = false;
                     },
 
