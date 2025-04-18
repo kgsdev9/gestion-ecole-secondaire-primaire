@@ -108,5 +108,5 @@ Route::prefix('configurationnote')->name('configurationnote.')->group(function (
     Route::post('/note/create', [NoteScolaireController::class, 'addNote'])->name('create.gestion.note');
     Route::delete('/note/{note}', [NoteController::class, 'destroy'])->name('delete.gestion.note');
 
-
+    Route::post('/validermoyennne', [NoteController::class, 'valider'])->name('validate.matiere');
 });

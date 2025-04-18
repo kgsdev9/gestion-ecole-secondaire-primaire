@@ -72,8 +72,6 @@
                                     </div>
                                 </div>
 
-
-
                                 <div class="card-body pt-0 pb-5">
                                     <div class="table-responsive">
                                         <table class="table table-row-dashed gy-5">
@@ -82,6 +80,7 @@
                                                     <th>Matière</th>
                                                     <th>Notes</th> <!-- Nouvelle colonne unique pour les notes -->
                                                     <th>Moyenne</th>
+                                                    <th>Action</th> <!-- Colonne Action -->
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -112,6 +111,15 @@
                                                             </template>
                                                         </td>
                                                         <td x-text="getMoyenneParMatiere(matiere.id)"></td>
+                                                        <td>
+                                                            <!-- Bouton pour valider les notes -->
+                                                            <template x-if="getNotesForMatiere(matiere.id).length > 0">
+                                                                <button @click="validateNotes(matiere.id)"
+                                                                    class="btn btn-success btn-sm">
+                                                                    <i class="fa fa-check"></i> Valider
+                                                                </button>
+                                                            </template>
+                                                        </td>
                                                     </tr>
                                                 </template>
                                             </tbody>
@@ -258,7 +266,6 @@
                             .eleve_id === this.selectedEleve.id);
                         if (!noteToDelete) return;
 
-                       
                         const response = await fetch(
                             `{{ route('configurationnote.delete.gestion.note', '') }}/${noteToDelete.id}`, {
                                 method: 'DELETE',
@@ -276,9 +283,40 @@
                     } catch (e) {
                         Swal.fire("Erreur serveur", "", "error");
                     }
+                },
+
+                // Méthode pour valider les notes d'une matière
+                async validateNotes(matiereId) {
+                    const notesForMatiere = this.getNotesForMatiere(matiereId);
+                    if (notesForMatiere.length === 0) {
+                        Swal.fire("Aucune note", "Il n'y a pas de notes à valider pour cette matière.", "warning");
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(
+                            `{{ route('configurationnote.validate.matiere', '') }}/${matiereId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({
+                                    eleve_id: this.selectedEleve.id,
+                                    matiere_id: matiereId,
+                                    notes: notesForMatiere,
+                                })
+                            });
+
+                        if (response.ok) {
+                            Swal.fire("Succès", "Notes validées avec succès.", "success");
+                        } else {
+                            Swal.fire("Erreur", "Échec de la validation des notes.", "error");
+                        }
+                    } catch (e) {
+                        Swal.fire("Erreur serveur", "", "error");
+                    }
                 }
             };
         }
     </script>
-
 @endsection
