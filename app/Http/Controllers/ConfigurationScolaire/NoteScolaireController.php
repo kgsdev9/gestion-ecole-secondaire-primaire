@@ -62,4 +62,17 @@ class NoteScolaireController extends Controller
             'note' => $note,
         ]);
     }
+
+
+    public function destroy($id)
+    {
+        try {
+            $note = Note::findOrFail($id);
+            $note->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Erreur lors de la suppression'], 500);
+        }
+    }
 }

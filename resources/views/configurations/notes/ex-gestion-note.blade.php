@@ -47,32 +47,13 @@
                         <!-- Tableau des notes par matière -->
                         <div class="flex-lg-row-fluid ms-lg-15">
                             <div class="card pt-4 mb-6">
-                                <div class="card-header border-0 pt-6">
-                                    <div class="card-title">
-                                        <div class="d-flex align-items-center position-relative my-1">
-                                            <i class='fas fa-search  position-absolute ms-5'></i>
-                                            <input type="text"
-                                                class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                                placeholder="Rechercher" x-model="searchTerm" @input="filterUsers">
-                                        </div>
-                                    </div>
-                                    <div class="card-toolbar">
-                                        <div class="d-flex justify-content-end align-items-center gap-3">
-                                            <button @click="printRapport" class="btn btn-light-dark btn-sm">
-                                                <i class="fa fa-print"></i> Imprimer
-                                            </button>
-                                            <button @click="exportRaport" class="btn btn-light-success btn-sm">
-                                                <i class='fas fa-file-export'></i> Export
-                                            </button>
-                                            <button @click="openModal()"
-                                                class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm">
-                                                <i class="fa fa-add"></i> Création
-                                            </button>
-                                        </div>
-                                    </div>
+                                <div class="card-header border-0 pt-6 d-flex justify-content-between">
+                                    <input type="text" class="form-control w-250px" placeholder="Rechercher"
+                                        x-model="searchTerm">
+                                    <button @click="openModal" class="btn btn-primary">
+                                        <i class="fa fa-plus"></i> Ajouter Note
+                                    </button>
                                 </div>
-
-
 
                                 <div class="card-body pt-0 pb-5">
                                     <div class="table-responsive">
@@ -80,7 +61,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>Matière</th>
-                                                    <th>Notes</th> <!-- Nouvelle colonne unique pour les notes -->
+                                                    <template x-for="type in typenotes" :key="type.id">
+                                                        <th x-text="type.name"></th>
+                                                    </template>
                                                     <th>Moyenne</th>
                                                 </tr>
                                             </thead>
@@ -88,29 +71,9 @@
                                                 <template x-for="matiere in matieres" :key="matiere.id">
                                                     <tr>
                                                         <td x-text="matiere.name"></td>
-                                                        <td>
-                                                            <!-- Affichage des notes sur une seule ligne avec boutons supprimer -->
-                                                            <template x-if="getNotesForMatiere(matiere.id).length > 0">
-                                                                <div class="d-flex flex-wrap">
-                                                                    <template
-                                                                        x-for="(note, index) in getNotesForMatiere(matiere.id)"
-                                                                        :key="index">
-                                                                        <div class="d-flex align-items-center me-2 mb-2">
-                                                                            <span x-text="note" class="me-2"></span>
-                                                                            <!-- Bouton supprimer pour chaque note -->
-                                                                            <button
-                                                                                @click="deleteNoteFromMatiere(matiere.id, note)"
-                                                                                class="btn btn-danger btn-sm">
-                                                                                <i class="fa fa-trash"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </template>
-                                                                </div>
-                                                            </template>
-                                                            <template x-if="getNotesForMatiere(matiere.id).length === 0">
-                                                                -
-                                                            </template>
-                                                        </td>
+                                                        <template x-for="type in typenotes" :key="type.id">
+                                                            <td x-text="getNoteValue(matiere.id, type.id) ?? '-'"></td>
+                                                        </template>
                                                         <td x-text="getMoyenneParMatiere(matiere.id)"></td>
                                                     </tr>
                                                 </template>
@@ -138,6 +101,15 @@
                                                         <option value="">Sélectionner une matière</option>
                                                         <template x-for="matiere in matieres" :key="matiere.id">
                                                             <option :value="matiere.id" x-text="matiere.name"></option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Type de note</label>
+                                                    <select class="form-control" x-model="formData.typenote_id" required>
+                                                        <option value="">Sélectionner un type</option>
+                                                        <template x-for="type in typenotes" :key="type.id">
+                                                            <option :value="type.id" x-text="type.name"></option>
                                                         </template>
                                                     </select>
                                                 </div>
@@ -170,12 +142,14 @@
             return {
                 eleves: @json($students),
                 matieres: @json($matieres),
+                typenotes: @json($typenotes),
                 notes: @json($notes),
                 selectedEleve: {},
                 searchTerm: '',
                 showModal: false,
                 formData: {
                     matiere_id: '',
+                    typenote_id: '',
                     valeur: '',
                     date: '',
                 },
@@ -184,11 +158,16 @@
                     this.selectedEleve = eleve;
                 },
 
-                // Récupérer les notes pour une matière spécifique et afficher en ligne
-                getNotesForMatiere(matiereId) {
-                    return this.notes
-                        .filter(n => n.matiere_id === matiereId && n.eleve_id === this.selectedEleve.id)
-                        .map(n => n.note);
+                // Afficher la valeur de la note pour un type donné dans une matière
+                getNoteValue(matiereId, typenoteId) {
+                    const notes = this.notes.filter(n =>
+                        n.eleve_id === this.selectedEleve.id &&
+                        n.matiere_id === matiereId &&
+                        n.typenote_id === typenoteId
+                    );
+
+                    if (notes.length === 0) return '-';
+                    return notes.map(n => n.note).join(', ');
                 },
 
                 getMoyenneParMatiere(matiereId) {
@@ -213,6 +192,7 @@
                     this.showModal = false;
                     this.formData = {
                         matiere_id: '',
+                        typenote_id: '',
                         valeur: '',
                         date: '',
                     };
@@ -222,6 +202,7 @@
                     const form = new FormData();
                     form.append('eleve_id', this.selectedEleve.id);
                     form.append('matiere_id', this.formData.matiere_id);
+                    form.append('typenote_id', this.formData.typenote_id);
                     form.append('note', this.formData.valeur);
                     form.append('date', this.formData.date);
 
@@ -238,40 +219,10 @@
                         if (response.ok) {
                             this.notes.push(data.note);
                             this.closeModal();
-                            window.history.replaceState(null, '', '{{ request()->url() }}');
                             Swal.fire("Succès", "Note ajoutée.", "success");
+                            alert('ss');
                         } else {
                             Swal.fire("Erreur", "Échec lors de l'ajout.", "error");
-                        }
-                    } catch (e) {
-                        Swal.fire("Erreur serveur", "", "error");
-                    }
-                },
-
-                // Méthode pour supprimer une note spécifique d'une matière
-                async deleteNoteFromMatiere(matiereId, note) {
-                    if (!confirm("Êtes-vous sûr de vouloir supprimer cette note ?")) return;
-
-                    try {
-                        // Trouver l'ID de la note à supprimer
-                        const noteToDelete = this.notes.find(n => n.matiere_id === matiereId && n.note === note && n
-                            .eleve_id === this.selectedEleve.id);
-                        if (!noteToDelete) return;
-
-                       
-                        const response = await fetch(
-                            `{{ route('configurationnote.delete.gestion.note', '') }}/${noteToDelete.id}`, {
-                                method: 'DELETE',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                }
-                            });
-
-                        if (response.ok) {
-                            this.notes = this.notes.filter(n => n.id !== noteToDelete.id);
-                            Swal.fire("Succès", "Note supprimée.", "success");
-                        } else {
-                            Swal.fire("Erreur", "Échec lors de la suppression.", "error");
                         }
                     } catch (e) {
                         Swal.fire("Erreur serveur", "", "error");

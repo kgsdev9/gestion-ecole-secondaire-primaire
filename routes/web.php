@@ -106,4 +106,7 @@ Route::prefix('configurationnote')->name('configurationnote.')->group(function (
     Route::get('/classe/anneeacademique', [NoteScolaireController::class, 'index'])->name('classe.anneeacademique');
     Route::get('/classe/note/by/classe/{id}', [NoteScolaireController::class, 'gestionNote'])->name('classe.gestion.note');
     Route::post('/note/create', [NoteScolaireController::class, 'addNote'])->name('create.gestion.note');
+    Route::delete('/note/{note}', [NoteController::class, 'destroy'])->name('delete.gestion.note');
+
+
 });
