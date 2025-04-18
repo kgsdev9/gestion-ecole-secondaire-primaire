@@ -30,8 +30,8 @@
                                 <div class="d-flex align-items-center position-relative my-1">
                                     <i class='fas fa-search position-absolute ms-5'></i>
                                     <input type="text"
-                                           class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                           placeholder="Rechercher" x-model="searchTerm" @input="filterScolarites">
+                                        class="form-control form-control-solid w-250px ps-13 form-control-sm"
+                                        placeholder="Rechercher" x-model="searchTerm" @input="filterScolarites">
                                 </div>
                             </div>
                             <div class="card-toolbar">
@@ -44,7 +44,7 @@
                                     </button>
 
                                     <button class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
-                                            @click="showModal = true">
+                                        @click="showModal = true">
                                         <i class='fa fa-add'></i> Création
                                     </button>
                                 </div>
@@ -79,17 +79,16 @@
                                                     <td x-text="scolarite.classe.name"></td>
                                                     <td x-text="scolarite.annee_academique.name"></td>
                                                     <td x-text="scolarite.montant_scolarite"></td>
-                                                    <td
-                                                        x-text="new Date(scolarite.created_at).toLocaleDateString('fr-FR')">
+                                                    <td x-text="new Date(scolarite.created_at).toLocaleDateString('fr-FR')">
                                                     </td>
                                                     <td class="text-end">
                                                         <button @click="openModal(scolarite)"
-                                                                class="btn btn-primary btn-sm mx-2">
+                                                            class="btn btn-primary btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
 
                                                         <button @click="deleteScolarite(scolarite.id)"
-                                                                class="btn btn-danger btn-sm">
+                                                            class="btn btn-danger btn-sm">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </td>
@@ -106,11 +105,11 @@
                                         <ul class="pagination">
                                             <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
                                                 <button class="page-link"
-                                                        @click="goToPage(currentPage - 1)">Précédent</button>
+                                                    @click="goToPage(currentPage - 1)">Précédent</button>
                                             </li>
                                             <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
                                                 <button class="page-link"
-                                                        @click="goToPage(currentPage + 1)">Suivant</button>
+                                                    @click="goToPage(currentPage + 1)">Suivant</button>
                                             </li>
                                         </ul>
                                     </nav>
@@ -152,14 +151,15 @@
                                         </select>
                                     </div>
 
-                                    
+
 
                                     salles
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="annee_academique" class="form-label">Année académique</label>
-                                        <select id="annee_academique_id" x-model="formData.annee_academique_id" class="form-select" required>
+                                        <select id="annee_academique_id" x-model="formData.annee_academique_id"
+                                            class="form-select" required>
                                             <option value="">Choisir une Année</option>
                                             @foreach ($anneesAcademiques as $annee)
                                                 <option value="{{ $annee->id }}">{{ $annee->name }}</option>
@@ -168,13 +168,15 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="montant_scolarite" class="form-label">Montant de la scolarité</label>
-                                        <input type="number" id="montant_scolarite" class="form-control" x-model="formData.montant_scolarite" required>
+                                        <input type="number" id="montant_scolarite" class="form-control"
+                                            x-model="formData.montant_scolarite" required>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-primary" x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
+                                        <button type="submit" class="btn btn-primary"
+                                            x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
                                     </div>
                                 </div>
                             </form>
@@ -243,7 +245,8 @@
                 },
 
                 async submitForm() {
-                    if (!this.formData.niveau_id || !this.formData.classe_id || !this.formData.annee_academique_id || !this.formData.montant_scolarite) {
+                    if (!this.formData.niveau_id || !this.formData.classe_id || !this.formData.annee_academique_id || !
+                        this.formData.montant_scolarite) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Tous les champs sont requis.',
@@ -340,22 +343,61 @@
                     }
                 },
 
-                deleteScolarite(scolariteId) {
-                    if (confirm('Êtes-vous sûr de vouloir supprimer cette scolarité ?')) {
-                        fetch(`/scolarites/${scolariteId}`, {
-                                method: 'DELETE'
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.message === 'Scolarité supprimée avec succès') {
-                                    this.scolarites = this.scolarites.filter(scolarite => scolarite.id !== scolariteId);
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Erreur:", error);
+                async deleteScolarite(id) {
+                    const confirmation = await Swal.fire({
+                        title: 'Supprimer cette scolarité ?',
+                        text: 'Cette action est irréversible.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Oui, supprimer',
+                        cancelButtonText: 'Annuler'
+                    });
+
+                    if (!confirmation.isConfirmed) return;
+
+                    try {
+                        const url = `{{ route('scolarites.destroy', ['scolarite' => '__ID__']) }}`.replace('__ID__',
+                            id);
+
+                        const response = await fetch(url, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'X-Requested-With': 'XMLHttpRequest',
+                            }
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: result.message || 'Scolarité supprimée',
+                                timer: 1500,
+                                showConfirmButton: false
                             });
+
+                            // Supprimer localement
+                            this.scolarites = this.scolarites.filter(s => s.id !== id);
+                            this.filterScolarites();
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur lors de la suppression',
+                                showConfirmButton: true
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Erreur :', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erreur réseau',
+                            showConfirmButton: true
+                        });
                     }
                 },
+
 
                 init() {
                     this.filteredScolarites = this.scolarites;

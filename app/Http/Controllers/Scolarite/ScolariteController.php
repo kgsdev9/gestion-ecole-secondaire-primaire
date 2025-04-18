@@ -46,6 +46,19 @@ class ScolariteController extends Controller
 
     private function updateScolarite($scolarite, Request $request)
     {
+        // Vérifie s'il existe déjà une autre scolarité avec les mêmes données
+        $exists = Scolarite::where('classe_id', $request->classe_id)
+            ->where('niveau_id', $request->niveau_id)
+            ->where('annee_academique_id', $request->annee_academique_id)
+            ->where('id', '!=', $scolarite->id) // Sauf celle qu'on est en train de modifier
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'message' => 'Une scolarité existe déjà pour cette classe, ce niveau et cette année académique.',
+            ], 400);
+        }
+
         // Mise à jour des informations de la scolarité
         $scolarite->update([
             'niveau_id' => $request->niveau_id,
@@ -62,8 +75,21 @@ class ScolariteController extends Controller
         ], 200);
     }
 
+
     private function createScolarite(Request $request)
     {
+        // Vérification si une scolarité existe déjà pour cette combinaison
+        $exists = Scolarite::where('niveau_id', $request->niveau_id)
+            
+            ->where('annee_academique_id', $request->annee_academique_id)
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'message' => 'Une scolarité existe déjà pour cette classe, ce niveau et cette année académique.',
+            ], 400); // Erreur côté client
+        }
+
         // Création d'une nouvelle scolarité
         $scolarite = Scolarite::create([
             'niveau_id' => $request->niveau_id,
@@ -73,9 +99,27 @@ class ScolariteController extends Controller
         ]);
 
         $scolarite->load(['niveau', 'classe', 'anneeAcademique']);
+
         return response()->json([
             'message' => 'Scolarité créée avec succès',
             'scolarite' => $scolarite
         ], 201);
+    }
+
+    public function destroy($id)
+    {
+        $scolarite = Scolarite::find($id);
+
+        if (!$scolarite) {
+            return response()->json([
+                'message' => 'Scolarité non trouvée.',
+            ], 404);
+        }
+
+        $scolarite->delete();
+
+        return response()->json([
+            'message' => 'Scolarité supprimée avec succès.',
+        ], 200);
     }
 }

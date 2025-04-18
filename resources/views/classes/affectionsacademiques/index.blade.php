@@ -297,10 +297,12 @@
                             });
                         }
                     } catch (error) {
-                        console.error('Erreur réseau:', error);
+
+                        const data = await response.json();
+                        const message = data.message;
                         Swal.fire({
                             icon: 'error',
-                            title: 'Une erreur est survenue.',
+                            title: message,
                             showConfirmButton: true,
                         });
                     }

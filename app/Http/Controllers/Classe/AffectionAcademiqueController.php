@@ -55,18 +55,18 @@ class AffectionAcademiqueController extends Controller
     // Mise à jour de l'affection académique
     private function updateAffectionAcademique(AffectionAcademique $affectionAcademique, Request $request)
     {
+       
         // Vérifier si une affection académique similaire existe, autre que celle que l'on met à jour
         $exists = AffectionAcademique::where('classe_id', $request->classe_id)
             ->where('niveau_id', $request->niveau_id)
             ->where('annee_academique_id', $request->annee_academique_id)
-            ->where('salle_id', $request->salle_id)
-            ->where('id', '!=', $affectionAcademique->id) // Exclure l'affection académique en cours de mise à jour
+            ->where('id', '!=', $affectionAcademique->id)
             ->exists();
 
         if ($exists) {
             return response()->json([
-                'message' => 'Cette affection académique existe déjà pour cette classe, niveau, année académique et salle.',
-            ], 400); // 400 pour signaler une erreur côté client
+                'message' => 'Cette classe est déjà affectée à ce niveau pour cette année académique.',
+            ], 400);
         }
 
         // Mise à jour des informations de l'affection académique
