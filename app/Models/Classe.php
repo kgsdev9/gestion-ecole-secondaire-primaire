@@ -12,6 +12,9 @@ class Classe extends Model
         'name',
     ];
 
-    
-}
 
+    public function students()
+    {
+        return $this->hasMany(Eleve::class);
+    }
+}

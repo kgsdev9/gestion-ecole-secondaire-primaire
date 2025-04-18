@@ -17,7 +17,7 @@ class AffectionAcademique extends Model
         'cloture'
     ];
 
-
+    
 
     /**
      * Relation avec le modèle Classe.

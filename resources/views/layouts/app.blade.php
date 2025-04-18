@@ -657,7 +657,7 @@
 
                                 <div class="menu-item pt-5">
                                     <div class="menu-content">
-                                        <span class="menu-heading fw-bold text-uppercase fs-7">Note Moyennes</span>
+                                        <span class="menu-heading fw-bold text-uppercase fs-7">Module Scolaire</span>
                                     </div>
                                 </div>
 
@@ -689,13 +689,26 @@
                                     <div class="menu-sub menu-sub-accordion">
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                                             <!--begin:Menu link-->
+
+                                            <div
+                                                class="menu-item {{ request()->routeIs('configurationnote.classe.anneeacademique') ? 'active' : '' }}">
+                                                <a class="menu-link" href="{{ route('configurationnote.classe.anneeacademique') }}">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Notes par classe</span>
+                                                </a>
+
+                                            </div>
+
+
                                             <div
                                                 class="menu-item {{ request()->routeIs('notes.index') ? 'active' : '' }}">
                                                 <a class="menu-link" href="{{ route('notes.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">Notes</span>
+                                                    <span class="menu-title">Notes globale</span>
                                                 </a>
 
                                             </div>
@@ -960,8 +973,9 @@
                         <!--begin::Copyright-->
                         <div class="text-dark order-2 order-md-1">
                             <span class="text-muted fw-semibold me-1">2023&copy;</span>
-                            <a href="#" target="_blank" class="text-gray-800 text-hover-primary">Carriere pro
-                                plus téchnologie</a>
+                            <a href="#" target="_blank" class="text-gray-800 text-hover-primary">KGS
+                                INFORMATIQUE
+                                agence digitale </a>
                         </div>
                         <!--end::Copyright-->
                         <!--begin::Menu-->

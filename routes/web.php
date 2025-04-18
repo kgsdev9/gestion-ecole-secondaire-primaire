@@ -5,6 +5,7 @@ use App\Http\Controllers\Categorie\CategoryController;
 use App\Http\Controllers\Classe\AffectionAcademiqueController;
 use App\Http\Controllers\Classe\ClasseController;
 use App\Http\Controllers\Commandes\CommandeController;
+use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
 use App\Http\Controllers\Depenses\DepensesController;
 use App\Http\Controllers\Eleve\EleveController;
 use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
@@ -98,3 +99,11 @@ Route::get('/gestion/semestre/{id}', [SemestreController::class, 'gestionSemestr
 Route::post('/store', [SemestreController::class, 'store'])->name('semestre.store');
 Route::post('/cloture-semestre', [SemestreController::class, 'toggleCloture'])->name('semestre.toggleCloture');
 Route::post('/delete/semestre/{id}', [SemestreController::class, 'destroy'])->name('semestre.destroy');
+
+
+Route::prefix('configurationnote')->name('configurationnote.')->group(function () {
+
+    Route::get('/classe/anneeacademique', [NoteScolaireController::class, 'index'])->name('classe.anneeacademique');
+    Route::get('/classe/note/by/classe/{id}', [NoteScolaireController::class, 'gestionNote'])->name('classe.gestion.note');
+    Route::post('/note/create', [NoteScolaireController::class, 'addNote'])->name('create.gestion.note');
+});
