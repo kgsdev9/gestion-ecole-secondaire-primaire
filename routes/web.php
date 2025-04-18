@@ -92,11 +92,9 @@ Route::post('/ventes/{vente}/validate', [VenteController::class, 'validatVente']
 
 
 
-
 Route::get('/generatefactureVente/{codefacure}', [VenteController::class, 'generateFactureVente'])->name('facture.vente.generate');
 Route::post('/rapport/vente/days', [VenteController::class, 'PrintAllVente'])->name('facture.vente.rapport');
 Route::get('/gestion/semestre/{id}', [SemestreController::class, 'gestionSemestre'])->name('gestion.semestre');
 Route::post('/store', [SemestreController::class, 'store'])->name('semestre.store');
 Route::post('/cloture-semestre', [SemestreController::class, 'toggleCloture'])->name('semestre.toggleCloture');
 Route::post('/delete/semestre/{id}', [SemestreController::class, 'destroy'])->name('semestre.destroy');
-Route::get('affectionacademique/check', [AffectionAcademiqueController::class, 'checkAffectionAcademique'])->name('affectionacademique.check');

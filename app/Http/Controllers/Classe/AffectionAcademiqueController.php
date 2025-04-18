@@ -87,17 +87,7 @@ class AffectionAcademiqueController extends Controller
     }
 
 
-    public function show(Request $request)
-    {
-     
-        $exists = AffectionAcademique::where('salle_id', $request->salle_id)
-            ->where('annee_academique_id', $request->annee_academique_id)
-            ->where('niveau_id', $request->niveau_id)
-            ->where('classe_id', '!=', $request->classe_id)
-            ->exists();
 
-        return response()->json(['exists' => $exists]);
-    }
     // Création d'une nouvelle affection académique
     private function createAffectionAcademique(Request $request)
     {
@@ -129,5 +119,23 @@ class AffectionAcademiqueController extends Controller
             'message' => 'Affection académique créée avec succès',
             'classe' => $affectionAcademique
         ], 201);
+    }
+
+
+    public function destroy($id)
+    {
+        $affection = AffectionAcademique::find($id);
+        if (!$affection)
+        {
+            return response()->json([
+                'message' => 'Affection académique introuvable.'
+            ], 404);
+        }
+
+        $affection->delete();
+
+        return response()->json([
+            'message' => 'Classe supprimée avec succès'
+        ]);
     }
 }

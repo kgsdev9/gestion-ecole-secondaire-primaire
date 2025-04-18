@@ -67,7 +67,7 @@
                                                             class="btn btn-primary btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <button @click="deleteClasse(classe.id)"
+                                                        <button @click="deleteAffectionAcademique(classe.id)"
                                                             class="btn btn-danger btn-sm">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
@@ -236,32 +236,6 @@
                         return;
                     }
 
-                    // Vérifier si une affection académique existe déjà avec la même salle et année académique
-                    const responseCheck = await fetch('{{ route('affectionacademique.check') }}', {
-                        method: 'GET',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        params: {
-                            niveau_id: this.formData.niveau_id,
-                            classe_id: this.formData.classe_id,
-                            salle_id: this.formData.salle_id,
-                            annee_academique_id: this.formData.annee_academique_id
-                        }
-                    });
-
-                    if (!responseCheck.ok) {
-                        const data = await responseCheck.json();
-                        if (data.exists) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Il est impossible d\'affecter deux classes dans la même salle pour la même année académique.',
-                                showConfirmButton: true,
-                            });
-                            return; // Retourner si l'affectation existe déjà
-                        }
-                    }
-
                     // Préparer les données du formulaire
                     const formData = new FormData();
                     formData.append('niveau_id', this.formData.niveau_id);
@@ -314,9 +288,11 @@
                                 });
                             }
                         } else {
+                            const data = await response.json();
+                            const message = data.message;
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Une erreur s\'est produite.',
+                                title: message,
                                 showConfirmButton: true,
                             });
                         }
@@ -351,22 +327,76 @@
                     }
                 },
 
-                deleteClasse(classeId) {
-                    if (confirm('Êtes-vous sûr de vouloir supprimer cette classe ?')) {
-                        fetch(`/classes/${classeId}`, {
-                                method: 'DELETE'
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.message === 'Classe supprimée avec succès') {
-                                    this.classes = this.classes.filter(classe => classe.id !== classeId);
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Erreur:", error);
+                async deleteAffectionAcademique(affectionId) {
+                    const confirmation = await Swal.fire({
+                        title: 'Êtes-vous sûr ?',
+                        text: "Cette action est irréversible !",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Oui, supprimer',
+                        cancelButtonText: 'Annuler'
+                    });
+
+                    if (!confirmation.isConfirmed) return;
+
+                    try {
+                        const url = `{{ route('affectionacademique.destroy', ['affectionacademique' => '__ID__']) }}`
+                            .replace(
+                                "__ID__",
+                                affectionId
+                            );
+
+                        const response = await fetch(url, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            },
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+
+                            Swal.fire({
+                                icon: "success",
+                                title: result.message || "Affection supprimée avec succès",
+                                showConfirmButton: false,
+                                timer: 1500,
                             });
+
+                            // Supprimer localement et rafraîchir le tableau
+                            this.classes = this.classes.filter(classe => classe.id !== affectionId);
+
+                            // Mettre à jour la liste filtrée et la pagination
+                            this.filterClasses();
+
+                            // Si la page actuelle devient vide, revenir à la page précédente
+                            const totalItems = this.filteredClasses.length;
+                            const totalPages = Math.ceil(totalItems / this.classesPerPage);
+                            if (this.currentPage > totalPages) {
+                                this.goToPage(totalPages || 1);
+                            }
+
+                        } else {
+                            const result = await response.json();
+                            Swal.fire({
+                                icon: "error",
+                                title: result.message || "Erreur lors de la suppression.",
+                                showConfirmButton: true,
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Erreur réseau :", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Une erreur réseau s'est produite.",
+                            showConfirmButton: true,
+                        });
                     }
                 },
+
+
 
                 init() {
                     this.filteredClasses = this.classes;
