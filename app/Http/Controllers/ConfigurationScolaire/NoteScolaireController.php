@@ -49,7 +49,7 @@ class NoteScolaireController extends Controller
             'eleve_id' => $request->eleve_id,
             'matiere_id' => $request->matiere_id,
             'typenote_id' => $request->typenote_id,
-            'note' => $request->valeur,
+            'note' => $request->note,
             'semestre_id' => 11,
         ]);
 

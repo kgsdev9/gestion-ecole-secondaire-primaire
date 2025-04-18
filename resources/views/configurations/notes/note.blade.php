@@ -14,7 +14,7 @@
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="d-flex flex-column flex-xl-row">
-                        <!-- Colonne élève -->
+                        <!-- Élève -->
                         <div class="flex-column flex-lg-row-auto w-100 w-xl-350px mb-10">
                             <div class="card mb-5 mb-xl-8">
                                 <div class="card-body pt-15">
@@ -44,7 +44,7 @@
                             </div>
                         </div>
 
-                        <!-- Tableau des notes -->
+                        <!-- Tableau des notes par matière -->
                         <div class="flex-lg-row-fluid ms-lg-15">
                             <div class="card pt-4 mb-6">
                                 <div class="card-header border-0 pt-6 d-flex justify-content-between">
@@ -61,18 +61,20 @@
                                             <thead>
                                                 <tr>
                                                     <th>Matière</th>
-                                                    <th>Type</th>
-                                                    <th>Note</th>
-                                                    <th>Date</th>
+                                                    <template x-for="type in typenotes" :key="type.id">
+                                                        <th x-text="type.name"></th>
+                                                    </template>
+                                                    <th>Moyenne</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <template x-for="note in filteredNotes()" :key="note.id">
+                                                <template x-for="matiere in matieres" :key="matiere.id">
                                                     <tr>
-                                                        <td x-text="note.matiere.name"></td>
-                                                        <td x-text="note.typenote.name"></td>
-                                                        <td x-text="note.note"></td>
-                                                        <td x-text="note.created_at"></td>
+                                                        <td x-text="matiere.name"></td>
+                                                        <template x-for="type in typenotes" :key="type.id">
+                                                            <td x-text="getNoteValue(matiere.id, type.id) ?? '-'"></td>
+                                                        </template>
+                                                        <td x-text="getMoyenneParMatiere(matiere.id)"></td>
                                                     </tr>
                                                 </template>
                                             </tbody>
@@ -82,7 +84,7 @@
                             </div>
                         </div>
 
-                        <!-- Modal pour ajout de note -->
+                        <!-- Modal ajout note -->
                         <template x-if="showModal">
                             <div class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5)">
                                 <div class="modal-dialog modal-lg">
@@ -156,9 +158,30 @@
                     this.selectedEleve = eleve;
                 },
 
-                filteredNotes() {
-                    if (!this.selectedEleve.id) return [];
-                    return this.notes.filter(n => n.eleve_id === this.selectedEleve.id);
+                // Afficher la valeur de la note pour un type donné dans une matière
+                getNoteValue(matiereId, typenoteId) {
+                    const notes = this.notes.filter(n =>
+                        n.eleve_id === this.selectedEleve.id &&
+                        n.matiere_id === matiereId &&
+                        n.typenote_id === typenoteId
+                    );
+
+                    // Si aucune note n'est trouvée, retourner un tiret
+                    if (notes.length === 0) return '-';
+
+                    // Retourner les notes sous forme de texte séparé par des virgules
+                    return notes.map(n => n.note).join(', ');
+                },
+
+                // Calcul de la moyenne pour une matière
+                getMoyenneParMatiere(matiereId) {
+                    const notes = this.notes.filter(n =>
+                        n.eleve_id === this.selectedEleve.id &&
+                        n.matiere_id === matiereId
+                    );
+                    if (notes.length === 0) return '-';
+                    const total = notes.reduce((sum, n) => sum + parseFloat(n.note || 0), 0);
+                    return (total / notes.length).toFixed(2);
                 },
 
                 openModal() {
@@ -184,7 +207,7 @@
                     form.append('eleve_id', this.selectedEleve.id);
                     form.append('matiere_id', this.formData.matiere_id);
                     form.append('typenote_id', this.formData.typenote_id);
-                    form.append('valeur', this.formData.valeur);
+                    form.append('note', this.formData.valeur);
                     form.append('date', this.formData.date);
 
                     try {
