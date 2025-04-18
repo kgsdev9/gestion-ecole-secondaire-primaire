@@ -91,17 +91,18 @@ class AffectionAcademiqueController extends Controller
     // Création d'une nouvelle affection académique
     private function createAffectionAcademique(Request $request)
     {
-        // Vérifier si une affection académique similaire existe
+
         $exists = AffectionAcademique::where('classe_id', $request->classe_id)
             ->where('niveau_id', $request->niveau_id)
             ->where('annee_academique_id', $request->annee_academique_id)
-            ->where('salle_id', $request->salle_id)
             ->exists();
+
+
 
         if ($exists) {
             return response()->json([
-                'message' => 'Cette affection académique existe déjà pour cette classe, niveau, année académique et salle.',
-            ], 400); // 400 pour signaler une erreur côté client
+                'message' => 'Cette classe est déjà affectée à ce niveau pour cette année académique.',
+            ], 400); // Erreur côté client
         }
 
         // Création d'une nouvelle affection académique
@@ -125,8 +126,7 @@ class AffectionAcademiqueController extends Controller
     public function destroy($id)
     {
         $affection = AffectionAcademique::find($id);
-        if (!$affection)
-        {
+        if (!$affection) {
             return response()->json([
                 'message' => 'Affection académique introuvable.'
             ], 404);

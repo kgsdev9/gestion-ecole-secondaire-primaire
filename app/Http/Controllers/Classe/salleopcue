@@ -1,0 +1,10 @@
+
+        $salleOccupee = AffectionAcademique::where('salle_id', $request->salle_id)
+            ->where('annee_academique_id', $request->annee_academique_id)
+            ->exists();
+
+        if ($salleOccupee) {
+            return response()->json([
+                'message' => 'Cette salle est déjà utilisée pour cette année académique.',
+            ], 400);
+        }
