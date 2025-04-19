@@ -161,6 +161,19 @@
                                                 </div>
 
                                                 <div class="mb-3">
+                                                    <label>Semestre ou trimestre </label>
+                                                    <select class="form-control" x-model="formData.semestre_id" required>
+                                                        <option value="">Sélectionner un semestre ou trimestre
+                                                        </option>
+                                                        <template x-for="semestre in semestres" :key="semestre.id">
+                                                            <option :value="semestre.id" x-text="semestre.name"></option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+
+
+
+                                                <div class="mb-3">
                                                     <label>Note</label>
                                                     <input type="number" class="form-control" x-model="formData.valeur"
                                                         min="0" max="20" required>
@@ -187,12 +200,14 @@
                 matieres: @json($matieres),
                 notes: @json($notes),
                 typenotes: @json($typenotes),
+                semestres: @json($semestres),
                 selectedEleve: {},
                 searchTerm: '',
                 showModal: false,
                 formData: {
                     matiere_id: '',
                     valeur: '',
+                    semestre_id: ''
                 },
 
                 selectEleve(eleve) {
@@ -238,7 +253,7 @@
                     form.append('matiere_id', this.formData.matiere_id);
                     form.append('note', this.formData.valeur);
                     form.append('typenote_id', this.formData.typenote_id);
-
+                    form.append('semestre_id', this.formData.semestre_id);
 
                     try {
                         const response = await fetch('{{ route('configurationnote.create.gestion.note') }}', {
@@ -250,19 +265,22 @@
                         });
 
                         const data = await response.json();
+
                         if (response.ok) {
                             this.notes.push(data.note);
                             this.closeModal();
-                            // window.history.replaceState(null, '', '{{ request()->url() }}');
                             Swal.fire("Succès", "Note ajoutée.", "success");
                             window.location.assign(window.location.href);
                         } else {
-                            Swal.fire("Erreur", "Échec lors de l'ajout.", "error");
+                            // Utiliser le message d'erreur retourné par le backend si disponible
+                            const message = data.message ?? "Échec lors de l'ajout.";
+                            Swal.fire("Erreur", message, "error");
                         }
                     } catch (e) {
                         Swal.fire("Erreur serveur", "", "error");
                     }
                 },
+
 
                 // Méthode pour supprimer une note spécifique d'une matière
                 async deleteNoteFromMatiere(matiereId, note) {

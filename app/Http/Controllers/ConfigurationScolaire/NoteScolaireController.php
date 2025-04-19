@@ -8,6 +8,7 @@ use App\Models\AnneeAcademique;
 use App\Models\Matiere;
 use App\Models\Moyenne;
 use App\Models\Note;
+use App\Models\Semestre;
 use App\Models\TypeNote;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,7 @@ class NoteScolaireController extends Controller
     public function index()
     {
         $anneeAcademiqueEnCours = AnneeAcademique::anneeAcademiqueEnCours();
+
 
         $classes = AffectionAcademique::with(['classe', 'niveau', 'salle'])
             ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
@@ -47,37 +49,55 @@ class NoteScolaireController extends Controller
             ->whereIn('eleve_id', $students->pluck('id'))
             ->with(['matiere', 'typenote'])
             ->get();
+        $semestres = $anneeAcademiqueEnCours->semestres;
 
-
-        return view('configurations.notes.note', compact('classe', 'students', 'matieres', 'typenotes', 'notes'));
+        return view('configurations.notes.note', compact('classe', 'students', 'matieres', 'typenotes', 'notes', 'semestres'));
     }
-
 
 
     public function addNote(Request $request)
     {
-
         $anneeAcademiqueEnCours = AnneeAcademique::anneeAcademiqueEnCours();
 
-        // Création de la note directement
+        // Vérifier si le semestre est clôturé
+        $semestre = Semestre::find($request->semestre_id);
+
+
+        if (!$semestre) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Semestre non trouvé.',
+            ], 404);
+        }
+
+        if ($semestre->cloture) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Impossible d\'ajouter une note. Ce semestre est clôturé.',
+            ], 403);
+        }
+
+     
+
+        // Création de la note
         $note = Note::create([
             'eleve_id' => $request->eleve_id,
             'matiere_id' => $request->matiere_id,
             'typenote_id' => $request->typenote_id,
             'note' => $request->note,
             'anneeacademique_id' => $anneeAcademiqueEnCours->id,
-            'semestre_id' => 1,
+            'semestre_id' => $request->semestre_id,
         ]);
 
-        // Charger les relations utiles pour l'affichage
+        // Charger les relations utiles
         $note->load('matiere', 'typenote');
 
-        // Retour en JSON pour Alpine.js
         return response()->json([
             'status' => 'success',
             'note' => $note,
         ]);
     }
+
 
 
     public function destroy($id)
@@ -123,7 +143,7 @@ class NoteScolaireController extends Controller
         // Enregistrement ou mise à jour de la moyenne
         Moyenne::updateOrCreate(
             [
-                'eleve_id' =>$request->eleve_id,
+                'eleve_id' => $request->eleve_id,
                 'matiere_id' => $matiereId,
                 'semestre_id' => $semestre,
                 'annee_academique_id' => $annee->id,
@@ -133,8 +153,4 @@ class NoteScolaireController extends Controller
 
         return response()->json(['message' => 'Moyenne validée avec succès.', 'moyenne' => $moyenne]);
     }
-
-
-
-    
 }
