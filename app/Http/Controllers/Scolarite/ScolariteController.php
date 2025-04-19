@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 
 class ScolariteController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         $scolarites = Scolarite::with(['niveau', 'classe', 'anneeAcademique'])->get();
@@ -80,7 +86,7 @@ class ScolariteController extends Controller
     {
         // Vérification si une scolarité existe déjà pour cette combinaison
         $exists = Scolarite::where('niveau_id', $request->niveau_id)
-            
+
             ->where('annee_academique_id', $request->annee_academique_id)
             ->exists();
 

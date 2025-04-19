@@ -73,7 +73,7 @@ Route::resource('/examens', ExamenController::class);
 Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
 Route::resource('/versements', VersementController::class);
 Route::resource('/bulletin', BulletinConroller::class);
-Route::resource('/suiviversement', SuiviVeX1rsement::class);
+// Route::resource('/suiviversement', SuiviVeX1rsement::class);
 
 
 
@@ -114,6 +114,6 @@ Route::prefix('configurationnote')->name('configurationnote.')->group(function (
 
 
 Route::prefix('gestionmoyenne')->name('gestionmoyenne.')->group(function () {
-
     Route::get('/moyenne', [MoyenneScolaireController::class, 'index'])->name('gestion.moyenne');
+    Route::post('/print/bulletin', [MoyenneScolaireController::class, 'printBulletin'])->name('print.bulletin');
 });

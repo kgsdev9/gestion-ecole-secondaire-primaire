@@ -77,7 +77,7 @@ class NoteScolaireController extends Controller
             ], 403);
         }
 
-     
+
 
         // Création de la note
         $note = Note::create([
@@ -127,7 +127,8 @@ class NoteScolaireController extends Controller
             ->where('semestre_id', $semestre)
             ->get();
 
-        if ($notes->isEmpty()) {
+        if ($notes->isEmpty())
+        {
             return response()->json(['message' => 'Aucune note trouvée.'], 404);
         }
 

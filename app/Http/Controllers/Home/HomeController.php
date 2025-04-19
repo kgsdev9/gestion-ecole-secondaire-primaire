@@ -122,7 +122,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        // $this->generateBulletin([]);
+        $this->generateBulletin([]);
 
         $listerecentesfactures =  [];
         $countlisterecentesfactures = 0;
