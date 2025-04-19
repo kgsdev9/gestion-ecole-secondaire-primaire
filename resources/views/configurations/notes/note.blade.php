@@ -149,16 +149,23 @@
                                                         </template>
                                                     </select>
                                                 </div>
+
+                                                <div class="mb-3">
+                                                    <label>Type de note</label>
+                                                    <select class="form-control" x-model="formData.typenote_id" required>
+                                                        <option value="">Sélectionner un type</option>
+                                                        <template x-for="type in typenotes" :key="type.id">
+                                                            <option :value="type.id" x-text="type.name"></option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+
                                                 <div class="mb-3">
                                                     <label>Note</label>
                                                     <input type="number" class="form-control" x-model="formData.valeur"
                                                         min="0" max="20" required>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label>Date</label>
-                                                    <input type="date" class="form-control" x-model="formData.date"
-                                                        required>
-                                                </div>
+
                                                 <button type="submit" class="btn btn-success">Enregistrer</button>
                                             </form>
                                         </div>
@@ -179,13 +186,13 @@
                 eleves: @json($students),
                 matieres: @json($matieres),
                 notes: @json($notes),
+                typenotes: @json($typenotes),
                 selectedEleve: {},
                 searchTerm: '',
                 showModal: false,
                 formData: {
                     matiere_id: '',
                     valeur: '',
-                    date: '',
                 },
 
                 selectEleve(eleve) {
@@ -222,7 +229,6 @@
                     this.formData = {
                         matiere_id: '',
                         valeur: '',
-                        date: '',
                     };
                 },
 
@@ -231,7 +237,8 @@
                     form.append('eleve_id', this.selectedEleve.id);
                     form.append('matiere_id', this.formData.matiere_id);
                     form.append('note', this.formData.valeur);
-                    form.append('date', this.formData.date);
+                    form.append('typenote_id', this.formData.typenote_id);
+
 
                     try {
                         const response = await fetch('{{ route('configurationnote.create.gestion.note') }}', {
@@ -246,8 +253,9 @@
                         if (response.ok) {
                             this.notes.push(data.note);
                             this.closeModal();
-                            window.history.replaceState(null, '', '{{ request()->url() }}');
+                            // window.history.replaceState(null, '', '{{ request()->url() }}');
                             Swal.fire("Succès", "Note ajoutée.", "success");
+                            window.location.assign(window.location.href);
                         } else {
                             Swal.fire("Erreur", "Échec lors de l'ajout.", "error");
                         }
@@ -298,7 +306,8 @@
                             `{{ route('configurationnote.validate.matiere', '') }}/${matiereId}`, {
                                 method: 'POST',
                                 headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json',
                                 },
                                 body: JSON.stringify({
                                     eleve_id: this.selectedEleve.id,

@@ -106,7 +106,7 @@ Route::prefix('configurationnote')->name('configurationnote.')->group(function (
     Route::get('/classe/anneeacademique', [NoteScolaireController::class, 'index'])->name('classe.anneeacademique');
     Route::get('/classe/note/by/classe/{id}', [NoteScolaireController::class, 'gestionNote'])->name('classe.gestion.note');
     Route::post('/note/create', [NoteScolaireController::class, 'addNote'])->name('create.gestion.note');
-    Route::delete('/note/{note}', [NoteController::class, 'destroy'])->name('delete.gestion.note');
+    Route::delete('/note/{note}', [NoteScolaireController::class, 'destroy'])->name('delete.gestion.note');
 
-    Route::post('/validermoyennne', [NoteController::class, 'valider'])->name('validate.matiere');
+    Route::post('/validermoyennne/{id}', [NoteScolaireController::class, 'validerMoyenne'])->name('validate.matiere');
 });

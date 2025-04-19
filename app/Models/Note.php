@@ -15,6 +15,8 @@ class Note extends Model
         'eleve_id',
         'matiere_id',
         'typenote_id',
+        'anneeacademique_id',
+        'status',
         'note',
     ];
 
