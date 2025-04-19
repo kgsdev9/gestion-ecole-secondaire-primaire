@@ -5,6 +5,7 @@ use App\Http\Controllers\Categorie\CategoryController;
 use App\Http\Controllers\Classe\AffectionAcademiqueController;
 use App\Http\Controllers\Classe\ClasseController;
 use App\Http\Controllers\Commandes\CommandeController;
+use App\Http\Controllers\configurationScolaire\MoyenneScolaireController;
 use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
 use App\Http\Controllers\Depenses\DepensesController;
 use App\Http\Controllers\Eleve\EleveController;
@@ -109,4 +110,10 @@ Route::prefix('configurationnote')->name('configurationnote.')->group(function (
     Route::delete('/note/{note}', [NoteScolaireController::class, 'destroy'])->name('delete.gestion.note');
 
     Route::post('/validermoyennne/{id}', [NoteScolaireController::class, 'validerMoyenne'])->name('validate.matiere');
+});
+
+
+Route::prefix('gestionmoyenne')->name('gestionmoyenne.')->group(function () {
+
+    Route::get('/moyenne', [MoyenneScolaireController::class, 'index'])->name('gestion.moyenne');
 });

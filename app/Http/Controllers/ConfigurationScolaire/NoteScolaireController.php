@@ -133,4 +133,8 @@ class NoteScolaireController extends Controller
 
         return response()->json(['message' => 'Moyenne validée avec succès.', 'moyenne' => $moyenne]);
     }
+
+
+
+    
 }

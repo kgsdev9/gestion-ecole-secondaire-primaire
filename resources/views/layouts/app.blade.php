@@ -692,7 +692,8 @@
 
                                             <div
                                                 class="menu-item {{ request()->routeIs('configurationnote.classe.anneeacademique') ? 'active' : '' }}">
-                                                <a class="menu-link" href="{{ route('configurationnote.classe.anneeacademique') }}">
+                                                <a class="menu-link"
+                                                    href="{{ route('configurationnote.classe.anneeacademique') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -703,12 +704,13 @@
 
 
                                             <div
-                                                class="menu-item {{ request()->routeIs('notes.index') ? 'active' : '' }}">
-                                                <a class="menu-link" href="{{ route('notes.index') }}">
+                                                class="menu-item {{ request()->routeIs('gestionmoyenne.gestion.moyenne') ? 'active' : '' }}">
+                                                <a class="menu-link"
+                                                    href="{{ route('gestionmoyenne.gestion.moyenne') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">Notes globale</span>
+                                                    <span class="menu-title">Gestion des moyennes</span>
                                                 </a>
 
                                             </div>
