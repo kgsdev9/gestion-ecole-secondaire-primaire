@@ -21,6 +21,13 @@ class Examen extends Model
         'cloture',
     ];
 
+
+
+    public function examenProgrammes()
+    {
+        return $this->hasMany(ProgrammeExamen::class);
+    }
+
     // Définir les relations
 
     // Relation avec le modèle AnneeAcademique

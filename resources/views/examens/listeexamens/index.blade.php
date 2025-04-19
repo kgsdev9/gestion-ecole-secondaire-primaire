@@ -73,22 +73,21 @@
                                                     <td x-text="examen.cloture ? 'Oui' : 'Non'"></td>
                                                     <td class="text-end d-flex justify-content-start">
                                                         <button @click="openModal(examen)"
-                                                                class="btn btn-primary btn-sm mx-2">
+                                                            class="btn btn-primary btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
                                                         <button @click="deleteExamen(examen.id)"
-                                                                class="btn btn-danger btn-sm mx-2">
+                                                            class="btn btn-danger btn-sm mx-2">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
-                                                        <button @click="openModal(examen)"
-                                                                class="btn btn-success btn-sm mx-2">
-                                                            <i class="fa fa-calendar-check"></i>
-                                                        </button>
 
-                                                        <button @click="enregistrerNotes(examen.id)"
-                                                        class="btn btn-success btn-sm mx-2">
-                                                    <i class="fa fa-save"></i> 
-                                                </button>
+
+                                                        <a :href="`{{ route('examens.programme.examens', ['id' => '__ID__']) }}`
+                                                        .replace(
+                                                            '__ID__', examen.id)"
+                                                            class="btn btn-warning btn-sm">
+                                                            <i class="fa fa-calendar-check"></i> Programme
+                                                        </a>
                                                     </td>
 
                                                 </tr>

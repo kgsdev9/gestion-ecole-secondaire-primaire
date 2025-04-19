@@ -5,9 +5,10 @@ use App\Http\Controllers\Categorie\CategoryController;
 use App\Http\Controllers\Classe\AffectionAcademiqueController;
 use App\Http\Controllers\Classe\ClasseController;
 use App\Http\Controllers\Commandes\CommandeController;
+use App\Http\Controllers\ConfigurationScolaire\GestionExamenController;
 use App\Http\Controllers\configurationScolaire\MoyenneScolaireController;
 use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
-use App\Http\Controllers\Depenses\DepensesController;
+
 use App\Http\Controllers\Eleve\EleveController;
 use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
 use App\Http\Controllers\Enseignant\EnseignantController;
@@ -78,7 +79,6 @@ Route::resource('/bulletin', BulletinConroller::class);
 
 
 Route::resource('/rapport', RapportController::class);
-Route::resource('/depenses', DepensesController::class);
 Route::resource('/commandes', CommandeController::class);
 Route::resource('/devis', CommandeController::class);
 Route::resource('/facturepersonnalite', FacturePersonnaliseController::class);
@@ -116,4 +116,10 @@ Route::prefix('configurationnote')->name('configurationnote.')->group(function (
 Route::prefix('gestionmoyenne')->name('gestionmoyenne.')->group(function () {
     Route::get('/moyenne', [MoyenneScolaireController::class, 'index'])->name('gestion.moyenne');
     Route::post('/print/bulletin', [MoyenneScolaireController::class, 'printBulletin'])->name('print.bulletin');
+});
+
+
+Route::prefix('examens')->name('examens.')->group(function () {
+    Route::get('/planification/programme/examens/{id}', [GestionExamenController::class, 'createProgrammeExamen'])->name('programme.examens');
+    Route::post('/programme/create', [GestionExamenController::class, 'store'])->name('programme.store');
 });

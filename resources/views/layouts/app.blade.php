@@ -697,7 +697,7 @@
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">Notes par classe</span>
+                                                    <span class="menu-title">Gestion Notes par classe</span>
                                                 </a>
 
                                             </div>
@@ -721,22 +721,12 @@
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">Moyennes</span>
+                                                    <span class="menu-title">Gestion des emplois du temps </span>
                                                 </a>
 
                                             </div>
-
-                                            <span class="menu-link">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">Configuration</span>
-                                            </span>
-
-
                                         </div>
                                     </div>
-
                                 </div>
 
 
