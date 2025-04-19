@@ -1,59 +1,4 @@
-<?php
-
-namespace App\Http\Controllers\configurationScolaire;
-
-use App\Http\Controllers\Controller;
-use App\Models\AffectionAcademique;
-use App\Models\AnneeAcademique;
-use App\Models\Classe;
-use App\Models\Eleve;
-use App\Models\Inscription;
-use App\Models\Matiere;
-use App\Models\Moyenne;
-use App\Models\Niveau;
-use App\Models\Note;
-use App\Models\Semestre;
-use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
-use Codedge\Fpdf\Fpdf\Fpdf;
-use Illuminate\Support\Str;
-
-class MoyenneScolaireController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function index()
-    {
-        $anneeAcademiqueEnCours = AnneeAcademique::anneeAcademiqueEnCours();
-
-        // Récupère les affectations de classes pour l'année en cours
-        $classes = AffectionAcademique::with(['classe', 'niveau', 'salle'])
-            ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
-            ->get();
-
-        // Récupère tous les élèves inscrits cette année
-        // Récupère tous les élèves affectés à cette année
-        $eleves = Inscription::with('eleve')
-            ->where('anneeacademique_id', $anneeAcademiqueEnCours->id)
-            ->get()
-            ->pluck('eleve');
-
-
-        // Récupère toutes les matières
-        $matieres = Matiere::all();
-        $niveaux = Niveau::all();
-        $semestres = $anneeAcademiqueEnCours->semestres;
-        $moyennes = Moyenne::where('annee_academique_id', $anneeAcademiqueEnCours->id)->get();
-
-        return view('configurations.moyennes.gestionmoyenne', compact('classes', 'eleves', 'matieres', 'niveaux', 'semestres',  'moyennes'));
-    }
-
-
-    public function printBulletin(Request $request)
+public function printBulletin(Request $request)
     {
         $eleve = Eleve::find($request->eleve_id);
         $anneeAcademiqueEnCours = AnneeAcademique::anneeAcademiqueEnCours();
@@ -61,57 +6,53 @@ class MoyenneScolaireController extends Controller
         $classe = Classe::find($request->classe_id);
 
         // Récupération des moyennes de l'élève
-        $moyenneEleve = Moyenne::where('semestre_id', $semestre->id)
+        $moyenneEleve = Moyenne::where('semestre_id', $request->semestre_id)
             ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
-            ->where('eleve_id', $eleve->id)
+            ->where('eleve_id', $request->eleve_id)
             ->get();
 
-        // Moyenne générale
+        // Moyenne générale de l'élève
         $totalCoef = $moyenneEleve->sum(fn($m) => $m->matiere->coefficient ?? 1);
         $totalNote = $moyenneEleve->sum(fn($m) => $m->moyenne * ($m->matiere->coefficient ?? 1));
         $moyenneGenerale = $totalCoef ? $totalNote / $totalCoef : 0;
 
-        // Élèves de la classe
-        $eleveIds = Inscription::where('classe_id', $classe->id)
+        // Liste des élèves de la classe pour cette année
+        $eleveIds = Inscription::where('classe_id', $request->classe_id)
             ->where('anneeacademique_id', $anneeAcademiqueEnCours->id)
             ->pluck('eleve_id');
 
-        // Moyennes générales de la classe
+        // Moyenne min et max de la classe
         $moyennesClasse = collect();
-        foreach ($eleveIds as $id) {
+
+        foreach ($eleveIds as $id)
+        {
             $moyennes = Moyenne::where('eleve_id', $id)
-                ->where('semestre_id', $semestre->id)
+                ->where('semestre_id', $request->semestre_id)
                 ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
                 ->get();
 
-            $coefSum = $moyennes->sum(fn($m) => $m->matiere->coefficient ?? 1);
-            $noteSum = $moyennes->sum(fn($m) => $m->moyenne * ($m->matiere->coefficient ?? 1));
-            $moyennesClasse->push($coefSum ? $noteSum / $coefSum : 0);
+            $totalCoef = $moyennes->sum(fn($m) => $m->matiere->coefficient ?? 1);
+            $totalNote = $moyennes->sum(fn($m) => $m->moyenne * ($m->matiere->coefficient ?? 1));
+            $moyennesClasse->push($totalCoef ? $totalNote / $totalCoef : 0);
         }
 
         $moyenneMax = $moyennesClasse->max();
         $moyenneMin = $moyennesClasse->min();
 
-        // Préparer les rangs par matière
-        $rangsParMatiere = [];
-        $moyennesParClasse = Moyenne::whereIn('eleve_id', $eleveIds)
-            ->where('semestre_id', $semestre->id)
+        // Premiers de chaque matière
+        $premiersParMatiere = Moyenne::whereIn('eleve_id', $eleveIds)
+            ->where('semestre_id', $request->semestre_id)
             ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
             ->get()
-            ->groupBy('matiere_id');
+            ->groupBy('matiere_id')
+            ->map(fn($group) => $group->sortByDesc('moyenne')->first());
 
-        foreach ($moyennesParClasse as $matiere_id => $notes) {
-            $classement = $notes->sortByDesc('moyenne')->values();
-            foreach ($classement as $index => $item) {
-                $rangsParMatiere[$matiere_id][$item->eleve_id] = $index + 1;
-            }
-        }
-
-        // --- Création PDF ---
+        // --- Création du PDF ---
         $pdf = new Fpdf();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 10);
 
+        // Logos, entêtes, infos générales
         $pdf->SetXY(40, 10);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->MultiCell(130, 5, utf8_decode("REPUBLIQUE DE CÔTE D'IVOIRE\nMINISTÈRE DE L'ENSEIGNEMENT TECHNIQUE DE LA\nFORMATION PROFESSIONNELLE ET DE L’APPRENTISSAGE\nDIRECTION RÉGIONALE SAN PEDRO"), 0, 'C');
@@ -160,8 +101,9 @@ class MoyenneScolaireController extends Controller
             $coef = $matiere->coefficient ?? 1;
             $mcoeff = $moy * $coef;
 
-            // Rang réel dans la matière
-            $rang = $rangsParMatiere[$matiere->id][$eleve->id] ?? '-';
+            // Récupérer le premier de la classe dans cette matière
+            $premier = $premiersParMatiere[$matiere->id] ?? null;
+            $rang = $premier && $premier->eleve_id == $eleve->id ? '1er' : '2e';
 
             $appreciation = match (true) {
                 $moy < 5 => 'Très Faible',
@@ -179,7 +121,7 @@ class MoyenneScolaireController extends Controller
             $pdf->Ln();
         }
 
-        // Moyenne générale et statistiques
+        // Moyenne générale
         $pdf->Ln(5);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(60, 8, 'Moyenne Générale', 1);
@@ -191,8 +133,8 @@ class MoyenneScolaireController extends Controller
         $pdf->Cell(60, 8, 'Plus Faible Moy.', 1);
         $pdf->Cell(20, 8, number_format($moyenneMin, 2), 1, 1, 'C');
 
-        // Génération du fichier
-        $filename = 'bulletin_' . $eleve->id . '_' . Str::random(6) . '.pdf';
+        // Enregistrement du fichier PDF
+        $filename = 'bulletin_' . $request->eleve_id . '_' . Str::random(6) . '.pdf';
         $savePath = public_path('bulletins/' . $filename);
         if (!file_exists(public_path('bulletins'))) {
             mkdir(public_path('bulletins'), 0777, true);
@@ -205,4 +147,3 @@ class MoyenneScolaireController extends Controller
             'url' => $publicUrl
         ]);
     }
-}
