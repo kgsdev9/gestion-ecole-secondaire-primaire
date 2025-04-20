@@ -16,15 +16,16 @@ class CreateExamensTable extends Migration
         Schema::create('examens', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('classe_id');
+            $table->unsignedBigInteger('affectationacademique_id');
             $table->date('date_debut');
             $table->date('date_fin');
             $table->boolean('cloture')->default(false);
-            $table->timestamps();
             $table->foreignId('anneeacademique_id')->constrained('annee_academiques')->onDelete('cascade');
             $table->foreignId('typeexamen_id')->constrained('type_examens')->onDelete('cascade');
             $table->foreign('affectationacademique_id')->references('id')->on('affection_academiques')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
