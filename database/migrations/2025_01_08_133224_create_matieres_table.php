@@ -17,6 +17,7 @@ class CreateMatieresTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->integer('coefficient');
             $table->timestamps();
         });
     }

@@ -18,7 +18,7 @@ class CreateAnneeAcademiquesTable extends Migration
             $table->string('name');
             $table->date('date_debut');
             $table->date('date_fin');
-            $table->boolean('close')->default(false);
+            $table->boolean('cloture')->default(false);
             $table->timestamps();
         });
     }

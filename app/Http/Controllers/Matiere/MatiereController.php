@@ -17,7 +17,6 @@ class MatiereController extends Controller
     }
 
 
-
     // Méthode pour créer ou modifier une matière
     public function store(Request $request)
     {
@@ -47,6 +46,7 @@ class MatiereController extends Controller
         $matiere = Matiere::create([
             'name' => $request->name,
             'description' => $request->description,
+            'coefficient' => $request->coefficient,
         ]);
 
         return response()->json([
@@ -55,12 +55,14 @@ class MatiereController extends Controller
         ], 201);
     }
 
+
     // Méthode pour mettre à jour une matière existante
     private function updateMatiere($matiere, Request $request)
     {
         $matiere->update([
             'name' => $request->name,
             'description' => $request->description,
+            'coefficient' => $request->coefficient,
         ]);
 
         return response()->json([
@@ -68,6 +70,7 @@ class MatiereController extends Controller
             'matiere' => $matiere
         ], 200);
     }
+
 
     // Méthode pour supprimer une matière
     public function destroy($id)

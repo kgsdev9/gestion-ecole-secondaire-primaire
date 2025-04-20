@@ -13,7 +13,7 @@ class AnneAcademiqueController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function index()
     {
         $listeanneeacademique = AnneeAcademique::orderByDesc('created_at')->get();
@@ -45,36 +45,36 @@ class AnneAcademiqueController extends Controller
     // Méthode pour la mise à jour d'une année académique existante
     private function updateAnneeAcademique($anneeAcademique, Request $request)
     {
-        // Mettre à jour l'année académique avec les données de la requête
         $anneeAcademique->update([
             'name' => $request->name,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
+            'cloture' => $request->cloture ?? $anneeAcademique->cloture, // conserve l'ancien si non fourni
         ]);
 
-        // Retourner une réponse JSON avec le message de succès et l'année académique mise à jour
         return response()->json([
             'message' => 'Année académique mise à jour avec succès.',
             'anneeAcademique' => $anneeAcademique
         ], 200);
     }
 
+
     // Méthode pour la création d'une nouvelle année académique
     private function createAnneeAcademique(Request $request)
     {
-        // Créer une nouvelle année académique
         $anneeAcademique = AnneeAcademique::create([
             'name' => $request->name,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
+            'cloture' => $request->cloture ?? false, // false par défaut si non fourni
         ]);
 
-        // Retourner une réponse JSON avec le message de succès et l'année académique créée
         return response()->json([
             'message' => 'Année académique créée avec succès.',
             'anneeAcademique' => $anneeAcademique
         ], 201);
     }
+
 
     // Méthode pour la suppression d'une année académique
     public function destroy($id)

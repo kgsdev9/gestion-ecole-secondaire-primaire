@@ -23,7 +23,11 @@ class Eleve extends Model
         'date_naissance',
         'adresse',
         'telephone_parent',
-        'anneeacademique_id'
+        'anneeacademique_id',
+        'genre_id',
+        'statuseleve_id',
+        'nationalite'
+
     ];
 
 
@@ -32,10 +36,21 @@ class Eleve extends Model
         return $this->hasMany(Inscription::class);
     }
 
+
     // Define the relationship to Classe
     public function classe()
     {
         return $this->belongsTo(Classe::class);
+    }
+
+    public function genre()
+    {
+        return $this->belongsTo(Genre::class);
+    }
+
+    public function statuseleve()
+    {
+        return $this->belongsTo(StatusEleve::class);
     }
 
     public function notes()

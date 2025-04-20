@@ -51,6 +51,8 @@
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                                 <th class="min-w-125px">Libellé Matière</th>
                                                 <th class="min-w-125px">Description</th>
+                                                <th class="min-w-100px">Coefficient</th>
+
                                                 <th class="min-w-125px">Date de création</th>
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
@@ -60,6 +62,7 @@
                                                 <tr>
                                                     <td x-text="matiere.name"></td>
                                                     <td x-text="matiere.description"></td>
+                                                    <td x-text="matiere.coefficient"></td>
                                                     <td x-text="new Date(matiere.created_at).toLocaleDateString('fr-FR')">
                                                     </td>
                                                     <td class="text-end">
@@ -104,6 +107,13 @@
                                     <label for="description" class="form-label">Description</label>
                                     <textarea id="description" class="form-control" x-model="formData.description" required></textarea>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label for="coefficient" class="form-label">Coefficient</label>
+                                    <input type="number" id="coefficient" class="form-control"
+                                        x-model="formData.coefficient" required min="0" step="0.1">
+                                </div>
+
                                 <button type="submit" class="btn btn-primary"
                                     x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
                             </form>
@@ -130,7 +140,9 @@
                 formData: {
                     name: '',
                     description: '',
+                    coefficient: '',
                 },
+
                 currentMatiere: null,
 
                 hideModal() {
@@ -149,7 +161,9 @@
                         this.formData = {
                             name: this.currentMatiere.name,
                             description: this.currentMatiere.description,
+                            coefficient: this.currentMatiere.coefficient,
                         };
+
                     } else {
                         this.resetForm();
                     }
@@ -159,8 +173,10 @@
                 resetForm() {
                     this.formData = {
                         name: '',
-                        description: ''
+                        description: '',
+                        coefficient: '',
                     };
+
                 },
 
                 async submitForm() {
@@ -179,7 +195,7 @@
                     formData.append('name', this.formData.name);
                     formData.append('description', this.formData.description);
                     formData.append('matiere_id', this.currentMatiere ? this.currentMatiere.id : null);
-
+                    formData.append('coefficient', this.formData.coefficient);
                     try {
                         const response = await fetch('{{ route('matieres.store') }}', {
                             method: 'POST',

@@ -66,6 +66,7 @@
                                                 <th class="min-w-125px">Libellé Année</th>
                                                 <th class="min-w-125px">Date début</th>
                                                 <th class="min-w-125px">Date Fin</th>
+                                                <th class="min-w-125px">Clôturée</th>
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
                                         </thead>
@@ -75,6 +76,13 @@
                                                     <td x-text="annee.name"></td>
                                                     <td x-text="formatDate(annee.date_debut)"></td>
                                                     <td x-text="formatDate(annee.date_fin)"></td>
+
+                                                    <td>
+                                                        <span
+                                                            :class="annee.cloture ? 'badge bg-success' : 'badge bg-secondary'"
+                                                            x-text="annee.cloture ? 'Oui' : 'Non'"></span>
+                                                    </td>
+
                                                     <td class="text-end">
                                                         <button @click="openModal(annee)"
                                                             class="btn btn-primary ms-2 btn-sm mx-2">
@@ -146,6 +154,13 @@
                                         <input type="date" id="date_fin" class="form-control"
                                             x-model="formData.date_fin" required>
                                     </div>
+
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" id="cloture" class="form-check-input"
+                                            x-model="formData.cloture">
+                                        <label for="cloture" class="form-check-label">Clôturée</label>
+                                    </div>
+
                                     <button type="submit" class="btn btn-primary"
                                         x-text="isEdit ? 'Mettre à jour' : 'Enregistrer'"></button>
                                 </form>
@@ -171,8 +186,10 @@
                     formData: {
                         name: '',
                         date_debut: '',
-                        date_fin: ''
+                        date_fin: '',
+                        cloture: false
                     },
+
                     currentAnneeAcademique: null,
 
                     init() {
@@ -189,6 +206,9 @@
                             this.formData.name = anneeAcademique.name;
                             this.formData.date_debut = anneeAcademique.date_debut;
                             this.formData.date_fin = anneeAcademique.date_fin;
+                            this.formData.cloture = !!anneeAcademique.cloture;
+
+
                         } else {
                             this.resetForm();
                         }
@@ -204,8 +224,10 @@
                         this.formData = {
                             name: '',
                             date_debut: '',
-                            date_fin: ''
+                            date_fin: '',
+                            cloture: false
                         };
+
                         this.isEdit = false;
                         this.currentAnneeAcademique = null;
                     },
@@ -258,9 +280,11 @@
                         formData.append('name', this.formData.name);
                         formData.append('date_debut', this.formData.date_debut);
                         formData.append('date_fin', this.formData.date_fin);
+                        formData.append('cloture', this.formData.cloture ? 1 : 0);
                         if (this.isEdit) {
                             formData.append('annee_academique_id', this.currentAnneeAcademique.id);
                         }
+                      
 
                         try {
                             const response = await fetch('{{ route('anneeacademique.store') }}', {

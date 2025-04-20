@@ -221,6 +221,37 @@
                                             x-model="formData.telephone_parant">
                                     </div>
 
+                                    <!-- Genre -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="genre_id" class="form-label">Genre</label>
+                                        <select id="genre_id" x-model="formData.genre_id" class="form-select" required>
+                                            <option value="">Choisir un Niveau</option>
+                                            @foreach ($genres as $genre)
+                                                <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Statut Élève -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="statuseleve_id" class="form-label">Statut Élève</label>
+                                        <select id="statuseleve_id" class="form-select" x-model="formData.statuseleve_id"
+                                            required>
+                                            <option value="">Choisir un statut</option>
+                                            @foreach ($statuseleves as $statuseleve)
+                                                <option value="{{ $statuseleve->id }}">{{ $statuseleve->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Nationalité -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="nationalite" class="form-label">Nationalité</label>
+                                        <input type="text" id="nationalite" class="form-control"
+                                            x-model="formData.nationalite" required>
+                                    </div>
+
+
                                     <div class="col-md-6 mb-3 mt-8">
                                         <label for="submit" class="form-label"></label>
                                         <button type="submit" class="btn btn-primary"
@@ -232,9 +263,6 @@
 
                     </div>
                 </div>
-
-
-
             </div>
         </template>
     </div>
@@ -244,6 +272,8 @@
             return {
                 searchTerm: '',
                 eleves: @json($eleves),
+                genres: @json($genres),
+                statuseleves: @json($statuseleves),
                 filteredEleves: [],
                 currentPage: 1,
                 elevesPerPage: 10,
@@ -256,6 +286,9 @@
                     prenom: '',
                     photo: '',
                     matricule: '',
+                    genre_id: '',
+                    statuseleve_id: '',
+                    nationalite: '',
                     classe_id: '',
                     annee_academique_id: '',
                     niveau_id: '',
@@ -292,7 +325,12 @@
                             date_naissance: this.currentEleve.date_naissance,
                             adresse: this.currentEleve.adresse,
                             telephone_parant: this.currentEleve.telephone_parent,
+                            statuseleve_id: this.currentEleve.statuseleve_id,
+                            genre_id: this.currentEleve.genre_id,
+                            nationalite: this.currentEleve.nationalite,
                         };
+
+
 
                     } else {
                         this.resetForm();
@@ -315,7 +353,12 @@
                         date_naissance: '',
                         adresse: '',
                         telephone_parant: '',
+                        statuseleve_id: '',
+                        genre_id: '',
+                        nationalite: '',
                     };
+
+
                 },
 
                 async deleteClient(clientId) {
@@ -446,6 +489,38 @@
                         return;
                     }
 
+
+                    if (!this.formData.genre_id || this.formData.genre_id === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le genre est requis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.statuseleve_id || this.formData.statuseleve_id === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Le status de l\'eleve est requis.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if (!this.formData.nationalite || this.formData.nationalite.trim() === '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'La nationalite  est requise.',
+                            showConfirmButton: true
+                        });
+                        this.isLoading = false;
+                        return;
+                    }
+
+
                     if (!this.formData.telephone_parant || this.formData.telephone_parant.trim() === '') {
                         Swal.fire({
                             icon: 'error',
@@ -465,6 +540,9 @@
                     formData.append('date_naissance', this.formData.date_naissance);
                     formData.append('adresse', this.formData.adresse);
                     formData.append('telephone_parant', this.formData.telephone_parant);
+                    formData.append('statuseleve_id', this.formData.statuseleve_id);
+                    formData.append('genre_id', this.formData.genre_id);
+                    formData.append('nationalite', this.formData.nationalite);
 
                     if (this.currentEleve) {
                         formData.append('eleve_id', this.currentEleve.id);

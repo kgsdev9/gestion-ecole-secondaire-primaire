@@ -11,6 +11,7 @@ class Matiere extends Model
 
     protected $fillable = [
         'name',
+        'coefficient',
         'description',
     ];
 }

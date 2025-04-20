@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Eleve;
+use App\Models\Genre;
 use App\Models\Inscription;
 use App\Models\Niveau;
+use App\Models\StatusEleve;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -23,13 +25,14 @@ class EleveController extends Controller
     public function index()
     {
 
-        $eleves = Eleve::with(['classe', 'anneeacademique', 'niveau'])->get();
-
+        $eleves = Eleve::with(['classe', 'anneeacademique', 'niveau', 'genre', 'statuseleve'])->get();
         $listeannee  = AnneeAcademique::all();
         $listeniveaux  = Niveau::all();
         $listeclasse  = Classe::all();
+        $genres = Genre::all();
+        $statuseleves = StatusEleve::all();
 
-        return view('eleves.index', compact('eleves', 'listeannee', 'listeclasse', 'listeniveaux'));
+        return view('eleves.index', compact('eleves', 'listeannee', 'listeclasse', 'listeniveaux', 'genres', 'statuseleves'));
     }
 
 
@@ -73,6 +76,8 @@ class EleveController extends Controller
             ], 409);
         }
 
+
+
         // Mise à jour des infos élève
         $eleve->update([
             'nom' => $request->nom,
@@ -91,7 +96,7 @@ class EleveController extends Controller
         // Mise à jour ou création de l'inscription
         $this->updateInscription($eleve, $request);
 
-        $eleve->load('classe', 'anneeacademique', 'niveau');
+        $eleve->load('classe', 'anneeacademique', 'niveau', 'genre', 'statuseleve');
 
         return response()->json([
             'message' => 'Élève mis à jour avec succès',
@@ -126,6 +131,9 @@ class EleveController extends Controller
             ], 409); // 409 = Conflict
         }
 
+
+      
+
         // Création d'un nouvel élève
         $eleve = Eleve::create([
             'nom' => $request->nom,
@@ -146,7 +154,7 @@ class EleveController extends Controller
         // Création de l'inscription
         $this->createInscription($eleve, $request);
 
-        $eleve->load('classe', 'anneeacademique', 'niveau');
+        $eleve->load('classe', 'anneeacademique', 'niveau', 'genre', 'statuseleve');
 
         return response()->json([
             'message' => 'Élève créé avec succès',
