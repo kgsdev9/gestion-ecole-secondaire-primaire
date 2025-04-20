@@ -15,6 +15,7 @@ class ProgrammeExamen extends Model
         'matiere_id',
         'heure_debut',
         'heure_fin',
+        'anneeacademique_id',
         'duree',
         'jour'
     ];

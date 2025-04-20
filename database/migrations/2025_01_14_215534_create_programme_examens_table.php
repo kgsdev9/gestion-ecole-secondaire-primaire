@@ -22,11 +22,12 @@ class CreateProgrammeExamensTable extends Migration
             $table->integer('duree')->nullable();
             $table->string('jour')->nullable();
             $table->timestamps();
+            $table->foreignId('anneeacademique_id')->constrained('annee_academiques')->onDelete('cascade');
             $table->foreign('examen_id')->references('id')->on('examens')->onDelete('cascade');
             $table->foreign('matiere_id')->references('id')->on('matieres')->onDelete('cascade');
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *

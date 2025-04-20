@@ -20,7 +20,7 @@ class CreateEnseignantsTable extends Migration
             $table->string('photo')->nullable();
             $table->string('matricule')->nullable();
             $table->string('email');
-            $table->string('adresse');
+            $table->string('adresse')->nullable();
             $table->string('telephone');
             $table->foreignId('matiere_id')->constrained('matieres')->onDelete('cascade');
             $table->timestamps();

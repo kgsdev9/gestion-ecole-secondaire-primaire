@@ -9,5 +9,5 @@ class ParametreAction extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['classe_id', 'niveau_id', 'anne_academique_id'];
+    protected $fillable = ['classe_id', 'niveau_id', 'anneeacademique_id'];
 }

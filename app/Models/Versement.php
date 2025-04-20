@@ -14,6 +14,7 @@ class Versement extends Model
         'reference',
         'typeversement_id',
         'eleve_id',
+        'anneeacademique_id',
         'date_versement',
         'montant_verse',
         'montant_restant',

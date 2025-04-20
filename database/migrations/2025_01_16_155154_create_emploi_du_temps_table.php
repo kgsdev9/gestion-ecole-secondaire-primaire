@@ -17,12 +17,14 @@ class CreateEmploiDuTempsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('matiere_id');
             $table->time('heure_debut');
-            $table->time('heure_fin'); 
-            $table->unsignedBigInteger('classe_id');
+            $table->time('heure_fin');
+            $table->unsignedBigInteger('affectationacademique_id');
             $table->unsignedBigInteger('jour_id');
-            $table->foreign('classe_id')->references('id')->on('classes')->onDelete('cascade');
+            $table->unsignedBigInteger('anneeacademique_id');
+            $table->foreign('affectationacademique_id')->references('id')->on('affection_academiques')->onDelete('cascade');
             $table->foreign('jour_id')->references('id')->on('jours')->onDelete('cascade');
             $table->foreign('matiere_id')->references('id')->on('matieres')->onDelete('cascade');
+            $table->foreign('anneeacademique_id')->references('id')->on('annee_academiques')->onDelete('cascade');
             $table->timestamps();
         });
     }

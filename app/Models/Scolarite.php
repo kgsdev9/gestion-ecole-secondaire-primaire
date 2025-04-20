@@ -12,7 +12,7 @@ class Scolarite extends Model
     protected $fillable = [
         'niveau_id',
         'classe_id',
-        'annee_academique_id',
+        'anneeacademique_id',
         'montant_scolarite',
     ];
 

@@ -12,7 +12,7 @@ class AffectionAcademique extends Model
     protected $fillable = [
         'classe_id',
         'niveau_id',
-        'annee_academique_id',
+        'anneeacademique_id',
         'salle_id',
         'cloture',
         'examen'
@@ -41,7 +41,7 @@ class AffectionAcademique extends Model
      */
     public function anneeAcademique()
     {
-        return $this->belongsTo(AnneeAcademique::class, 'annee_academique_id');
+        return $this->belongsTo(AnneeAcademique::class, 'anneeacademique_id');
     }
 
     /**

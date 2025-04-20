@@ -24,7 +24,7 @@ class CreateExamensTable extends Migration
             $table->timestamps();
             $table->foreignId('anneeacademique_id')->constrained('annee_academiques')->onDelete('cascade');
             $table->foreignId('typeexamen_id')->constrained('type_examens')->onDelete('cascade');
-            $table->foreign('classe_id')->references('id')->on('classes')->onDelete('cascade');
+            $table->foreign('affectationacademique_id')->references('id')->on('affection_academiques')->onDelete('cascade');
         });
     }
 

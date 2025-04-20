@@ -13,7 +13,7 @@ class MoyenneExamen extends Model
         'eleve_id',
         'matiere_id',
         'examen_id',
-        'annee_academique_id',
+        'anneeacademique_id',
         'moyenne',
     ];
 

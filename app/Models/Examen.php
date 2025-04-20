@@ -21,8 +21,6 @@ class Examen extends Model
         'cloture',
     ];
 
-    
-
 
     public function examenProgrammes()
     {
@@ -49,5 +47,4 @@ class Examen extends Model
         return $this->belongsTo(Classe::class);
     }
 
-    // Ajouter d'autres relations si nécessaire (par exemple, les notes des examens)
 }

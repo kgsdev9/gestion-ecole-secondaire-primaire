@@ -16,7 +16,6 @@ class CreateNotesTable extends Migration
 
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
-
             $table->unsignedBigInteger('semestre_id');
             $table->unsignedBigInteger('anneeacademique_id');
             $table->unsignedBigInteger('eleve_id');

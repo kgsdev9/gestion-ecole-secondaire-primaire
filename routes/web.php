@@ -71,8 +71,6 @@ Route::resource('/notes', NoteController::class);
 Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
 Route::resource('/versements', VersementController::class);
 Route::resource('/bulletin', BulletinConroller::class);
-// Route::resource('/suiviversement', SuiviVeX1rsement::class);
-
 
 
 Route::resource('/rapport', RapportController::class);

@@ -11,16 +11,13 @@ class Semestre extends Model
 
     // Définir les attributs qui peuvent être assignés en masse
     protected $fillable = [
-        'annee_academique_id',
+        'anneeacademique_id',
         'name',
-        'cloture',
+        'active',
         'date_debut',
         'date_fin',
     ];
 
-
-
-    
     // Relation avec l'année académique
     public function anneeAcademique()
     {
@@ -34,7 +31,7 @@ class Semestre extends Model
      */
     public function estCloture()
     {
-        return $this->cloture;
+        return $this->active;
     }
 
     /**
@@ -42,7 +39,7 @@ class Semestre extends Model
      */
     public function closeSemestre()
     {
-        $this->cloture = true;
+        $this->active = true;
         $this->save();
     }
 
@@ -51,7 +48,7 @@ class Semestre extends Model
      */
     public function openSemestre()
     {
-        $this->cloture = false;
+        $this->active = false;
         $this->save();
     }
 }

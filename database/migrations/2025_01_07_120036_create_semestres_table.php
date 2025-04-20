@@ -15,13 +15,13 @@ class CreateSemestresTable extends Migration
     {
         Schema::create('semestres', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('annee_academique_id');
+            $table->unsignedBigInteger('anneeacademique_id');
             $table->string('name');
-            $table->boolean('cloture')->default(false);
-            $table->date('date_debut');
-            $table->date('date_fin');
-            $table->timestamps();
-            $table->foreign('annee_academique_id')->references('id')->on('annee_academiques')->onDelete('cascade');
+            $table->boolean('active')->default(false);
+            $table->date('date_debut')->nullable();
+            $table->date('date_fin')->nullable();
+            $table->timestamps(); 
+            $table->foreign('anneeacademique_id')->references('id')->on('annee_academiques')->onDelete('cascade');
         });
     }
 

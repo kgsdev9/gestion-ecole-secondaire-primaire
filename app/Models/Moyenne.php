@@ -14,7 +14,7 @@ class Moyenne extends Model
         'eleve_id',
         'matiere_id',
         'semestre_id',
-        'annee_academique_id',
+        'anneeacademique_id',
         'moyenne',
     ];
 

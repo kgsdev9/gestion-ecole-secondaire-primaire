@@ -14,7 +14,7 @@ class AnneeAcademique extends Model
         'name',
         'date_debut',
         'date_fin',
-        'cloture'
+        'active',
     ];
 
 
@@ -32,7 +32,7 @@ class AnneeAcademique extends Model
 
     public function scopeActuelle($query)
     {
-        return $query->where('cloturee', false)->latest()->first();
+        return $query->where('active', false)->latest()->first();
     }
     // $annee = AnneeAcademique::actuelle();
     public function anneeAcademiqueActuelle()
