@@ -17,7 +17,6 @@ class SemestreController extends Controller
      */
     public function gestionSemestre($id)
     {
-
         $anneacademique  =  AnneeAcademique::find($id);
         $semestres = $anneacademique->semestres;
         return view('semestres.create', compact('anneacademique', 'semestres'));
@@ -64,7 +63,7 @@ class SemestreController extends Controller
 
         DB::transaction(function () use ($semestre) {
 
-            Semestre::where('anneeacademique_id', $semestre->annee_academique_id)->update(['active' => false]);
+            Semestre::where('anneeacademique_id', $semestre->anneeacademique_id)->update(['active' => false]);
             $semestre->active = true;
             $semestre->save();
         });
