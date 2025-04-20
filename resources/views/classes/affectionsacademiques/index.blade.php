@@ -309,13 +309,16 @@
                 },
 
 
-                get paginatedClasses() {
+                get paginatedClasses()
+                {
                     return this.filteredClasses.slice((this.currentPage - 1) * this.classesPerPage, this.currentPage *
                         this.classesPerPage);
                 },
 
-                filterClasses() {
-                    this.filteredClasses = this.classes.filter(classe => {
+                filterClasses()
+                {
+                    this.filteredClasses = this.classes.filter(classe =>
+                    {
                         return classe.classe.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             classe.niveau.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             classe.annee_academique.name.toLowerCase().includes(this.searchTerm.toLowerCase());
@@ -323,8 +326,10 @@
                     this.totalPages = Math.ceil(this.filteredClasses.length / this.classesPerPage);
                 },
 
-                goToPage(page) {
-                    if (page > 0 && page <= this.totalPages) {
+                goToPage(page)
+                {
+                    if (page > 0 && page <= this.totalPages)
+                    {
                         this.currentPage = page;
                     }
                 },

@@ -186,7 +186,7 @@
                                 timer: 2000,
                             });
 
-                            window.location.href = '{{ route('examens.index') }}'; // change la route si nécessaire
+                            window.location.href = '{{ route('examens.gestion.index') }}'; // change la route si nécessaire
                         })
                         .catch(error => {
                             console.error('Erreur réseau:', error);

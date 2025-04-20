@@ -8,13 +8,13 @@ use App\Http\Controllers\Commandes\CommandeController;
 use App\Http\Controllers\ConfigurationScolaire\GestionExamenController;
 use App\Http\Controllers\configurationScolaire\MoyenneScolaireController;
 use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
-
 use App\Http\Controllers\Eleve\EleveController;
 use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
 use App\Http\Controllers\Enseignant\EnseignantController;
 use App\Http\Controllers\Examen\ExamenController;
 use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Factures\FacturePersonnaliseController;
+use App\Http\Controllers\GestionScolaire\Examen\GestionMoyenneExamenController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Impression\Facture\ImpressionFactureController;
 use App\Http\Controllers\Inscription\InscriptionController;
@@ -24,7 +24,6 @@ use App\Http\Controllers\Note\NoteController;
 use App\Http\Controllers\Pos\ProductPostController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Rapport\RapportController;
-use App\Http\Controllers\Rapport\SuiviVersement;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Salle\AnneAcademiqueController;
 use App\Http\Controllers\Salle\SalleController;
@@ -33,7 +32,6 @@ use App\Http\Controllers\Semestre\SemestreController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vente\VenteController;
 use App\Http\Controllers\Versement\VersementController;
-use App\Models\EmploiDuTemps;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,7 +68,6 @@ Route::resource('/classes', ClasseController::class);
 Route::resource('/affectionacademique', AffectionAcademiqueController::class);
 Route::resource('/inscription', InscriptionController::class);
 Route::resource('/notes', NoteController::class);
-Route::resource('/examens', ExamenController::class);
 Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
 Route::resource('/versements', VersementController::class);
 Route::resource('/bulletin', BulletinConroller::class);
@@ -120,7 +117,11 @@ Route::prefix('gestionmoyenne')->name('gestionmoyenne.')->group(function () {
 
 
 Route::prefix('examens')->name('examens.')->group(function () {
+    Route::resource('/gestion', ExamenController::class);
     Route::get('/planification/programme/examens/{id}', [GestionExamenController::class, 'createProgrammeExamen'])->name('programme.examens');
     Route::post('/programme/create', [GestionExamenController::class, 'store'])->name('programme.store');
     Route::get('/repartition/automatique/{id}', [GestionExamenController::class, 'createRepartition'])->name('create.repartition');
+    Route::resource('/managementgrade', GestionMoyenneExamenController::class);
+
+    Route::get('/save/moyenne/examen/{id}', [GestionMoyenneExamenController::class, 'saveMoyenneExamen'])->name('save.moyenne');
 });

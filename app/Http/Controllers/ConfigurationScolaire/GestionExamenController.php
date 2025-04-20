@@ -27,18 +27,8 @@ class GestionExamenController extends Controller
         $examen = Examen::findOrFail($id);
         $matieres = Matiere::all() ?? [];
         $programmeexamens = $examen->examenProgrammes()->with('matiere')->get();
-
         return view('examens.listeexamens.programme.programmeexamen', compact('examen', 'programmeexamens', 'matieres', 'examen'));
     }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-
 
     public function createRepartition($id)
     {
@@ -49,44 +39,49 @@ class GestionExamenController extends Controller
         $index = 0;
         $totalEleves = $eleves->count();
 
-        foreach ($salles as $salle) {
-            $capacite = $salle->capacite;
+        $repartitionexiste = Repartition::where('examen_id', $examen->id)
+            ->where('annee_academique_id', $examen->anneeacademique_id)
+            ->exists();
 
-            for ($i = 0; $i < $capacite && $index < $totalEleves; $i++) {
-                Repartition::create([
-                    'examen_id' => $examen->id,
-                    'eleve_id' => $eleves[$index]->id,
-                    'salle_id' => $salle->id,
-                    'annee_academique_id' => $examen->anneeacademique_id,
-                ]);
+        if (!$repartitionexiste) {
+            foreach ($salles as $salle) {
+                $capacite = $salle->capacite;
 
-                $index++;
+                for ($i = 0; $i < $capacite && $index < $totalEleves; $i++) {
+                    Repartition::create([
+                        'examen_id' => $examen->id,
+                        'eleve_id' => $eleves[$index]->id,
+                        'salle_id' => $salle->id,
+                        'annee_academique_id' => $examen->anneeacademique_id,
+                    ]);
+
+                    $index++;
+                }
+                if ($index >= $totalEleves) {
+                    break;
+                }
             }
-            if ($index >= $totalEleves) {
-                break;
+
+            if ($index < $totalEleves) {
+
+                return back()->with('error', 'Pas assez de salles pour tous les élèves.');
             }
         }
 
-        if ($index < $totalEleves)
-        {
-            return back()->with('error', 'Pas assez de salles pour tous les élèves.');
-        }
+        $repartitions = Repartition::with(['examen', 'eleve', 'salle', 'anneeAcademique'])
+            ->where('examen_id', $examen->id)
+            ->where('annee_academique_id', $examen->anneeacademique_id)
+            ->get();
 
-        return view('examens.repartition.examen.gestionrepartition');
+
+        return view('examens.repartition.examen.gestionrepartition', compact('repartitions', 'examen'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $examenId = $request->input('examen_id');
         $programmes = json_decode($request->input('programmeexamen'), true);
-
-
         ProgrammeExamen::where('examen_id', $examenId)->delete();
 
         // Créer les nouveaux programmes
@@ -105,51 +100,5 @@ class GestionExamenController extends Controller
             'success' => true,
             'message' => 'Programme d\'examen enregistré avec succès.'
         ]);
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

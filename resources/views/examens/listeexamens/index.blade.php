@@ -96,6 +96,16 @@
                                                             <i class="fa fa-sitemap"></i>
                                                         </a>
 
+                                                        &nbsp; &nbsp;
+                                                        <a :href="`{{ route('examens.save.moyenne', ['id' => '__ID__']) }}`
+                                                        .replace
+                                                            ('__ID__', examen.id)"
+                                                            class="btn btn-info btn-sm">
+                                                            <i class="fa fa-calculator"></i>
+                                                        </a>
+
+
+
                                                     </td>
 
                                                 </tr>
@@ -313,7 +323,7 @@
                     }
 
                     try {
-                        const response = await fetch('{{ route('examens.store') }}', {
+                        const response = await fetch('{{ route('examens.gestion.store') }}', {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -374,7 +384,7 @@
                     }).then(async (result) => {
                         if (result.isConfirmed) {
                             try {
-                                const response = await fetch(`/examens/${id}`, {
+                                const response = await fetch(`/examens/gestion/${id}`, {
                                     method: 'DELETE',
                                     headers: {
                                         'X-CSRF-TOKEN': '{{ csrf_token() }}',

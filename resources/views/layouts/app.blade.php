@@ -145,7 +145,7 @@
 
                                 </a>
 
-                                <a href="{{ route('examens.index') }}"
+                                <a href="{{ route('examens.gestion.index') }}"
                                     class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
                                     <!--begin:Menu link-->
                                     <span class="menu-link">
@@ -716,8 +716,8 @@
                                             </div>
 
                                             <div
-                                                class="menu-item {{ request()->routeIs('examens.index') ? 'active' : '' }}">
-                                                <a class="menu-link" href="{{ route('examens.index') }}">
+                                                class="menu-item {{ request()->routeIs('examens.gestion.index') ? 'active' : '' }}">
+                                                <a class="menu-link" href="{{ route('examens.gestion.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -767,8 +767,8 @@
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                                             <!--begin:Menu link-->
                                             <div
-                                                class="menu-item {{ request()->routeIs('examens.index') ? 'active' : '' }}">
-                                                <a class="menu-link" href="{{ route('examens.index') }}">
+                                                class="menu-item {{ request()->routeIs('examens.gestion.index') ? 'active' : '' }}">
+                                                <a class="menu-link" href="{{ route('examens.gestion.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -778,12 +778,13 @@
                                             </div>
 
                                             <div
-                                                class="menu-item {{ request()->routeIs('examens.index') ? 'active' : '' }}">
-                                                <a class="menu-link" href="{{ route('examens.index') }}">
+                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                <a class="menu-link"
+                                                    href="{{ route('examens.managementgrade.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">Moyenne</span>
+                                                    <span class="menu-title">Moyennes</span>
                                                 </a>
 
                                             </div>
