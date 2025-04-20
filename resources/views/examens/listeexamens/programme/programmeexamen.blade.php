@@ -8,9 +8,11 @@
             <div class="app-toolbar py-3 py-lg-6">
                 <div class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-                        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                            Planification du programme des examens
+                        <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 justify-content-center my-0">
+                            Planification du programme des examens :
+                            <span x-text="examen.nom" class="text-primary ms-2"></span>
                         </h1>
+
                     </div>
                 </div>
             </div>
@@ -18,16 +20,6 @@
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="card">
-                        <div class="card-header border-0 pt-6">
-                            <div class="card-title">
-                                <div class="d-flex align-items-center position-relative my-1">
-                                    <i class='fas fa-search position-absolute ms-5'></i>
-                                    <input type="text"
-                                        class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                        placeholder="Rechercher" x-model="searchTerm" @input="filterProgrammeExamen">
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="card-body py-4">
                             <div class="table-responsive">
@@ -50,24 +42,31 @@
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 fw-semibold">
-                                            <template x-for="(programme, index) in programmeexamen" :key="programme.id || index">
+                                            <template x-for="(programme, index) in programmeexamen" :key="index">
+
+                                                :key="programme.id || index">
                                                 <tr>
                                                     <td>
-                                                        <select class="form-control" x-model="programme.matiere_id" required>
+                                                        <select class="form-select" x-model="programme.matiere_id" required>
                                                             <option value="">Sélectionner une matière</option>
                                                             <template x-for="matiere in matieres" :key="matiere.id">
-                                                                <option :value="matiere.id" x-text="matiere.name"></option>
+                                                                <option :value="matiere.id" x-text="matiere.name"
+                                                                    :selected="programme.matiere_id == matiere.id"></option>
                                                             </template>
                                                         </select>
                                                     </td>
+
                                                     <td>
-                                                        <input type="time" class="form-control" x-model="programme.heure_debut" required>
+                                                        <input type="time" class="form-control"
+                                                            x-model="programme.heure_debut" required>
                                                     </td>
                                                     <td>
-                                                        <input type="time" class="form-control" x-model="programme.heure_fin" required>
+                                                        <input type="time" class="form-control"
+                                                            x-model="programme.heure_fin" required>
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-control" x-model="programme.duree" required>
+                                                        <input type="number" class="form-control" x-model="programme.duree"
+                                                            required>
                                                     </td>
                                                     <td class="text-end d-flex justify-content-start">
                                                         <button @click="deleteRow(index)"
@@ -83,12 +82,25 @@
                             </div>
                         </div>
 
-                        <div class="card-footer d-flex justify-content-end">
-                            <button class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
-                                @click="addRow()">
-                                <i class="fa fa-plus"></i> Ajouter une ligne
-                            </button>
+                        <div class="card-footer d-flex justify-content-between">
+                           
+                            <div>
+                                <button class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
+                                    @click="addRow()">
+                                    <i class="fa fa-plus me-1"></i> Ajouter une ligne
+                                </button>
+                            </div>
+                            <!-- Bouton Enregistrer à gauche -->
+                            <div>
+                                <button class="btn btn-primary btn-sm" @click="submitProgrammeExamen()">
+                                    <i class="fa fa-save me-1"></i> Enregistrer le programme
+                                </button>
+                            </div>
+
+
+
                         </div>
+
                     </div>
 
 
@@ -102,11 +114,10 @@
         function programmeexamenSearch() {
             return {
                 searchTerm: '',
-                programmeexamen: @json($programmeexamens), // Données initiales des programmes
+                programmeexamen: @json($programmeexamens),
+                examen: @json($examen),
                 isLoading: false,
-                matieres: @json($matieres), // Assure-toi d'envoyer les matières dans la vue
-
-                // Ajouter une ligne vide dans le tableau
+                matieres: @json($matieres),
                 addRow() {
                     this.programmeexamen.push({
                         matiere_id: '',
@@ -116,16 +127,15 @@
                     });
                 },
 
-                // Supprimer une ligne à l'index donné
                 deleteRow(index) {
                     this.programmeexamen.splice(index, 1);
                 },
 
-                // Appliquer un filtrage basé sur le terme de recherche
                 filterProgrammeExamen() {
                     this.programmeexamen = this.programmeexamen.filter(programme => {
                         return programme.matiere_id && this.matieres.some(matiere =>
-                            matiere.id === programme.matiere_id && matiere.nom.toLowerCase().includes(this.searchTerm.toLowerCase())
+                            matiere.id === programme.matiere_id && matiere.nom.toLowerCase().includes(this
+                                .searchTerm.toLowerCase())
                         );
                     });
                 },
@@ -133,6 +143,47 @@
                 init() {
                     this.isLoading = false;
                 },
+
+                submitProgrammeExamen() {
+                    const formData = new FormData();
+                    formData.append('examen_id', this.examen.id);
+                    formData.append('programmeexamen', JSON.stringify(this.programmeexamen));
+
+                    fetch('{{ route('examens.programme.store') }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: formData,
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Erreur lors de l\'enregistrement');
+                            }
+                            return response.json();
+                        })
+                        .then(result => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Programme enregistré avec succès !',
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Erreur réseau:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Une erreur est survenue.',
+                                text: error.message,
+                                showConfirmButton: true,
+                            });
+                        });
+                }
+
+
+
+
             };
         }
     </script>

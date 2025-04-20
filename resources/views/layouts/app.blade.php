@@ -15,7 +15,7 @@
     <meta property="og:site_name" content="#" />
     <link rel="canonical" href="#" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    {{-- <link rel="shortcut icon" href="assets/media/logos/favicon.ico" /> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <link rel="stylesheet" href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css">

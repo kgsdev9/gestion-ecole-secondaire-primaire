@@ -5,10 +5,16 @@ namespace App\Http\Controllers\ConfigurationScolaire;
 use App\Http\Controllers\Controller;
 use App\Models\Examen;
 use App\Models\Matiere;
+use App\Models\ProgrammeExamen;
 use Illuminate\Http\Request;
 
 class GestionExamenController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +26,7 @@ class GestionExamenController extends Controller
         $matieres = Matiere::all() ?? [];
         $programmeexamens = $examen->examenProgrammes()->with('matiere')->get();
 
-        return view('examens.listeexamens.programme.programmeexamen', compact('examen', 'programmeexamens', 'matieres'));
+        return view('examens.listeexamens.programme.programmeexamen', compact('examen', 'programmeexamens', 'matieres', 'examen'));
     }
 
 
@@ -42,8 +48,37 @@ class GestionExamenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $examenId = $request->input('examen_id');
+        $programmes = json_decode($request->input('programmeexamen'), true);
+
+
+        ProgrammeExamen::where('examen_id', $examenId)->delete();
+
+        // Créer les nouveaux programmes
+        foreach ($programmes as $programme)
+        {
+            $instance = ProgrammeExamen::create([
+                'examen_id' => $examenId,
+                'matiere_id' => $programme['matiere_id'],
+                'heure_debut' => $programme['heure_debut'],
+                'heure_fin' => $programme['heure_fin'],
+                'duree' => $programme['duree'] ?? null,
+            ]);
+
+            // Si durée vide, la calculer
+            if (!$instance->duree)
+            {
+                $instance->calculerDuree();
+                $instance->save();
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Programme d\'examen enregistré avec succès.'
+        ]);
     }
+
 
     /**
      * Display the specified resource.
