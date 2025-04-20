@@ -14,7 +14,7 @@ class Repartition extends Model
         'examen_id',
         'eleve_id',
         'salle_id',
-        'anneeacademique_id',
+        'annee_academique_id',
     ];
-  
+
 }

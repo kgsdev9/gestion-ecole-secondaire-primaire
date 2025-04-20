@@ -89,7 +89,7 @@
                                                             <i class="fa fa-calendar-check"></i>
                                                         </a>
                                                         &nbsp; &nbsp;
-                                                        <a :href="`{{ route('examens.programme.examens', ['id' => '__ID__']) }}`
+                                                        <a :href="`{{ route('examens.create.repartition', ['id' => '__ID__']) }}`
                                                         .replace
                                                             ('__ID__', examen.id)"
                                                             class="btn btn-info btn-sm">
@@ -126,7 +126,8 @@
                                     <!-- Nom -->
                                     <div class="col-md-6">
                                         <label for="nom" class="form-label">Nom de l'examen</label>
-                                        <input type="text" id="nom" class="form-control" x-model="formData.nom" required>
+                                        <input type="text" id="nom" class="form-control" x-model="formData.nom"
+                                            required>
                                     </div>
 
                                     <!-- Description -->
@@ -138,7 +139,8 @@
                                     <!-- Type examen -->
                                     <div class="col-md-6">
                                         <label for="typeexamen_id" class="form-label">Type Examen</label>
-                                        <select id="typeexamen_id" x-model="formData.typeexamen_id" class="form-select" required>
+                                        <select id="typeexamen_id" x-model="formData.typeexamen_id" class="form-select"
+                                            required>
                                             <option value="">Type examen</option>
                                             @foreach ($typexamen as $type)
                                                 <option value="{{ $type->id }}">{{ $type->name }}</option>
@@ -149,7 +151,8 @@
                                     <!-- Année académique -->
                                     <div class="col-md-6">
                                         <label for="anneeacademique_id" class="form-label">Année académique</label>
-                                        <select id="anneeacademique_id" x-model="formData.anneeacademique_id" class="form-select" required>
+                                        <select id="anneeacademique_id" x-model="formData.anneeacademique_id"
+                                            class="form-select" required>
                                             <option value="">Année académique</option>
                                             @foreach ($anneAcademique as $anne)
                                                 <option value="{{ $anne->id }}">{{ $anne->name }}</option>
@@ -171,26 +174,30 @@
                                     <!-- Date de début -->
                                     <div class="col-md-6">
                                         <label for="date_debut" class="form-label">Date de début</label>
-                                        <input type="date" id="date_debut" class="form-control" x-model="formData.date_debut" required>
+                                        <input type="date" id="date_debut" class="form-control"
+                                            x-model="formData.date_debut" required>
                                     </div>
 
                                     <!-- Date de fin -->
                                     <div class="col-md-6">
                                         <label for="date_fin" class="form-label">Date de fin</label>
-                                        <input type="date" id="date_fin" class="form-control" x-model="formData.date_fin" required>
+                                        <input type="date" id="date_fin" class="form-control"
+                                            x-model="formData.date_fin" required>
                                     </div>
 
                                     <!-- Clôture -->
                                     <div class="col-md-6 d-flex align-items-center mt-4">
                                         <div class="form-check">
-                                            <input type="checkbox" id="cloture" x-model="formData.cloture" class="form-check-input">
+                                            <input type="checkbox" id="cloture" x-model="formData.cloture"
+                                                class="form-check-input">
                                             <label for="cloture" class="form-check-label ms-2">Clôturé</label>
                                         </div>
                                     </div>
 
                                     <!-- Bouton submit -->
                                     <div class="col-md-12 text-end mt-4">
-                                        <button type="submit" class="btn btn-primary" x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
+                                        <button type="submit" class="btn btn-primary"
+                                            x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
                                     </div>
 
                                 </div>

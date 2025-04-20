@@ -122,4 +122,5 @@ Route::prefix('gestionmoyenne')->name('gestionmoyenne.')->group(function () {
 Route::prefix('examens')->name('examens.')->group(function () {
     Route::get('/planification/programme/examens/{id}', [GestionExamenController::class, 'createProgrammeExamen'])->name('programme.examens');
     Route::post('/programme/create', [GestionExamenController::class, 'store'])->name('programme.store');
+    Route::get('/repartition/automatique/{id}', [GestionExamenController::class, 'createRepartition'])->name('create.repartition');
 });

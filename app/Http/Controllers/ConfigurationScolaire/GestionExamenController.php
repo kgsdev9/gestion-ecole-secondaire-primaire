@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Examen;
 use App\Models\Matiere;
 use App\Models\ProgrammeExamen;
+use App\Models\Repartition;
+use App\Models\Salle;
 use Illuminate\Http\Request;
 
 class GestionExamenController extends Controller
@@ -35,9 +37,42 @@ class GestionExamenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+
+
+
+    public function createRepartition($id)
     {
-        //
+        $examen = Examen::with('classe.students')->findOrFail($id);
+        $salles = Salle::all();
+        $eleves = $examen->classe->students()->orderBy('nom')->get();
+
+        $index = 0;
+        $totalEleves = $eleves->count();
+
+        foreach ($salles as $salle) {
+            $capacite = $salle->capacite;
+
+            for ($i = 0; $i < $capacite && $index < $totalEleves; $i++) {
+                Repartition::create([
+                    'examen_id' => $examen->id,
+                    'eleve_id' => $eleves[$index]->id,
+                    'salle_id' => $salle->id,
+                    'annee_academique_id' => $examen->anneeacademique_id,
+                ]);
+
+                $index++;
+            }
+            if ($index >= $totalEleves) {
+                break;
+            }
+        }
+
+        if ($index < $totalEleves)
+        {
+            return back()->with('error', 'Pas assez de salles pour tous les élèves.');
+        }
+
+        return view('examens.repartition.examen.gestionrepartition');
     }
 
     /**
