@@ -16,6 +16,7 @@ class ProgrammeExamen extends Model
         'heure_debut',
         'heure_fin',
         'duree',
+        'jour'
     ];
 
     // Définir les relations

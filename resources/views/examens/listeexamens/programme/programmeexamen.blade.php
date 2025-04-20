@@ -12,7 +12,6 @@
                             Planification du programme des examens :
                             <span x-text="examen.nom" class="text-primary ms-2"></span>
                         </h1>
-
                     </div>
                 </div>
             </div>
@@ -20,7 +19,6 @@
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="card">
-
                         <div class="card-body py-4">
                             <div class="table-responsive">
                                 <template x-if="isLoading">
@@ -35,15 +33,15 @@
                                         <thead>
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                                 <th class="min-w-125px">Matière</th>
+                                                <th class="min-w-125px">Jour</th>
                                                 <th class="min-w-125px">Heure de début</th>
                                                 <th class="min-w-125px">Heure de fin</th>
-                                                <th class="min-w-125px">Durée</th>
+                                                <th class="min-w-125px">Durée (heures)</th>
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 fw-semibold">
-                                            <template x-for="(programme, index) in programmeexamen" :key="index">
-
+                                            <template x-for="(programme, index) in programmeexamen"
                                                 :key="programme.id || index">
                                                 <tr>
                                                     <td>
@@ -57,17 +55,27 @@
                                                     </td>
 
                                                     <td>
-                                                        <input type="time" class="form-control"
-                                                            x-model="programme.heure_debut" required>
-                                                    </td>
-                                                    <td>
-                                                        <input type="time" class="form-control"
-                                                            x-model="programme.heure_fin" required>
-                                                    </td>
-                                                    <td>
-                                                        <input type="number" class="form-control" x-model="programme.duree"
+                                                        <input type="text" class="form-control" x-model="programme.jour"
                                                             required>
                                                     </td>
+
+                                                    <td>
+                                                        <input type="time" class="form-control"
+                                                            x-model="programme.heure_debut" @change="updateDuree(index)"
+                                                            required>
+                                                    </td>
+
+                                                    <td>
+                                                        <input type="time" class="form-control"
+                                                            x-model="programme.heure_fin" @change="updateDuree(index)"
+                                                            required>
+                                                    </td>
+
+                                                    <td>
+                                                        <input type="number" step="0.01" class="form-control"
+                                                            x-model="programme.duree" readonly>
+                                                    </td>
+
                                                     <td class="text-end d-flex justify-content-start">
                                                         <button @click="deleteRow(index)"
                                                             class="btn btn-danger btn-sm mx-2">
@@ -83,28 +91,19 @@
                         </div>
 
                         <div class="card-footer d-flex justify-content-between">
-                           
                             <div>
                                 <button class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm"
                                     @click="addRow()">
                                     <i class="fa fa-plus me-1"></i> Ajouter une ligne
                                 </button>
                             </div>
-                            <!-- Bouton Enregistrer à gauche -->
                             <div>
                                 <button class="btn btn-primary btn-sm" @click="submitProgrammeExamen()">
                                     <i class="fa fa-save me-1"></i> Enregistrer le programme
                                 </button>
                             </div>
-
-
-
                         </div>
-
                     </div>
-
-
-
                 </div>
             </div>
         </div>
@@ -118,9 +117,11 @@
                 examen: @json($examen),
                 isLoading: false,
                 matieres: @json($matieres),
+
                 addRow() {
                     this.programmeexamen.push({
                         matiere_id: '',
+                        jour: '',
                         heure_debut: '',
                         heure_fin: '',
                         duree: '',
@@ -131,14 +132,29 @@
                     this.programmeexamen.splice(index, 1);
                 },
 
-                filterProgrammeExamen() {
-                    this.programmeexamen = this.programmeexamen.filter(programme => {
-                        return programme.matiere_id && this.matieres.some(matiere =>
-                            matiere.id === programme.matiere_id && matiere.nom.toLowerCase().includes(this
-                                .searchTerm.toLowerCase())
-                        );
-                    });
+                updateDuree(index) {
+                    const programme = this.programmeexamen[index];
+                    if (programme.heure_debut && programme.heure_fin) {
+                        const debut = new Date(`1970-01-01T${programme.heure_debut}:00`);
+                        const fin = new Date(`1970-01-01T${programme.heure_fin}:00`);
+
+                        const diffMs = fin - debut;
+                        const diffHeures = diffMs / (1000 * 60 * 60); // convert ms to hours
+
+                        if (diffHeures > 0) {
+                            programme.duree = diffHeures.toFixed(2);
+                        } else {
+                            programme.duree = 0;
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Heure invalide',
+                                text: 'L\'heure de fin doit être après l\'heure de début.',
+                                showConfirmButton: true,
+                            });
+                        }
+                    }
                 },
+
 
                 init() {
                     this.isLoading = false;
@@ -169,6 +185,8 @@
                                 showConfirmButton: false,
                                 timer: 2000,
                             });
+
+                            window.location.href = '{{ route('examens.index') }}'; // change la route si nécessaire
                         })
                         .catch(error => {
                             console.error('Erreur réseau:', error);
@@ -180,10 +198,6 @@
                             });
                         });
                 }
-
-
-
-
             };
         }
     </script>

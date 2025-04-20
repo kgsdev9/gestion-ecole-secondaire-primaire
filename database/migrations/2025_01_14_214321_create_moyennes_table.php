@@ -17,7 +17,7 @@ class CreateMoyennesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('eleve_id');
             $table->unsignedBigInteger('matiere_id');
-            $table->unsignedBigInteger('semestre_id')->nullable();
+            $table->unsignedBigInteger('semestre_id');
             $table->unsignedBigInteger('annee_academique_id');
             $table->float('moyenne', 5, 2);
             $table->timestamps();

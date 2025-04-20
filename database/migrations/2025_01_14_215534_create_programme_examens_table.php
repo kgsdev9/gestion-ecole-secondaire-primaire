@@ -20,6 +20,7 @@ class CreateProgrammeExamensTable extends Migration
             $table->time('heure_debut');
             $table->time('heure_fin');
             $table->integer('duree')->nullable();
+            $table->string('jour')->nullable();
             $table->timestamps();
             $table->foreign('examen_id')->references('id')->on('examens')->onDelete('cascade');
             $table->foreign('matiere_id')->references('id')->on('matieres')->onDelete('cascade');

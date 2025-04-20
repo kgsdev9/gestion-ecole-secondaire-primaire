@@ -14,10 +14,11 @@ class AffectionAcademique extends Model
         'niveau_id',
         'annee_academique_id',
         'salle_id',
-        'cloture'
+        'cloture',
+        'examen'
     ];
 
-    
+
 
     /**
      * Relation avec le modèle Classe.

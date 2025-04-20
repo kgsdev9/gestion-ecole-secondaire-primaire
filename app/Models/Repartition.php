@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Salle extends Model
+class Repartition extends Model
 {
     use HasFactory;
 
-    protected $fillable =  [
-        'name',
-        'capacite'
+
+    protected $fillable = [
+        'examen_id',
+        'eleve_id',
+        'salle_id',
+        'anneeacademique_id',
     ];
+  
 }

@@ -55,22 +55,15 @@ class GestionExamenController extends Controller
         ProgrammeExamen::where('examen_id', $examenId)->delete();
 
         // Créer les nouveaux programmes
-        foreach ($programmes as $programme)
-        {
+        foreach ($programmes as $programme) {
             $instance = ProgrammeExamen::create([
                 'examen_id' => $examenId,
                 'matiere_id' => $programme['matiere_id'],
                 'heure_debut' => $programme['heure_debut'],
                 'heure_fin' => $programme['heure_fin'],
+                'jour' => $programme['jour'],
                 'duree' => $programme['duree'] ?? null,
             ]);
-
-            // Si durée vide, la calculer
-            if (!$instance->duree)
-            {
-                $instance->calculerDuree();
-                $instance->save();
-            }
         }
 
         return response()->json([

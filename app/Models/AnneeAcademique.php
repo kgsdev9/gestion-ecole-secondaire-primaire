@@ -13,7 +13,8 @@ class AnneeAcademique extends Model
     protected $fillable = [
         'name',
         'date_debut',
-        'date_fin'
+        'date_fin',
+        'close'
     ];
 
 
@@ -21,11 +22,23 @@ class AnneeAcademique extends Model
     {
         return self::whereDate('date_debut', '<=', Carbon::today())
             ->whereDate('date_fin', '>=', Carbon::today())
-            ->first(); // On suppose qu'il y a une seule année académique en cours
+            ->first();
     }
 
     public function semestres()
     {
         return $this->hasMany(Semestre::class);
+    }
+
+    public function scopeActuelle($query)
+    {
+        return $query->where('cloturee', false)->latest()->first();
+    }
+    // $annee = AnneeAcademique::actuelle();
+    public function anneeAcademiqueActuelle()
+    {
+        $now = now();
+        $anneeDebut = $now->month >= 9 ? $now->year : $now->year - 1;
+        return $anneeDebut . '-' . ($anneeDebut + 1);
     }
 }
