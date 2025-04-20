@@ -47,6 +47,10 @@ class GestionMoyenneExamenController extends Controller
         $examen = Examen::find($request->examen_id);
         $anneeAcademiqueId = $examen->anneeacademique_id;
 
+        MoyenneExamen::where('examen_id', $examen->id)
+            ->where('annee_academique_id', $anneeAcademiqueId)
+            ->delete();
+
         foreach ($request->notes as $eleve_id => $matieres) {
 
 
