@@ -49,7 +49,7 @@
                                         <thead>
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                                 <th class="min-w-125px">Nom Examen</th>
-                                                <th class="min-w-125px">Description</th>
+
                                                 <th class="min-w-125px">Type Examen</th>
                                                 <th class="min-w-125px">Année académique</th>
                                                 <th class="min-w-125px">Classe</th>
@@ -63,7 +63,7 @@
                                             <template x-for="examen in paginatedExamens" :key="examen.id">
                                                 <tr>
                                                     <td x-text="examen.nom"></td>
-                                                    <td x-text="examen.description"></td>
+
                                                     <td x-text="examen.type_examen.name"></td>
                                                     <td x-text="examen.annee_academique.name"></td>
                                                     <td x-text="examen.classe.name"></td>
@@ -86,8 +86,16 @@
                                                         .replace(
                                                             '__ID__', examen.id)"
                                                             class="btn btn-warning btn-sm">
-                                                            <i class="fa fa-calendar-check"></i> Programme
+                                                            <i class="fa fa-calendar-check"></i>
                                                         </a>
+                                                        &nbsp; &nbsp;
+                                                        <a :href="`{{ route('examens.programme.examens', ['id' => '__ID__']) }}`
+                                                        .replace
+                                                            ('__ID__', examen.id)"
+                                                            class="btn btn-info btn-sm">
+                                                            <i class="fa fa-sitemap"></i>
+                                                        </a>
+
                                                     </td>
 
                                                 </tr>
@@ -105,7 +113,7 @@
         <!-- Modal pour la création et la modification -->
         <template x-if="showModal">
             <div class="modal fade show d-block" tabindex="-1" aria-modal="true" style="background-color: rgba(0,0,0,0.5)">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-xl"> <!-- modal-xl pour largeur étendue -->
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" x-text="isEdite ? 'Modification' : 'Création'"></h5>
@@ -113,69 +121,85 @@
                         </div>
                         <div class="modal-body">
                             <form @submit.prevent="submitForm">
-                                <div class="mb-3">
-                                    <label for="nom" class="form-label">Nom de l'examen</label>
-                                    <input type="text" id="nom" class="form-control" x-model="formData.nom"
-                                        required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea id="description" class="form-control" x-model="formData.description" required></textarea>
-                                </div>
+                                <div class="row g-3"> <!-- row avec espacement entre colonnes -->
 
-                                <div class="mb-3">
-                                    <label for="niveau_id" class="form-label">Type Examen</label>
-                                    <select id="niveau_id" x-model="formData.typeexamen_id" class="form-select" required>
-                                        <option value="">Type examen</option>
-                                        @foreach ($typexamen as $type)
-                                            <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                    <!-- Nom -->
+                                    <div class="col-md-6">
+                                        <label for="nom" class="form-label">Nom de l'examen</label>
+                                        <input type="text" id="nom" class="form-control" x-model="formData.nom" required>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="niveau_id" class="form-label">Annnée academique</label>
-                                    <select id="niveau_id" x-model="formData.anneeacademique_id" class="form-select"
-                                        required>
-                                        <option value="">Annnée academique</option>
-                                        @foreach ($anneAcademique as $anneAcademique)
-                                            <option value="{{ $anneAcademique->id }}">{{ $anneAcademique->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                    <!-- Description -->
+                                    <div class="col-md-6">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea id="description" class="form-control" x-model="formData.description" required></textarea>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="niveau_id" class="form-label">Classe</label>
-                                    <select id="niveau_id" x-model="formData.classe_id" class="form-select" required>
-                                        <option value="">Selectionner une classe</option>
-                                        @foreach ($classe as $classroom)
-                                            <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                    <!-- Type examen -->
+                                    <div class="col-md-6">
+                                        <label for="typeexamen_id" class="form-label">Type Examen</label>
+                                        <select id="typeexamen_id" x-model="formData.typeexamen_id" class="form-select" required>
+                                            <option value="">Type examen</option>
+                                            @foreach ($typexamen as $type)
+                                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="date_debut" class="form-label">Date de début</label>
-                                    <input type="date" id="date_debut" class="form-control"
-                                        x-model="formData.date_debut" required>
+                                    <!-- Année académique -->
+                                    <div class="col-md-6">
+                                        <label for="anneeacademique_id" class="form-label">Année académique</label>
+                                        <select id="anneeacademique_id" x-model="formData.anneeacademique_id" class="form-select" required>
+                                            <option value="">Année académique</option>
+                                            @foreach ($anneAcademique as $anne)
+                                                <option value="{{ $anne->id }}">{{ $anne->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Classe -->
+                                    <div class="col-md-6">
+                                        <label for="classe_id" class="form-label">Classe</label>
+                                        <select id="classe_id" x-model="formData.classe_id" class="form-select" required>
+                                            <option value="">Sélectionner une classe</option>
+                                            @foreach ($classe as $classroom)
+                                                <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Date de début -->
+                                    <div class="col-md-6">
+                                        <label for="date_debut" class="form-label">Date de début</label>
+                                        <input type="date" id="date_debut" class="form-control" x-model="formData.date_debut" required>
+                                    </div>
+
+                                    <!-- Date de fin -->
+                                    <div class="col-md-6">
+                                        <label for="date_fin" class="form-label">Date de fin</label>
+                                        <input type="date" id="date_fin" class="form-control" x-model="formData.date_fin" required>
+                                    </div>
+
+                                    <!-- Clôture -->
+                                    <div class="col-md-6 d-flex align-items-center mt-4">
+                                        <div class="form-check">
+                                            <input type="checkbox" id="cloture" x-model="formData.cloture" class="form-check-input">
+                                            <label for="cloture" class="form-check-label ms-2">Clôturé</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bouton submit -->
+                                    <div class="col-md-12 text-end mt-4">
+                                        <button type="submit" class="btn btn-primary" x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
+                                    </div>
+
                                 </div>
-                                <div class="mb-3">
-                                    <label for="date_fin" class="form-label">Date de fin</label>
-                                    <input type="date" id="date_fin" class="form-control"
-                                        x-model="formData.date_fin" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="cloture" class="form-label">Clôture</label>
-                                    <input type="checkbox" id="cloture" x-model="formData.cloture"
-                                        class="form-check-input">
-                                </div>
-                                <button type="submit" class="btn btn-primary"
-                                    x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
         </template>
 
     </div>
