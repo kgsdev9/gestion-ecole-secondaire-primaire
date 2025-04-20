@@ -5,6 +5,7 @@ namespace App\Http\Controllers\GestionScolaire\Examen;
 use App\Http\Controllers\Controller;
 use App\Models\Examen;
 use App\Models\Inscription;
+use App\Models\MoyenneExamen;
 use App\Models\ProgrammeExamen;
 use Illuminate\Http\Request;
 
@@ -43,6 +44,31 @@ class GestionMoyenneExamenController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
+        $examen = Examen::find($request->examen_id);
+        $anneeAcademiqueId = $examen->anneeacademique_id;
+
+        foreach ($request->notes as $eleve_id => $matieres) {
+
+
+            foreach ($matieres as $matiere_id => $note) {
+
+
+                if (!is_null($note)) {
+                    MoyenneExamen::updateOrCreate(
+                        [
+                            'eleve_id' => $eleve_id,
+                            'matiere_id' => $matiere_id,
+                            'examen_id' => $examen->id,
+                            'annee_academique_id' => $anneeAcademiqueId,
+                        ],
+                        [
+                            'moyenne' => $note,
+                        ]
+                    );
+                }
+            }
+        }
+
+        return response()->json(['success' => true]);
     }
 }

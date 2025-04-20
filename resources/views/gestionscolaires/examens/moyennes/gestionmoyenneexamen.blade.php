@@ -34,7 +34,7 @@
                                 <thead>
                                     <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                         <th>Élève</th>
-                                        <template x-for="matiere in matieres" :key="matiere.id">
+                                        <template x-for="matiere in matieres" :key="matiere.matiere.id">
                                             <th x-text="matiere.matiere.name"></th>
                                         </template>
                                     </tr>
@@ -47,7 +47,7 @@
                                                 <td>
                                                     <input type="number" step="0.01" min="0" max="20"
                                                         class="form-control form-control-sm"
-                                                        x-model="notes[eleve.id][matiere.id]" />
+                                                        x-model="notes[eleve.id][matiere.matiere.id]" />
                                                 </td>
                                             </template>
                                         </tr>
@@ -80,7 +80,7 @@
                 },
 
                 saveNotes() {
-                 
+
                     fetch('{{ route('examens.managementgrade.store') }}', {
                             method: 'POST',
                             headers: {
