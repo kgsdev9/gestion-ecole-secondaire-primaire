@@ -55,11 +55,11 @@ class AffectionAcademiqueController extends Controller
     // Mise à jour de l'affection académique
     private function updateAffectionAcademique(AffectionAcademique $affectionAcademique, Request $request)
     {
-       
+
         // Vérifier si une affection académique similaire existe, autre que celle que l'on met à jour
         $exists = AffectionAcademique::where('classe_id', $request->classe_id)
             ->where('niveau_id', $request->niveau_id)
-            ->where('annee_academique_id', $request->annee_academique_id)
+            ->where('anneeacademique_id', $request->annee_academique_id)
             ->where('id', '!=', $affectionAcademique->id)
             ->exists();
 
@@ -73,7 +73,7 @@ class AffectionAcademiqueController extends Controller
         $affectionAcademique->update([
             'classe_id' => $request->classe_id,
             'niveau_id' => $request->niveau_id,
-            'annee_academique_id' => $request->annee_academique_id,
+            'anneeacademique_id' => $request->annee_academique_id,
             'salle_id' => $request->salle_id,
         ]);
 
@@ -91,10 +91,10 @@ class AffectionAcademiqueController extends Controller
     // Création d'une nouvelle affection académique
     private function createAffectionAcademique(Request $request)
     {
-
+      
         $exists = AffectionAcademique::where('classe_id', $request->classe_id)
             ->where('niveau_id', $request->niveau_id)
-            ->where('annee_academique_id', $request->annee_academique_id)
+            ->where('anneeacademique_id', $request->annee_academique_id)
             ->exists();
 
 
@@ -109,7 +109,7 @@ class AffectionAcademiqueController extends Controller
         $affectionAcademique = AffectionAcademique::create([
             'classe_id' => $request->classe_id,
             'niveau_id' => $request->niveau_id,
-            'annee_academique_id' => $request->annee_academique_id,
+            'anneeacademique_id' => $request->annee_academique_id,
             'salle_id' => $request->salle_id,
         ]);
 
