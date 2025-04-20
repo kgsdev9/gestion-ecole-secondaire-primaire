@@ -42,25 +42,26 @@ class SalleController extends Controller
         }
     }
 
+    private function createSalle(Request $request)
+    {
+        $salle = Salle::create([
+            'name' => $request->name,
+            'capacite' => $request->capacite,
+        ]);
+
+        return response()->json(['message' => 'Salle créée avec succès', 'salle' => $salle], 201);
+    }
+
     private function updateSalle(Salle $salle, Request $request)
     {
-        // Met à jour la salle
         $salle->update([
             'name' => $request->name,
+            'capacite' => $request->capacite,
         ]);
 
         return response()->json(['message' => 'Salle mise à jour avec succès', 'salle' => $salle], 200);
     }
 
-    private function createSalle(Request $request)
-    {
-        // Création d'une nouvelle salle
-        $salle = Salle::create([
-            'name' => $request->name,
-        ]);
-
-        return response()->json(['message' => 'Salle créée avec succès', 'salle' => $salle], 201);
-    }
 
     public function destroy($id)
     {

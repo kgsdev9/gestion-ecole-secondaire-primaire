@@ -59,6 +59,7 @@
                                         <thead>
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                                 <th class="min-w-125px">Libellé Salle</th>
+                                                <th class="min-w-100px">Capacité</th>
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
                                         </thead>
@@ -66,6 +67,7 @@
                                             <template x-for="salle in paginatedSalles" :key="salle.id">
                                                 <tr>
                                                     <td x-text="salle.name"></td>
+                                                    <td x-text="salle.capacite"></td>
                                                     <td class="text-end">
                                                         <button @click="openModal(salle)"
                                                             class="btn btn-primary btn-sm mx-2">
@@ -120,10 +122,16 @@
                                     <input type="text" id="name" class="form-control" x-model="formData.name"
                                         required>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="capacite" class="form-label">Capacité</label>
+                                    <input type="number" id="capacite" class="form-control" x-model="formData.capacite"
+                                        required min="1">
+                                </div>
                                 <button type="submit" class="btn btn-primary"
                                     x-text="isEdite ? 'Mettre à jour' : 'Enregistrer'"></button>
                             </form>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -144,6 +152,7 @@
                 isEdite: false,
                 formData: {
                     name: '',
+                    capacite: ''
                 },
                 currentSalle: null,
 
@@ -161,7 +170,8 @@
                             ...salle
                         };
                         this.formData = {
-                            name: this.currentSalle.name
+                            name: this.currentSalle.name,
+                            capacite: this.currentSalle.capacite
                         };
                     } else {
                         this.resetForm();
@@ -171,17 +181,18 @@
 
                 resetForm() {
                     this.formData = {
-                        name: ''
+                        name: '',
+                        capacite: ''
                     };
                 },
 
                 async submitForm() {
                     this.isLoading = true;
 
-                    if (!this.formData.name.trim()) {
+                    if (!this.formData.name.trim() || !this.formData.capacite) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Le nom de la salle est requis.',
+                            title: 'Le nom et la capacité sont requis.',
                         });
                         this.isLoading = false;
                         return;
@@ -189,6 +200,7 @@
 
                     const formData = new FormData();
                     formData.append('name', this.formData.name);
+                    formData.append('capacite', this.formData.capacite);
                     formData.append('salle_id', this.currentSalle ? this.currentSalle.id : null);
 
                     try {

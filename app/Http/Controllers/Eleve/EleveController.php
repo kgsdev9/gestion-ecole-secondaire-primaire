@@ -83,6 +83,9 @@ class EleveController extends Controller
             'date_naissance' => $request->date_naissance,
             'adresse' => $request->adresse,
             'telephone_parent' => $request->telephone_parant,
+            'statuseleve_id' => $request->statuseleve_id,
+            'nationalite' => $request->nationalite,
+            'genre_id' => $request->genre_id,
         ]);
 
         // Mise à jour ou création de l'inscription
@@ -134,7 +137,11 @@ class EleveController extends Controller
             'date_naissance' => $request->date_naissance,
             'adresse' => $request->adresse,
             'telephone_parent' => $request->telephone_parant,
+            'statuseleve_id' => $request->statuseleve_id,
+            'nationalite' => $request->nationalite,
+            'genre_id' => $request->genre_id,
         ]);
+
 
         // Création de l'inscription
         $this->createInscription($eleve, $request);
