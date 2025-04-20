@@ -745,16 +745,12 @@
                                             <span class="svg-icon svg-icon-2">
                                                 <svg width="24" height="24" viewBox="0 0 24 24"
                                                     fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M21 10H13V11C13 11.6 12.6 12 12 12C11.4 12 11 11.6 11 11V10H3C2.4 10 2 10.4 2 11V13H22V11C22 10.4 21.6 10 21 10Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.3"
-                                                        d="M12 12C11.4 12 11 11.6 11 11V3C11 2.4 11.4 2 12 2C12.6 2 13 2.4 13 3V11C13 11.6 12.6 12 12 12Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.3"
-                                                        d="M18.1 21H5.9C5.4 21 4.9 20.6 4.8 20.1L3 13H21L19.2 20.1C19.1 20.6 18.6 21 18.1 21ZM13 18V15C13 14.4 12.6 14 12 14C11.4 14 11 14.4 11 15V18C11 18.6 11.4 19 12 19C12.6 19 13 18.6 13 18ZM17 18V15C17 14.4 16.6 14 16 14C15.4 14 15 14.4 15 15V18C15 18.6 15.4 19 16 19C16.6 19 17 18.6 17 18ZM9 18V15C9 14.4 8.6 14 8 14C7.4 14 7 14.4 7 15V18C7 18.6 7.4 19 8 19C8.6 19 9 18.6 9 18Z"
-                                                        fill="currentColor" />
+                                                    <path fill="currentColor"
+                                                        d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V5H19V19Z" />
+                                                    <path fill="currentColor"
+                                                        d="M7 7H9V9H7ZM11 7H13V9H11ZM15 7H17V9H15ZM7 11H9V13H7ZM11 11H13V13H11ZM15 11H17V13H15ZM7 15H9V17H7ZM11 15H13V17H11ZM15 15H17V17H15Z" />
                                                 </svg>
+
                                             </span>
                                         </span>
                                         <span class="menu-title">Module Examens</span>
@@ -791,20 +787,11 @@
 
 
 
-
-                                            <span class="menu-link">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">Rapprot Examens</span>
-                                            </span>
-
-
                                         </div>
                                     </div>
 
                                 </div>
-                                {{-- fin examens  --}}
+
 
                                 <div class="menu-item pt-5">
                                     <div class="menu-content">
@@ -818,18 +805,10 @@
                                         <span class="menu-icon">
                                             <!--begin::Svg Icon | path: icons/duotune/layouts/lay008.svg-->
                                             <span class="svg-icon svg-icon-2">
-                                                <svg width="24" height="24" viewBox="0 0 24 24"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM12 20C7.6 20 4 16.4 4 12C4 7.6 7.6 4 12 4C16.4 4 20 7.6 20 12C20 16.4 16.4 20 12 20Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.3"
-                                                        d="M13 7H10C9.4 7 9 7.4 9 8C9 8.6 9.4 9 10 9H11C12.1 9 13 9.9 13 11C13 12.1 12.1 13 11 13H10C9.4 13 9 13.4 9 14C9 14.6 9.4 15 10 15H13C13.6 15 14 14.6 14 14C14 13.4 13.6 13 13 13H12C10.9 13 10 12.1 10 11C10 9.9 10.9 9 12 9H13C13.6 9 14 8.6 14 8C14 7.4 13.6 7 13 7Z"
-                                                        fill="currentColor" />
-                                                    <path
-                                                        d="M12 6C12.6 6 13 5.6 13 5C13 4.4 12.6 4 12 4C11.4 4 11 4.4 11 5C11 5.6 11.4 6 12 6ZM12 18C12.6 18 13 17.6 13 17C13 16.4 12.6 16 12 16C11.4 16 11 16.4 11 17C11 17.6 11.4 18 12 18Z"
-                                                        fill="currentColor" />
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill="currentColor" d="M16 2H8C6.9 2 6 2.9 6 4V20C6 21.1 6.9 22 8 22H16C17.1 22 18 21.1 18 20V4C18 2.9 17.1 2 16 2ZM8 4H16V20H8V4ZM10 6H14V8H10V6ZM10 10H14V12H10V10ZM10 14H14V16H10V14ZM10 18H14V20H10V18Z"/>
                                                 </svg>
+
 
                                             </span>
                                             <!--end::Svg Icon-->
@@ -837,8 +816,7 @@
                                         <span class="menu-title">Suivi versements</span>
                                         <span class="menu-arrow"></span>
                                     </span>
-                                    <!--end:Menu link-->
-                                    <!--begin:Menu sub-->
+
                                     <div class="menu-sub menu-sub-accordion">
                                         <!--begin:Menu item-->
                                         <div class="menu-item">
@@ -876,15 +854,11 @@
                                         class="menu-link {{ request()->routeIs('emplois-du-temps.index') ? 'active' : '' }}">
                                         <span class="menu-icon">
                                             <span class="svg-icon svg-icon-2">
-                                                <svg width="24" height="24" viewBox="0 0 24 24"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M20 7H4C3.4 7 3 6.6 3 6V4C3 3.4 3.4 3 4 3H20C20.6 3 21 3.4 21 4V6C21 6.6 20.6 7 20 7ZM7 9H4C3.4 9 3 9.4 3 10V20C3 20.6 3.4 21 4 21H7C7.6 21 8 20.6 8 20V10C8 9.4 7.6 9 7 9Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.3"
-                                                        d="M20 21H11C10.4 21 10 20.6 10 20V10C10 9.4 10.4 9 11 9H20C20.6 9 21 9.4 21 10V20C21 20.6 20.6 21 20 21ZM15 11H13V13H15V11ZM17 13H15V15H17V13ZM13 15H15V17H13V15Z"
-                                                        fill="currentColor" />
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.03 20 4 16.97 4 12C4 7.03 7.03 4 12 4C16.97 4 20 7.03 20 12C20 16.97 16.97 20 12 20ZM11 7H13V13H9V11H11V7Z"/>
                                                 </svg>
+
+
 
                                             </span>
 
@@ -903,15 +877,10 @@
                                         <span class="menu-icon">
                                             <!--begin::Svg Icon | path: icons/duotune/layouts/lay008.svg-->
                                             <span class="svg-icon svg-icon-2">
-                                                <svg width="24" height="24" viewBox="0 0 24 24"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M20 7H3C2.4 7 2 6.6 2 6V3C2 2.4 2.4 2 3 2H20C20.6 2 21 2.4 21 3V6C21 6.6 20.6 7 20 7ZM7 9H3C2.4 9 2 9.4 2 10V20C2 20.6 2.4 21 3 21H7C7.6 21 8 20.6 8 20V10C8 9.4 7.6 9 7 9Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.3"
-                                                        d="M20 21H11C10.4 21 10 20.6 10 20V10C10 9.4 10.4 9 11 9H20C20.6 9 21 9.4 21 10V20C21 20.6 20.6 21 20 21Z"
-                                                        fill="currentColor" />
-                                                </svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12C2 16.97 6.03 21 12 21C17.97 21 22 16.97 22 12C22 7.03 17.97 2 12 2ZM12 19C8.69 19 6 16.31 6 13C6 9.69 8.69 7 12 7C15.31 7 18 9.69 18 13C18 16.31 15.31 19 12 19ZM12 5C8.69 5 6 7.69 6 11C6 14.31 8.69 17 12 17C15.31 17 18 14.31 18 11C18 7.69 15.31 5 12 5Z"/>
+                                                  </svg>
+
                                             </span>
                                             <!--end::Svg Icon-->
                                         </span>

@@ -21,6 +21,7 @@ class Examen extends Model
         'cloture',
     ];
 
+    
 
 
     public function examenProgrammes()
