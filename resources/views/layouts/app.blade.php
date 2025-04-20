@@ -5,15 +5,19 @@
     <base href="" />
     <title>@yield('title')</title>
     <meta charset="utf-8" />
-    <meta name="description" content="#" />
-    <meta name="keywords" content="#" />
+    <meta name="description" content="KGS Informatique - Spécialiste en solutions numériques : développement web, logiciels, maintenance et accompagnement digital en Côte d'Ivoire." />
+    <meta name="keywords" content="KGS Informatique, développement web, logiciels, informatique, Côte d'Ivoire, maintenance, digital, kgsinformatique.net" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta property="og:locale" content="#" />
-    <meta property="og:type" content="#" />
-    <meta property="og:title" content="#" />
-    <meta property="og:url" content="#" />
-    <meta property="og:site_name" content="#" />
-    <link rel="canonical" href="#" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="KGS Informatique - Votre Partenaire Numérique" />
+    <meta property="og:description" content="Découvrez les solutions numériques de KGS Informatique : applications web, logiciels métiers, maintenance informatique et plus encore." />
+    <meta property="og:url" content="https://kgsinformatique.net/" />
+    <meta property="og:site_name" content="KGS Informatique" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://kgsinformatique.net/" />
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <link rel="shortcut icon" href="assets/media/logos/favicon.ico" /> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -47,21 +51,15 @@
             document.documentElement.setAttribute("data-bs-theme", themeMode);
         }
     </script>
-    <!--end::Theme mode setup on page load-->
-    <!--begin::App-->
+
     <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
-        <!--begin::Page-->
         <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
-            <!--begin::Header-->
             <div id="kt_app_header" class="app-header">
-                <!--begin::Header container-->
                 <div class="app-container container-fluid d-flex align-items-stretch justify-content-between"
                     id="kt_app_header_container">
-                    <!--begin::sidebar mobile toggle-->
                     <div class="d-flex align-items-center d-lg-none ms-n2 me-2" title="Show sidebar menu">
                         <div class="btn btn-icon btn-active-color-primary w-35px h-35px"
                             id="kt_app_sidebar_mobile_toggle">
-                            <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
                             <span class="svg-icon svg-icon-1">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -73,11 +71,10 @@
                                         fill="currentColor" />
                                 </svg>
                             </span>
-                            <!--end::Svg Icon-->
+
                         </div>
                     </div>
-                    <!--end::sidebar mobile toggle-->
-                    <!--begin::Mobile logo-->
+
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                         <a href="{{ url('') }}" class="d-lg-none">
                             @can('after')
@@ -89,86 +86,70 @@
 
                         </a>
                     </div>
-                    <!--end::Mobile logo-->
-                    <!--begin::Header wrapper-->
+
                     <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1"
                         id="kt_app_header_wrapper">
-                        <!--begin::Menu wrapper-->
+
                         <div class="app-header-menu app-header-mobile-drawer align-items-stretch" data-kt-drawer="true"
                             data-kt-drawer-name="app-header-menu" data-kt-drawer-activate="{default: true, lg: false}"
                             data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="end"
                             data-kt-drawer-toggle="#kt_app_header_menu_toggle" data-kt-swapper="true"
                             data-kt-swapper-mode="{default: 'append', lg: 'prepend'}"
                             data-kt-swapper-parent="{default: '#kt_app_body', lg: '#kt_app_header_wrapper'}">
-                            <!--begin::Menu-->
+
                             <div class="menu menu-rounded menu-column menu-lg-row my-5 my-lg-0 align-items-stretch fw-semibold px-2 px-lg-0"
                                 id="kt_app_header_menu" data-kt-menu="true">
-                                <!--begin:Menu item-->
                                 <a href="{{ url('/') }}"
                                     class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
-                                    <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-title">Tableau de bord</span>
                                         <span class="menu-arrow d-lg-none"></span>
                                     </span>
 
                                 </a>
-                                <!--end:Menu item-->
-                                <!--begin:Menu item-->
-                                <a href="#" class="menu-item menu-lg-down-accordion me-0 me-lg-2">
-                                    <!--begin:Menu link-->
-                                    <span class="menu-link">
-                                        <span class="menu-title">Rapport</span>
-                                        <span class=" d-lg-none"></span>
-                                    </span>
 
-                                </a>
-                                <!--end:Menu item-->
-                                <!--begin:Menu item-->
                                 <a href="{{ route('eleves.index') }}"
                                     class="menu-item me-0 me-lg-2 {{ request()->routeIs('eleves.index') ? 'active' : '' }}">
-                                    <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-title">Eleves</span>
                                         <span class="d-lg-none"></span>
                                     </span>
                                 </a>
 
-
                                 <a href="{{ route('versements.index') }}"
                                     class="menu-item menu-lg-down-accordion me-0 me-lg-2">
-                                    <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-title">Versements</span>
                                         <span class=" d-lg-none"></span>
                                     </span>
 
                                 </a>
-
                                 <a href="{{ route('examens.gestion.index') }}"
                                     class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
-                                    <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-title">Examens</span>
                                         <span class="d-lg-none"></span>
                                     </span>
 
                                 </a>
-                                <!--end:Menu item-->
-                            </div>
-                            <!--end::Menu-->
-                        </div>
-                        <!--end::Menu wrapper-->
-                        <!--begin::Navbar-->
-                        <div class="app-navbar flex-shrink-0">
 
+                                <a href="#" class="menu-item menu-lg-down-accordion me-0 me-lg-2">
+                                    <span class="menu-link">
+                                        <span class="menu-title">Rapport scolaire</span>
+                                        <span class=" d-lg-none"></span>
+                                    </span>
+
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="app-navbar flex-shrink-0">
                             <div class="app-navbar-item ms-1 ms-lg-3">
-                                <!--begin::Menu toggle-->
                                 <a href="#"
                                     class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px"
                                     data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent"
                                     data-kt-menu-placement="bottom-end">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen060.svg-->
+
                                     <span class="svg-icon theme-light-show svg-icon-2">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -201,8 +182,7 @@
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen061.svg-->
+
                                     <span class="svg-icon theme-dark-show svg-icon-2">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -220,18 +200,16 @@
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->
+
                                 </a>
-                                <!--begin::Menu toggle-->
-                                <!--begin::Menu-->
+
                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-muted menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px"
                                     data-kt-menu="true" data-kt-element="theme-mode-menu">
-                                    <!--begin::Menu item-->
                                     <div class="menu-item px-3 my-0">
                                         <a href="#" class="menu-link px-3 py-2" data-kt-element="mode"
                                             data-kt-value="light">
                                             <span class="menu-icon" data-kt-element="icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen060.svg-->
+
                                                 <span class="svg-icon svg-icon-3">
                                                     <svg width="24" height="24" viewBox="0 0 24 24"
                                                         fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -264,18 +242,16 @@
                                                             fill="currentColor" />
                                                     </svg>
                                                 </span>
-                                                <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title">Light</span>
+                                            <span class="menu-title">Blanc</span>
                                         </a>
                                     </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
+
                                     <div class="menu-item px-3 my-0">
                                         <a href="#" class="menu-link px-3 py-2" data-kt-element="mode"
                                             data-kt-value="dark">
                                             <span class="menu-icon" data-kt-element="icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen061.svg-->
+
                                                 <span class="svg-icon svg-icon-3">
                                                     <svg width="24" height="24" viewBox="0 0 24 24"
                                                         fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -293,18 +269,17 @@
                                                             fill="currentColor" />
                                                     </svg>
                                                 </span>
-                                                <!--end::Svg Icon-->
+
                                             </span>
-                                            <span class="menu-title">Dark</span>
+                                            <span class="menu-title">Noir</span>
                                         </a>
                                     </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
+
                                     <div class="menu-item px-3 my-0">
                                         <a href="#" class="menu-link px-3 py-2" data-kt-element="mode"
                                             data-kt-value="system">
                                             <span class="menu-icon" data-kt-element="icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen062.svg-->
+
                                                 <span class="svg-icon svg-icon-3">
                                                     <svg width="24" height="24" viewBox="0 0 24 24"
                                                         fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -313,35 +288,34 @@
                                                             fill="currentColor" />
                                                     </svg>
                                                 </span>
-                                                <!--end::Svg Icon-->
+
                                             </span>
                                             <span class="menu-title">System</span>
                                         </a>
                                     </div>
-                                    <!--end::Menu item-->
+
                                 </div>
-                                <!--end::Menu-->
+
                             </div>
 
                             <div class="app-navbar-item ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
-                                <!--begin::Menu wrapper-->
+
                                 <div class="cursor-pointer symbol symbol-35px symbol-md-40px"
                                     data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                     data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                                     <img src="{{ asset('avatar.png') }}" style="height:45px;" alt="user" />
                                 </div>
-                                <!--begin::User account menu-->
+
                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px"
                                     data-kt-menu="true">
-                                    <!--begin::Menu item-->
+
                                     <div class="menu-item px-3">
                                         <div class="menu-content d-flex align-items-center px-3">
-                                            <!--begin::Avatar-->
+
                                             <div class="symbol symbol-50px me-5">
                                                 <img alt="Logo" src="{{ asset('avatar.png') }}" />
                                             </div>
-                                            <!--end::Avatar-->
-                                            <!--begin::Username-->
+
                                             <div class="d-flex flex-column">
                                                 <div class="fw-bold d-flex align-items-center fs-5">
                                                     {{ Auth::user()->name }}
@@ -388,16 +362,12 @@
                                             Déconnexion
                                         </a>
                                     </div>
-
                                 </div>
-
                             </div>
-                            <!--end::User menu-->
-                            <!--begin::Header menu toggle-->
+
                             <div class="app-navbar-item d-lg-none ms-2 me-n3" title="Show header menu">
                                 <div class="btn btn-icon btn-active-color-primary w-35px h-35px"
                                     id="kt_app_header_menu_toggle">
-                                    <!--begin::Svg Icon | path: icons/duotune/text/txt001.svg-->
                                     <span class="svg-icon svg-icon-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -409,38 +379,30 @@
                                                 fill="currentColor" />
                                         </svg>
                                     </span>
-                                    <!--end::Svg Icon-->
+
                                 </div>
                             </div>
-                            <!--end::Header menu toggle-->
                         </div>
-                        <!--end::Navbar-->
                     </div>
-                    <!--end::Header wrapper-->
                 </div>
-                <!--end::Header container-->
             </div>
-            <!--end::Header-->
-            <!--begin::Wrapper-->
             <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
-                <!--begin::Sidebar-->
+
                 <div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true"
                     data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}"
                     data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start"
                     data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
-                    <!--begin::Logo-->
                     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
-                        <!--begin::Logo image-->
+
                         <a href="/" class="text-dark" option="changerlelogo">
                             GESTION ECOLE 2.0
                         </a>
-                        <!--end::Logo image-->
-                        <!--begin::Sidebar toggle-->
+
                         <div id="kt_app_sidebar_toggle"
                             class="app-sidebar-toggle btn btn-icon btn-sm h-30px w-30px rotate" data-kt-toggle="true"
                             data-kt-toggle-state="active" data-kt-toggle-target="body"
                             data-kt-toggle-name="app-sidebar-minimize">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr079.svg-->
+
                             <span class="svg-icon svg-icon-2 rotate-180">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -452,22 +414,18 @@
                                         fill="currentColor" />
                                 </svg>
                             </span>
-                            <!--end::Svg Icon-->
                         </div>
-                        <!--end::Sidebar toggle-->
+
                     </div>
                     <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
-                        <!--begin::Menu wrapper-->
+
                         <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5"
                             data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto"
                             data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
                             data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px">
-                            <!--begin::Menu-->
                             <div class="menu menu-column menu-rounded menu-sub-indention fw-semibold px-3"
                                 id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
-                                <!--begin:Menu item-->
                                 <div class="menu-item here show menu-accordion">
-                                    <!--begin:Menu link-->
                                     <a class="menu-link" href="{{ url('/') }}">
                                         <span class="menu-icon">
                                             <span class="svg-icon svg-icon-2">
@@ -666,29 +624,21 @@
                                         <span class="menu-icon">
 
                                             <span class="svg-icon svg-icon-2">
-                                                <svg width="24" height="24" viewBox="0 0 24 24"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M21 10H13V11C13 11.6 12.6 12 12 12C11.4 12 11 11.6 11 11V10H3C2.4 10 2 10.4 2 11V13H22V11C22 10.4 21.6 10 21 10Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.3"
-                                                        d="M12 12C11.4 12 11 11.6 11 11V3C11 2.4 11.4 2 12 2C12.6 2 13 2.4 13 3V11C13 11.6 12.6 12 12 12Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.3"
-                                                        d="M18.1 21H5.9C5.4 21 4.9 20.6 4.8 20.1L3 13H21L19.2 20.1C19.1 20.6 18.6 21 18.1 21ZM13 18V15C13 14.4 12.6 14 12 14C11.4 14 11 14.4 11 15V18C11 18.6 11.4 19 12 19C12.6 19 13 18.6 13 18ZM17 18V15C17 14.4 16.6 14 16 14C15.4 14 15 14.4 15 15V18C15 18.6 15.4 19 16 19C16.6 19 17 18.6 17 18ZM9 18V15C9 14.4 8.6 14 8 14C7.4 14 7 14.4 7 15V18C7 18.6 7.4 19 8 19C8.6 19 9 18.6 9 18Z"
-                                                        fill="currentColor" />
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none">
+                                                    <path fill="currentColor"
+                                                        d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM5 19V5H19V19H5ZM12 6C13.1 6 14 6.9 14 8C14 9.1 13.1 10 12 10C10.9 10 10 9.1 10 8C10 6.9 10.9 6 12 6ZM12 7C11.45 7 11 7.45 11 8C11 8.55 11.45 9 12 9C12.55 9 13 8.55 13 8C13 7.45 12.55 7 12 7Z" />
                                                 </svg>
+
+
                                             </span>
                                         </span>
                                         <span class="menu-title">Module Scolaire</span>
                                         <span class="menu-arrow"></span>
                                     </span>
 
-
-
                                     <div class="menu-sub menu-sub-accordion">
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                                            <!--begin:Menu link-->
 
                                             <div
                                                 class="menu-item {{ request()->routeIs('configurationnote.classe.anneeacademique') ? 'active' : '' }}">
@@ -701,8 +651,6 @@
                                                 </a>
 
                                             </div>
-
-
                                             <div
                                                 class="menu-item {{ request()->routeIs('gestionmoyenne.gestion.moyenne') ? 'active' : '' }}">
                                                 <a class="menu-link"
@@ -712,7 +660,6 @@
                                                     </span>
                                                     <span class="menu-title">Gestion des moyennes</span>
                                                 </a>
-
                                             </div>
 
                                             <div
@@ -736,8 +683,6 @@
                                     </div>
                                 </div>
 
-
-                                {{-- debut examen --}}
                                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                                     <span class="menu-link">
                                         <span class="menu-icon">
@@ -757,11 +702,8 @@
                                         <span class="menu-arrow"></span>
                                     </span>
 
-
-
                                     <div class="menu-sub menu-sub-accordion">
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                                            <!--begin:Menu link-->
                                             <div
                                                 class="menu-item {{ request()->routeIs('examens.gestion.index') ? 'active' : '' }}">
                                                 <a class="menu-link" href="{{ route('examens.gestion.index') }}">
@@ -782,10 +724,17 @@
                                                     </span>
                                                     <span class="menu-title">Moyennes</span>
                                                 </a>
-
                                             </div>
-
-
+                                            <div
+                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                <a class="menu-link"
+                                                    href="{{ route('examens.managementgrade.index') }}">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Convocation</span>
+                                                </a>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -800,27 +749,23 @@
                                 </div>
 
                                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                                    <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-icon">
-                                            <!--begin::Svg Icon | path: icons/duotune/layouts/lay008.svg-->
                                             <span class="svg-icon svg-icon-2">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill="currentColor" d="M16 2H8C6.9 2 6 2.9 6 4V20C6 21.1 6.9 22 8 22H16C17.1 22 18 21.1 18 20V4C18 2.9 17.1 2 16 2ZM8 4H16V20H8V4ZM10 6H14V8H10V6ZM10 10H14V12H10V10ZM10 14H14V16H10V14ZM10 18H14V20H10V18Z"/>
+                                                <svg width="24" height="24" viewBox="0 0 24 24"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill="currentColor"
+                                                        d="M16 2H8C6.9 2 6 2.9 6 4V20C6 21.1 6.9 22 8 22H16C17.1 22 18 21.1 18 20V4C18 2.9 17.1 2 16 2ZM8 4H16V20H8V4ZM10 6H14V8H10V6ZM10 10H14V12H10V10ZM10 14H14V16H10V14ZM10 18H14V20H10V18Z" />
                                                 </svg>
-
-
                                             </span>
-                                            <!--end::Svg Icon-->
                                         </span>
                                         <span class="menu-title">Suivi versements</span>
                                         <span class="menu-arrow"></span>
                                     </span>
 
                                     <div class="menu-sub menu-sub-accordion">
-                                        <!--begin:Menu item-->
                                         <div class="menu-item">
-                                            <!--begin:Menu link-->
+
                                             <a class="menu-link {{ request()->routeIs('versements.index') ? 'active' : '' }}"
                                                 href="{{ route('versements.index') }}">
                                                 <span class="menu-bullet">
@@ -828,24 +773,21 @@
                                                 </span>
                                                 <span class="menu-title">Par Etudiant</span>
                                             </a>
-                                            <!--end:Menu link-->
+
                                         </div>
 
                                         <div class="menu-item">
-                                            <!--begin:Menu link-->
+
                                             <a class="menu-link" href="#">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
                                                 <span class="menu-title">Rapport de versement</span>
                                             </a>
-                                            <!--end:Menu link-->
+
                                         </div>
 
                                     </div>
-
-
-                                    <!--end:Menu sub-->
                                 </div>
 
 
@@ -854,51 +796,52 @@
                                         class="menu-link {{ request()->routeIs('emplois-du-temps.index') ? 'active' : '' }}">
                                         <span class="menu-icon">
                                             <span class="svg-icon svg-icon-2">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.03 20 4 16.97 4 12C4 7.03 7.03 4 12 4C16.97 4 20 7.03 20 12C20 16.97 16.97 20 12 20ZM11 7H13V13H9V11H11V7Z"/>
+                                                <svg width="24" height="24" viewBox="0 0 24 24"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill="currentColor"
+                                                        d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.03 20 4 16.97 4 12C4 7.03 7.03 4 12 4C16.97 4 20 7.03 20 12C20 16.97 16.97 20 12 20ZM11 7H13V13H9V11H11V7Z" />
                                                 </svg>
-
-
-
                                             </span>
 
                                         </span>
                                         <span class="menu-title">Emploi Du Temps</span>
-
                                     </a>
 
                                 </div>
 
-
-
                                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                                    <!--begin:Menu link-->
                                     <span class="menu-link">
                                         <span class="menu-icon">
-                                            <!--begin::Svg Icon | path: icons/duotune/layouts/lay008.svg-->
                                             <span class="svg-icon svg-icon-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12C2 16.97 6.03 21 12 21C17.97 21 22 16.97 22 12C22 7.03 17.97 2 12 2ZM12 19C8.69 19 6 16.31 6 13C6 9.69 8.69 7 12 7C15.31 7 18 9.69 18 13C18 16.31 15.31 19 12 19ZM12 5C8.69 5 6 7.69 6 11C6 14.31 8.69 17 12 17C15.31 17 18 14.31 18 11C18 7.69 15.31 5 12 5Z"/>
-                                                  </svg>
-
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none">
+                                                    <path fill="currentColor"
+                                                        d="M12 2C6.48 2 2 6.48 2 12C2 16.97 6.03 21 12 21C17.97 21 22 16.97 22 12C22 7.03 17.97 2 12 2ZM12 19C8.69 19 6 16.31 6 13C6 9.69 8.69 7 12 7C15.31 7 18 9.69 18 13C18 16.31 15.31 19 12 19ZM12 5C8.69 5 6 7.69 6 11C6 14.31 8.69 17 12 17C15.31 17 18 14.31 18 11C18 7.69 15.31 5 12 5Z" />
+                                                </svg>
                                             </span>
-                                            <!--end::Svg Icon-->
                                         </span>
                                         <span class="menu-title">Historique</span>
-
                                     </span>
-
-
-
-
                                 </div>
 
-
-
+                                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                    <span class="menu-link">
+                                        <span class="menu-icon">
+                                            <span class="svg-icon svg-icon-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <path fill="currentColor"
+                                                        d="M19.43 12.98c.04-.32.07-.66.07-1s-.03-.68-.07-1l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.08 7.08 0 0 0-1.73-1l-.38-2.65A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.49.42l-.38 2.65a7.08 7.08 0 0 0-1.73 1l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.32-.07.66-.07 1s.03.68.07 1L2.57 14.63a.5.5 0 0 0-.12.64l2 3.46c.14.25.44.34.69.22l2.49-1c.52.39 1.1.72 1.73 1l.38 2.65c.05.27.27.46.49.46h4c.28 0 .5-.2.49-.46l.38-2.65a7.08 7.08 0 0 0 1.73-1l2.49 1c.25.12.55.03.69-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                        <span class="menu-title">Configuration</span>
+                                    </span>
+                                </div>
                             </div>
-                            <!--end::Menu-->
+
                         </div>
-                        <!--end::Menu wrapper-->
+
                     </div>
 
                     <div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6" id="kt_app_sidebar_footer">
@@ -929,18 +872,15 @@
                 @yield('content')
 
                 <div id="kt_app_footer" class="app-footer">
-                    <!--begin::Footer container-->
                     <div
                         class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
-                        <!--begin::Copyright-->
+
                         <div class="text-dark order-2 order-md-1">
                             <span class="text-muted fw-semibold me-1">2023&copy;</span>
-                            <a href="#" target="_blank" class="text-gray-800 text-hover-primary">KGS
+                            <a href="https://kgsinformatique.net/" target="_blank" class="text-gray-800 text-hover-primary">KGS
                                 INFORMATIQUE
                                 agence digitale </a>
                         </div>
-                        <!--end::Copyright-->
-                        <!--begin::Menu-->
                         <ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
                             <li class="menu-item">
                                 <a href="#" target="_blank" class="menu-link px-2">A propos</a>
@@ -952,26 +892,18 @@
                                 <a href="#" target="_blank" class="menu-link px-2">Version Pro</a>
                             </li>
                         </ul>
-                        <!--end::Menu-->
+
                     </div>
-                    <!--end::Footer container-->
+
                 </div>
             </div>
-
-
         </div>
-
-
     </div>
-
-
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     @stack('scripts')
-
 </body>
-
 </html>
