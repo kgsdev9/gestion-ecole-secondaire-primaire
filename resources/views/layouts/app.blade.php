@@ -14,10 +14,7 @@
     <meta property="og:description" content="Découvrez les solutions numériques de KGS Informatique : applications web, logiciels métiers, maintenance informatique et plus encore." />
     <meta property="og:url" content="https://kgsinformatique.net/" />
     <meta property="og:site_name" content="KGS Informatique" />
-
-    <!-- Canonical -->
     <link rel="canonical" href="https://kgsinformatique.net/" />
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <link rel="shortcut icon" href="assets/media/logos/favicon.ico" /> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
