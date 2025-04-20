@@ -72,20 +72,21 @@
                                                     <td x-text="formatDate(semestre.date_fin)"></td>
                                                     <td>
                                                         <span
-                                                            :class="semestre.cloture ? 'badge bg-success' : 'badge bg-warning'">
-                                                            <i
-                                                                :class="semestre.cloture ? 'fa fa-lock' : 'fa fa-unlock'"></i>
-                                                            <span x-text="semestre.cloture ? 'Clôturé' : 'Ouvert'"></span>
+                                                            :class="semestre.active ? 'badge bg-success' : 'badge bg-warning'">
+                                                            <i :class="semestre.active ? 'fa fa-lock' : 'fa fa-unlock'"></i>
+                                                            <span x-text="semestre.active ? 'Actif' : 'Inactif'"></span>
                                                         </span>
                                                     </td>
+
                                                     <td class="text-end">
                                                         <button @click="toggleCloture(semestre)"
                                                             class="btn btn-secondary ms-2 btn-sm">
                                                             <i class="fa"
-                                                                :class="semestre.cloture ? 'fa-unlock' : 'fa-lock'"></i>
+                                                                :class="semestre.active ? 'fa-unlock' : 'fa-lock'"></i>
                                                             <span
-                                                                x-text="semestre.cloture ? 'Déclôturer' : 'Clôturer'"></span>
+                                                                x-text="semestre.active ? 'Désactiver' : 'Activer'"></span>
                                                         </button>
+
                                                         <button @click="deleteSemestre(semestre.id)"
                                                             class="btn btn-danger btn-sm">
                                                             <i class="fa fa-trash"></i>
@@ -298,9 +299,29 @@
                         });
 
                         if (response.ok) {
-                            semestre.cloture = !semestre.cloture; // <-- mise à jour locale
+                            const result = await response.json();
+
+                            // Désactiver tous les semestres localement
+                            this.semestres.forEach(s => s.active = false);
+
+                            // Activer localement le semestre concerné
+                            const index = this.semestres.findIndex(s => s.id === result.id_active);
+                            if (index !== -1) {
+                                this.semestres[index].active = true;
+                            }
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: result.message,
+                                timer: 1500,
+                                showConfirmButton: false,
+                            });
+
                         } else {
-                            alert('Erreur lors du changement de statut.');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur lors du changement de statut.',
+                            });
                         }
                     }
 

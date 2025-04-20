@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AnneeAcademique;
 use App\Models\Semestre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SemestreController extends Controller
 {
@@ -16,6 +17,7 @@ class SemestreController extends Controller
      */
     public function gestionSemestre($id)
     {
+
         $anneacademique  =  AnneeAcademique::find($id);
         $semestres = $anneacademique->semestres;
         return view('semestres.create', compact('anneacademique', 'semestres'));
@@ -24,7 +26,7 @@ class SemestreController extends Controller
     public function store(Request $request)
     {
         $semestre = Semestre::create([
-            'annee_academique_id' => $request->annee_academique_id,
+            'anneeacademique_id' => $request->annee_academique_id,
             'name' => $request->name,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
@@ -60,13 +62,17 @@ class SemestreController extends Controller
             ], 404);
         }
 
-        $semestre->cloture = !$semestre->cloture;
-        $semestre->save();
+        DB::transaction(function () use ($semestre) {
+
+            Semestre::where('anneeacademique_id', $semestre->annee_academique_id)->update(['active' => false]);
+            $semestre->active = true;
+            $semestre->save();
+        });
 
         return response()->json([
             'success' => true,
-            'message' => 'Statut de clôture mis à jour.',
-            'cloture' => $semestre->cloture,
+            'message' => 'Semestre activé avec succès.',
+            'id_active' => $semestre->id,
         ]);
     }
 }

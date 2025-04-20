@@ -20,7 +20,6 @@ class CreateAffectionAcademiquesTable extends Migration
             $table->unsignedBigInteger('salle_id');
             $table->unsignedBigInteger('annee_academiques');
             $table->boolean('examen')->default(false);
-            $table->boolean('cloture')->default(false);
             $table->foreign('classe_id')->references('id')->on('classes')->onDelete('cascade');
             $table->foreign('niveau_id')->references('id')->on('niveaux')->onDelete('cascade');
             $table->foreign('annee_academiques')->references('id')->on('annee_academiques')->onDelete('cascade');

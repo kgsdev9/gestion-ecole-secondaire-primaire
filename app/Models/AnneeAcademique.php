@@ -27,7 +27,7 @@ class AnneeAcademique extends Model
 
     public function semestres()
     {
-        return $this->hasMany(Semestre::class);
+        return $this->hasMany(Semestre::class, 'anneeacademique_id');
     }
 
     public function scopeActuelle($query)

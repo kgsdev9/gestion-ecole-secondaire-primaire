@@ -52,7 +52,6 @@ Auth::routes();
 Route::get('/', [HomeController::class, 'index']);
 
 Route::resource('/users', UserController::class);
-Route::resource('/anneeacademique', AnneAcademiqueController::class);
 Route::resource('/roles', RoleController::class);
 Route::resource('/factures', FactureController::class);
 Route::resource('/eleves', EleveController::class);
@@ -122,4 +121,11 @@ Route::prefix('examens')->name('examens.')->group(function () {
     Route::resource('/managementgrade', GestionMoyenneExamenController::class);
 
     Route::get('/save/moyenne/examen/{id}', [GestionMoyenneExamenController::class, 'saveMoyenneExamen'])->name('save.moyenne');
+});
+
+
+
+Route::prefix('administration')->name('administration.')->group(function () {
+    Route::resource('/anneeacademique', AnneAcademiqueController::class);
+    Route::post('/annneacademique/active', [AnneAcademiqueController::class, 'active'])->name('active.anneeacademique');
 });

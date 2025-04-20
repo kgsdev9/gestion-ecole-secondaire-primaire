@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\AnneeAcademique;
 use Illuminate\Support\Facades\DB;
 
-class AnneeScolaireService
+class AnneeAcademiqueService
 {
     /**
      * Crée une nouvelle année scolaire et désactive les autres.

@@ -490,8 +490,8 @@
                                         </div>
 
                                         <div class="menu-item">
-                                            <a class="menu-link {{ request()->routeIs('anneeacademique.index') ? 'active' : '' }}"
-                                                href="{{ route('anneeacademique.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('administration.anneeacademique.index') ? 'active' : '' }}"
+                                                href="{{ route('administration.anneeacademique.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>

@@ -66,7 +66,6 @@
                                                 <th class="min-w-125px">Libellé Année</th>
                                                 <th class="min-w-125px">Date début</th>
                                                 <th class="min-w-125px">Date Fin</th>
-                                                <th class="min-w-125px">Clôturée</th>
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
                                         </thead>
@@ -77,11 +76,6 @@
                                                     <td x-text="formatDate(annee.date_debut)"></td>
                                                     <td x-text="formatDate(annee.date_fin)"></td>
 
-                                                    <td>
-                                                        <span
-                                                            :class="annee.cloture ? 'badge bg-success' : 'badge bg-secondary'"
-                                                            x-text="annee.cloture ? 'Oui' : 'Non'"></span>
-                                                    </td>
 
                                                     <td class="text-end">
                                                         <button @click="openModal(annee)"
@@ -92,6 +86,15 @@
                                                             class="btn btn-danger btn-sm">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
+
+
+                                                        <button class="btn btn-sm btn-secondary"
+                                                            @click="toggleActive(annee)">
+                                                            <i class="fa"
+                                                                :class="annee.active ? 'fa-unlock' : 'fa-lock'"></i>
+                                                            <span x-text="annee.active ? 'active' : 'inactive'"></span>
+                                                        </button>
+
 
                                                         <a :href="`{{ route('gestion.semestre', ['id' => '__ID__']) }}`.replace(
                                                             '__ID__', annee.id)"
@@ -153,12 +156,6 @@
                                         <label for="date_fin" class="form-label">Date fin</label>
                                         <input type="date" id="date_fin" class="form-control"
                                             x-model="formData.date_fin" required>
-                                    </div>
-
-                                    <div class="mb-3 form-check">
-                                        <input type="checkbox" id="cloture" class="form-check-input"
-                                            x-model="formData.cloture">
-                                        <label for="cloture" class="form-check-label">Clôturée</label>
                                     </div>
 
                                     <button type="submit" class="btn btn-primary"
@@ -225,7 +222,6 @@
                             name: '',
                             date_debut: '',
                             date_fin: '',
-                            cloture: false
                         };
 
                         this.isEdit = false;
@@ -245,6 +241,45 @@
                         const start = (this.currentPage - 1) * this.anneeAcademiquesPerPage;
                         return this.filteredAnneeAcademiques.slice(start, start + this.anneeAcademiquesPerPage);
                     },
+
+
+                    async toggleActive(annee) {
+                        const response = await fetch(`{{ route('administration.active.anneeacademique') }}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id: annee.id
+                            })
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+
+                            // ✅ Mettre toutes les années à inactif
+                            this.anneeAcademiques.forEach(a => a.active = false);
+
+                            // ✅ Activer uniquement celle retournée par le backend
+                            const index = this.anneeAcademiques.findIndex(a => a.id === result.id_active);
+                            if (index !== -1) {
+                                this.anneeAcademiques[index].active = true;
+                            }
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: result.message,
+                                timer: 1500,
+                                showConfirmButton: false,
+                            });
+
+                        } else {
+                            alert('Erreur lors du changement de statut.');
+                        }
+                    },
+
+
 
                     formatDate(date) {
                         return new Date(date).toLocaleDateString('fr-FR');
@@ -284,10 +319,10 @@
                         if (this.isEdit) {
                             formData.append('annee_academique_id', this.currentAnneeAcademique.id);
                         }
-                      
+
 
                         try {
-                            const response = await fetch('{{ route('anneeacademique.store') }}', {
+                            const response = await fetch('{{ route('administration.anneeacademique.store') }}', {
                                 method: 'POST',
                                 headers: {
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -343,8 +378,10 @@
 
                     async deleteAnneeAcademique(id) {
                         try {
-                            const url = `{{ route('anneeacademique.destroy', ['anneeacademique' => '__ID__']) }}`.replace(
-                                "__ID__", id);
+                            const url =
+                                `{{ route('administration.anneeacademique.destroy', ['anneeacademique' => '__ID__']) }}`
+                                .replace(
+                                    "__ID__", id);
 
                             const response = await fetch(url, {
                                 method: "DELETE",

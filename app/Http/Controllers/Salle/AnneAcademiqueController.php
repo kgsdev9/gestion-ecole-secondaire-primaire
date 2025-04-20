@@ -4,20 +4,43 @@ namespace App\Http\Controllers\Salle;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnneeAcademique;
+use App\Services\AnneeAcademiqueService;
 use Illuminate\Http\Request;
 
 class AnneAcademiqueController extends Controller
 {
-
-    public function __construct()
+    protected $anneAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneAcademiqueService = $anneAcademiqueService;
     }
 
     public function index()
     {
         $listeanneeacademique = AnneeAcademique::orderByDesc('created_at')->get();
         return view('anneacademique.index', compact('listeanneeacademique'));
+    }
+
+    public function active(Request $request)
+    {
+        $annee = AnneeAcademique::find($request->id);
+
+        if (!$annee) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Année introuvable.'
+            ], 404);
+        }
+
+        // Utilisation du service pour activer l'année et désactiver les autres
+        $this->anneAcademiqueService->activer($annee->id);
+
+        return response()->json([
+            'success' => true,
+            'message' => "L'année {$annee->libelle} a été activée avec succès.",
+            'id_active' => $annee->id
+        ]);
     }
 
     public function store(Request $request)
@@ -49,7 +72,7 @@ class AnneAcademiqueController extends Controller
             'name' => $request->name,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
-            'cloture' => $request->cloture ?? $anneeAcademique->cloture, // conserve l'ancien si non fourni
+            'active' => 1
         ]);
 
         return response()->json([
@@ -66,7 +89,6 @@ class AnneAcademiqueController extends Controller
             'name' => $request->name,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
-            'cloture' => $request->cloture ?? false, // false par défaut si non fourni
         ]);
 
         return response()->json([
