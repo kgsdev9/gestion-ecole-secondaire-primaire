@@ -342,7 +342,7 @@
                     const scolarite = this.scolarites.find(s =>
                         s.niveau_id === this.selectedEleve.niveau_id &&
                         s.classe_id === this.selectedEleve.classe_id &&
-                        s.annee_academique_id === this.selectedEleve.annee_academique_id
+                        s.anneeacademique_id  === this.selectedEleve.annee_academique_id
                     );
 
 

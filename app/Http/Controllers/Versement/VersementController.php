@@ -8,20 +8,34 @@ use App\Models\Scolarite;
 use App\Models\TypeVersement;
 use App\Models\Versement;
 use Illuminate\Http\Request;
+use App\Services\AnneeAcademiqueService;
 
 class VersementController extends Controller
 {
 
-    public function __construct()
+
+    protected $anneeAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
     }
 
     public function index()
     {
-        $listeleves = Eleve::all();
-        $versements  = Versement::with(['eleve', 'typeVersement'])->get();
-        $listescolarite = Scolarite::all();
+        $anneeScolaireActuelle = $this->anneeAcademiqueService->getAnneeActive();
+        $listeleves = Eleve::whereHas('inscriptions', function ($query) use ($anneeScolaireActuelle) {
+            $query->where('anneeacademique_id', $anneeScolaireActuelle->id);
+        })->get();
+
+        // Versements de l'année en cours
+        $versements = Versement::with(['eleve', 'typeVersement'])
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+            ->get();
+
+        $listescolarite = Scolarite::with(['niveau', 'classe', 'anneeAcademique'])
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+            ->get();
         $typeversement  = TypeVersement::all();
         return view('versements.index', compact('listeleves', 'versements', 'listescolarite', 'typeversement'));
     }
@@ -30,6 +44,7 @@ class VersementController extends Controller
 
     public function store(Request $request)
     {
+        
         // Création du versement sans validation (en supposant que les données sont valides)
         $versement = Versement::create([
             'montant_verse' => $request->montant_verse,
@@ -37,6 +52,7 @@ class VersementController extends Controller
             'typeversement_id' => $request->typeversement_id,
             'date_versement' => $request->date_versement,
             'eleve_id' => $request->eleve_id,
+            'anneeacademique_id' => $this->anneeAcademiqueService->getAnneeActive()->id,
             'reference' => rand(1000, 34445),
         ]);
 

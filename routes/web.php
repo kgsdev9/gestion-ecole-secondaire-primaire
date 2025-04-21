@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Bulletin\BulletinConroller;
 use App\Http\Controllers\Categorie\CategoryController;
-use App\Http\Controllers\Classe\AffectionAcademiqueController;
 use App\Http\Controllers\Classe\ClasseController;
 use App\Http\Controllers\Commandes\CommandeController;
 use App\Http\Controllers\ConfigurationScolaire\GestionExamenController;
@@ -64,7 +63,6 @@ Route::resource('/salles', SalleController::class);
 Route::resource('/enseignants', EnseignantController::class);
 Route::resource('/scolarites', ScolariteController::class);
 Route::resource('/classes', ClasseController::class);
-Route::resource('/affectionacademique', AffectionAcademiqueController::class);
 Route::resource('/inscription', InscriptionController::class);
 Route::resource('/notes', NoteController::class);
 Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
