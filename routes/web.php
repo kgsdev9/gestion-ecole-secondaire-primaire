@@ -10,7 +10,12 @@ use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
 use App\Http\Controllers\Eleve\EleveController;
 use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
 use App\Http\Controllers\Enseignant\EnseignantController;
+use App\Http\Controllers\Examen\ConvocationController;
 use App\Http\Controllers\Examen\ExamenController;
+use App\Http\Controllers\Examen\MoyenneExamenController;
+use App\Http\Controllers\Examen\ProgrammeExamenController;
+use App\Http\Controllers\Examen\RepartitionController;
+use App\Http\Controllers\Examen\ResultatController;
 use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Factures\FacturePersonnaliseController;
 use App\Http\Controllers\GestionScolaire\Examen\GestionMoyenneExamenController;
@@ -114,11 +119,19 @@ Route::prefix('gestionmoyenne')->name('gestionmoyenne.')->group(function () {
 Route::prefix('examens')->name('examens.')->group(function () {
     Route::resource('/gestion', ExamenController::class);
     Route::get('/planification/programme/examens/{id}', [GestionExamenController::class, 'createProgrammeExamen'])->name('programme.examens');
-    Route::post('/programme/create', [GestionExamenController::class, 'store'])->name('programme.store');
+    // Route::post('/programme/create', [GestionExamenController::class, 'store'])->name('programme.store');
     Route::get('/repartition/automatique/{id}', [GestionExamenController::class, 'createRepartition'])->name('create.repartition');
     Route::resource('/managementgrade', GestionMoyenneExamenController::class);
-
     Route::get('/save/moyenne/examen/{id}', [GestionMoyenneExamenController::class, 'saveMoyenneExamen'])->name('save.moyenne');
+    // nouveaux controllers
+
+    Route::resource('/programme', ProgrammeExamenController::class);
+    Route::resource('/moyenne', MoyenneExamenController::class);
+    Route::resource('/repartition', RepartitionController::class);
+    Route::resource('/convocation', ConvocationController::class);
+    Route::resource('/resultats', ResultatController::class);
+
+
 });
 
 

@@ -21,6 +21,7 @@ class ExamenController extends Controller
 
     public function index()
     {
+       
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
         $classe = Classe::all();
         $anneAcademique = AnneeAcademique::all();

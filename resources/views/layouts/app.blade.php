@@ -709,9 +709,9 @@
 
 
                                             <div
-                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                class="menu-item {{ request()->routeIs('examens.programme.index') ? 'active' : '' }}">
                                                 <a class="menu-link"
-                                                    href="{{ route('examens.managementgrade.index') }}">
+                                                    href="{{ route('examens.programme.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -720,9 +720,9 @@
                                             </div>
 
                                             <div
-                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                class="menu-item {{ request()->routeIs('examens.repartition.index') ? 'active' : '' }}">
                                                 <a class="menu-link"
-                                                    href="{{ route('examens.managementgrade.index') }}">
+                                                    href="{{ route('examens.repartition.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -730,12 +730,10 @@
                                                 </a>
                                             </div>
 
-
-
                                             <div
-                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                class="menu-item {{ request()->routeIs('examens.moyenne.index') ? 'active' : '' }}">
                                                 <a class="menu-link"
-                                                    href="{{ route('examens.managementgrade.index') }}">
+                                                    href="{{ route('examens.moyenne.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -745,9 +743,9 @@
 
 
                                             <div
-                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                class="menu-item {{ request()->routeIs('examens.convocation.index') ? 'active' : '' }}">
                                                 <a class="menu-link"
-                                                    href="{{ route('examens.managementgrade.index') }}">
+                                                    href="{{ route('examens.convocation.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -756,9 +754,9 @@
                                             </div>
 
                                             <div
-                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                class="menu-item {{ request()->routeIs('examens.resultats.index') ? 'active' : '' }}">
                                                 <a class="menu-link"
-                                                    href="{{ route('examens.managementgrade.index') }}">
+                                                    href="{{ route('examens.resultats.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
