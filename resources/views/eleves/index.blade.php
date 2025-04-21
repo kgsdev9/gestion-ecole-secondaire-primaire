@@ -172,7 +172,7 @@
                                         <select id="classe_id" x-model="formData.classe_id" class="form-select" required>
                                             <option value="">Choisir une Classe</option>
                                             @foreach ($listeclasse as $classe)
-                                                <option value="{{ $classe->id }}">{{ $classe->name }}</option>
+                                                <option value="{{ $classe->id }}">{{ $classe->classe->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

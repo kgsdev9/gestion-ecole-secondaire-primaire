@@ -11,19 +11,19 @@ use App\Models\Inscription;
 use App\Models\Matiere;
 use App\Models\Moyenne;
 use App\Models\Niveau;
-use App\Models\Note;
 use App\Models\Semestre;
 use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Str;
+use App\Services\AnneeAcademiqueService;
 
 class MoyenneScolaireController extends Controller
 {
-
-    public function __construct()
+    protected $anneeAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
     }
 
     /**
@@ -34,26 +34,23 @@ class MoyenneScolaireController extends Controller
 
     public function index()
     {
-        $anneeAcademiqueEnCours = AnneeAcademique::anneeAcademiqueEnCours();
+        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
         // Récupère les affectations de classes pour l'année en cours
         $classes = AffectionAcademique::with(['classe', 'niveau', 'salle'])
-            ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
             ->get();
 
-        // Récupère tous les élèves inscrits cette année
-        // Récupère tous les élèves affectés à cette année
         $eleves = Inscription::with('eleve')
-            ->where('anneeacademique_id', $anneeAcademiqueEnCours->id)
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
             ->get()
             ->pluck('eleve');
 
 
-        // Récupère toutes les matières
         $matieres = Matiere::all();
         $niveaux = Niveau::all();
-        $semestres = $anneeAcademiqueEnCours->semestres;
-        $moyennes = Moyenne::where('annee_academique_id', $anneeAcademiqueEnCours->id)->get();
+        $semestres = $anneeScolaireActuelle->semestres;
+        $moyennes = Moyenne::where('annee_academique_id', $anneeScolaireActuelle->id)->get();
 
         return view('configurations.moyennes.gestionmoyenne', compact('classes', 'eleves', 'matieres', 'niveaux', 'semestres',  'moyennes'));
     }

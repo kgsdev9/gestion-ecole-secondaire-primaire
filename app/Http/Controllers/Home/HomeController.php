@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
+use App\Services\AnneeAcademiqueService;
 
 class HomeController extends Controller
 {
 
-    public function __construct()
+    protected $anneeAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
     }
     /**
      * Affichage de la page d'accueil.
@@ -18,6 +21,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
+        return view('welcome', compact('anneeScolaireActuelle'));
     }
 }

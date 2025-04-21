@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Eleve;
 
 use App\Http\Controllers\Controller;
+use App\Models\AffectionAcademique;
 use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Eleve;
@@ -12,23 +13,26 @@ use App\Models\Niveau;
 use App\Models\StatusEleve;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Services\AnneeAcademiqueService;
 
 class EleveController extends Controller
 {
-
-    public function __construct()
+    protected $anneeAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
     }
 
 
     public function index()
     {
+        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
         $eleves = Eleve::with(['classe', 'anneeacademique', 'niveau', 'genre', 'statuseleve'])->get();
         $listeannee  = AnneeAcademique::all();
         $listeniveaux  = Niveau::all();
-        $listeclasse  = Classe::all();
+        $listeclasse  = AffectionAcademique::where('anneeacademique_id', $anneeScolaireActuelle->id)->get();
         $genres = Genre::all();
         $statuseleves = StatusEleve::all();
 
@@ -132,7 +136,7 @@ class EleveController extends Controller
         }
 
 
-      
+
 
         // Création d'un nouvel élève
         $eleve = Eleve::create([

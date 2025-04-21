@@ -11,12 +11,12 @@
                         <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
 
                             <li class="breadcrumb-item text-muted">
-                                <a href="../../demo1/dist/index.html" class="text-muted text-hover-primary">Home</a>
+                                <a href="#" class="text-muted text-hover-primary">Accueil</a>
                             </li>
                             <li class="breadcrumb-item">
                                 <span class="bullet bg-gray-400 w-5px h-2px"></span>
                             </li>
-                            <li class="breadcrumb-item text-muted">Dashboards</li>
+                            <li class="breadcrumb-item text-muted">Tableau de bord </li>
                         </ul>
                     </div>
 
@@ -29,26 +29,19 @@
                             <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-50 mb-5 mb-xl-10"
                                 style="background-color: #3E97FF;background-image:url('assets/media/svg/shapes/widget-bg-1.png')">
                                 <div class="card-header pt-5">
-
                                     <div class="card-title d-flex flex-column">
-
                                         <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2"></span>
-
                                         <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Année academique
-
+                                            {{ $anneeScolaireActuelle->name }}
                                         </span>
-
                                     </div>
-
                                 </div>
-
                                 <div class="card-body d-flex align-items-end pt-0">
-
                                     <div class="d-flex align-items-center flex-column mt-3 w-100">
                                         <div
                                             class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
-                                            <span>Objectif financier de l'année </span>
-                                            <span>{{ date('y') }}</span>
+                                            <span>Bonne année academique </span>
+
                                         </div>
                                         <div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
                                             <div class="bg-white rounded h-8px" role="progressbar" style="width: 72%;"
@@ -96,9 +89,9 @@
 
                                     <div class="d-flex flex-stack">
 
-                                        <a href="{{ route('ventes.index') }}" class="text-primary fw-semibold fs-6 me-2">
-                                            Gestion des ventes </a>
-
+                                        <a href="{{ route('versements.index') }}"
+                                            class="text-primary fw-semibold fs-6 me-2">
+                                            Gestion des versements </a>
                                         <button type="button"
                                             class="btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end">
 
@@ -125,8 +118,8 @@
 
                                     <div class="d-flex flex-stack">
 
-                                        <a href="{{ route('factures.index') }}"
-                                            class="text-primary fw-semibold fs-6 me-2">Gestion des versments </a>
+                                        <a href="{{ route('gestionmoyenne.gestion.moyenne') }}"
+                                            class="text-primary fw-semibold fs-6 me-2">Gestion des moyennes </a>
 
                                         <button type="button"
                                             class="btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end">
@@ -153,7 +146,7 @@
                                 </div>
 
                             </div>
-                            
+
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
@@ -307,7 +300,8 @@
                             <div class="card card-flush h-md-100">
                                 <div class="card-header pt-5">
                                     <h3 class="card-title align-items-start flex-column">
-                                        <span class="card-label fw-bold text-gray-800">Liste des etudiants par année </span>
+                                        <span class="card-label fw-bold text-gray-800">Liste des etudiants par année
+                                        </span>
                                         <span class="text-gray-400 mt-1 fw-semibold fs-6">Graphique des rapports</span>
                                     </h3>
                                 </div>
@@ -329,7 +323,8 @@
                                 <div class="card-header pt-7">
                                     <!--begin::Title-->
                                     <h3 class="card-title align-items-start flex-column">
-                                        <span class="card-label fw-bold text-gray-800">Liste des récentes versements effectutés
+                                        <span class="card-label fw-bold text-gray-800">Liste des récentes versements
+                                            effectutés
                                         </span>
                                         <span class="text-gray-400 mt-1 fw-semibold fs-6">Les versements
                                         </span>

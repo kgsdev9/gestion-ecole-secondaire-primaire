@@ -146,14 +146,10 @@
                                         <select id="classe_id" x-model="formData.classe_id" class="form-select" required>
                                             <option value="">Choisir une Classe</option>
                                             @foreach ($classes as $classe)
-                                                <option value="{{ $classe->id }}">{{ $classe->name }}</option>
+                                                <option value="{{ $classe->id }}">{{ $classe->classe->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-
-
-
-                                    salles
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
@@ -161,9 +157,12 @@
                                         <select id="annee_academique_id" x-model="formData.annee_academique_id"
                                             class="form-select" required>
                                             <option value="">Choisir une Année</option>
-                                            @foreach ($anneesAcademiques as $annee)
-                                                <option value="{{ $annee->id }}">{{ $annee->name }}</option>
-                                            @endforeach
+                                            @if ($anneesAcademiques)
+                                                <option value="{{ $anneesAcademiques->id }}">{{ $anneesAcademiques->name }}
+                                                </option>
+                                            @else
+                                                <option disabled>Aucune année active</option>
+                                            @endif
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">

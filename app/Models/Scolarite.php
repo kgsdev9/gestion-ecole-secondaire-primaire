@@ -11,7 +11,7 @@ class Scolarite extends Model
 
     protected $fillable = [
         'niveau_id',
-        'classe_id',
+        'affectationacademique_id',
         'anneeacademique_id',
         'montant_scolarite',
     ];
@@ -25,11 +25,11 @@ class Scolarite extends Model
 
     public function classe()
     {
-        return $this->belongsTo(Classe::class);
+        return $this->belongsTo(AffectionAcademique::class, 'affectationacademique_id');
     }
 
     public function anneeAcademique()
     {
-        return $this->belongsTo(AnneeAcademique::class);
+        return $this->belongsTo(AnneeAcademique::class, 'anneeacademique_id');
     }
 }

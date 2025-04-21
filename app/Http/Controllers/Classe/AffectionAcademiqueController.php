@@ -9,23 +9,30 @@ use App\Models\AffectionAcademique;
 use App\Models\AnneeAcademique;
 use App\Models\Niveau;
 use App\Models\Salle;
+use App\Services\AnneeAcademiqueService;
 
 class AffectionAcademiqueController extends Controller
 {
-    public function __construct()
+    protected $anneeAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
     }
     // Vérification si une affection académique existe déjà
 
 
     public function index()
     {
+        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
+       
         $niveaux = Niveau::all();
-        $anneesAcademiques  = AnneeAcademique::all();
+        $anneesAcademiques  = $anneeScolaireActuelle;
         $salles = Salle::all();
         $classe = Classe::all();
-        $classes = AffectionAcademique::with(['classe', 'niveau', 'anneeAcademique', 'salle'])->get();
+        $classes = AffectionAcademique::with(['classe', 'niveau', 'anneeAcademique', 'salle'])
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+            ->get();
 
         return view('classes.affectionsacademiques.index', compact('niveaux', 'anneesAcademiques', 'classes', 'salles', 'classe'));
     }
@@ -91,7 +98,7 @@ class AffectionAcademiqueController extends Controller
     // Création d'une nouvelle affection académique
     private function createAffectionAcademique(Request $request)
     {
-      
+
         $exists = AffectionAcademique::where('classe_id', $request->classe_id)
             ->where('niveau_id', $request->niveau_id)
             ->where('anneeacademique_id', $request->annee_academique_id)

@@ -20,7 +20,7 @@ class CreateElevesTable extends Migration
             $table->string('photo')->nullable();
             $table->string('matricule')->unique();
 
-            $table->foreignId('affectationacademique_id')->constrained('affection_academiques')->onDelete('cascade');
+            $table->foreignId('classe_id')->constrained('classes')->onDelete('cascade');
             $table->foreignId('niveau_id')->constrained('niveaux')->onDelete('cascade');
             $table->foreignId('anneeacademique_id')->constrained('annee_academiques')->onDelete('cascade');
 

@@ -145,14 +145,17 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label for="annee_academique" class="form-label">Année académique</label>
-                                        <select id="annee_academique_id" x-model="formData.annee_academique_id"
-                                            class="form-select" required>
-                                            <option value="">Choisir une Année</option>
-                                            @foreach ($anneesAcademiques as $annee)
-                                                <option value="{{ $annee->id }}">{{ $annee->name }}</option>
-                                            @endforeach
+                                        <select id="annee_academique_id" x-model="formData.annee_academique_id" class="form-select" required>
+                                            <option value="">Choisir une année académique...</option>
+                                            @if ($anneesAcademiques)
+                                                <option value="{{ $anneesAcademiques->id }}">{{ $anneesAcademiques->name }}</option>
+                                            @else
+                                                <option disabled>Aucune année active</option>
+                                            @endif
                                         </select>
                                     </div>
+
+
                                 </div>
 
                                 <div class="row">
