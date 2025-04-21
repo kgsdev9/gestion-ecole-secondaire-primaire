@@ -10,13 +10,14 @@ use App\Models\Repartition;
 use App\Models\RepartitionDetail;
 use App\Models\Salle;
 use Illuminate\Http\Request;
-
+use App\Services\AnneeAcademiqueService;
 class GestionExamenController extends Controller
 {
-
-    public function __construct()
+    protected $anneeAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
     }
     /**
      * Display a listing of the resource.
@@ -45,7 +46,7 @@ class GestionExamenController extends Controller
         $repartitionexiste = RepartitionDetail::where('examen_id', $examen->id)
             ->where('anneeacademique_id', $examen->anneeacademique_id)
             ->exists();
-       
+
         if (!$repartitionexiste) {
             foreach ($salles as $salle) {
                 $capacite = $salle->capacite;
@@ -97,6 +98,8 @@ class GestionExamenController extends Controller
                 'heure_fin' => $programme['heure_fin'],
                 'jour' => $programme['jour'],
                 'duree' => $programme['duree'] ?? null,
+                'anneeacademique_id' =>  $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive()->id,
+
             ]);
         }
 

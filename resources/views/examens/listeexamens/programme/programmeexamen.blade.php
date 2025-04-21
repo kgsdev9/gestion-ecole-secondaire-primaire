@@ -10,7 +10,7 @@
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                         <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 justify-content-center my-0">
                             Planification du programme des examens :
-                            <span x-text="examen.nom" class="text-primary ms-2"></span>
+                            <span x-text="examen.name" class="text-primary ms-2"></span>
                         </h1>
                     </div>
                 </div>
@@ -41,8 +41,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 fw-semibold">
-                                            <template x-for="(programme, index) in programmeexamen"
-                                                :key="programme.id || index">
+                                            <template x-for="(programme, index) in programmeexamen" :key="programme.id">
                                                 <tr>
                                                     <td>
                                                         <select class="form-select" x-model="programme.matiere_id" required>
@@ -120,6 +119,7 @@
 
                 addRow() {
                     this.programmeexamen.push({
+                        id: Date.now(), 
                         matiere_id: '',
                         jour: '',
                         heure_debut: '',
@@ -127,6 +127,7 @@
                         duree: '',
                     });
                 },
+
 
                 deleteRow(index) {
                     this.programmeexamen.splice(index, 1);
@@ -186,7 +187,8 @@
                                 timer: 2000,
                             });
 
-                            window.location.href = '{{ route('examens.gestion.index') }}'; // change la route si nécessaire
+                            window.location.href =
+                            '{{ route('examens.gestion.index') }}'; // change la route si nécessaire
                         })
                         .catch(error => {
                             console.error('Erreur réseau:', error);
