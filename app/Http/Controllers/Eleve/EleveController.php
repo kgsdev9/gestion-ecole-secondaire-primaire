@@ -28,7 +28,9 @@ class EleveController extends Controller
     {
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
-        $eleves = Eleve::with(['classe', 'anneeacademique', 'niveau', 'genre', 'statuseleve'])->get();
+        $eleves = Eleve::with(['classe', 'anneeacademique', 'niveau', 'genre', 'statuseleve'])
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+            ->get();
         $anneesAcademiques  = $anneeScolaireActuelle;
         $listeniveaux  = Niveau::all();
         $listeclasse  = Classe::with(['niveau', 'anneeAcademique', 'salle'])
@@ -136,7 +138,7 @@ class EleveController extends Controller
             ], 409);
         }
 
-       
+
         // Création d'un nouvel élève
         $eleve = Eleve::create([
             'nom' => $request->nom,

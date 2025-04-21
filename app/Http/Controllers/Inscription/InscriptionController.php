@@ -9,14 +9,25 @@ use App\Models\Eleve;
 use App\Models\Classe;
 use App\Models\Niveau;
 use App\Models\AnneeAcademique;
-
+use App\Services\AnneeAcademiqueService;
 
 class InscriptionController extends Controller
 {
+    protected $anneeAcademiqueService;
 
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
+    {
+        $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
+    }
     public function index()
     {
-        $inscriptions = Inscription::with(['eleve', 'classe', 'niveau', 'anneeAcademique'])->get();
+        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
+
+        $inscriptions = Inscription::with(['eleve', 'classe', 'niveau', 'anneeAcademique'])
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+            ->get();
+
 
         $eleves = Eleve::all();
         $niveaux = Niveau::all();
