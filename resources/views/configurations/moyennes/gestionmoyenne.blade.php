@@ -31,7 +31,7 @@
                                             class="form-select form-select-sm">
                                             <option value="">Toutes les classes</option>
                                             <template x-for="cl in classes" :key="cl.id">
-                                                <option :value="cl.id" x-text="cl.classe.name"></option>
+                                                <option :value="cl.id" x-text="cl.name"></option>
                                             </template>
                                         </select>
                                     </div>

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Eleve;
 
 use App\Http\Controllers\Controller;
-use App\Models\AffectionAcademique;
 use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Eleve;
@@ -30,13 +29,15 @@ class EleveController extends Controller
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
         $eleves = Eleve::with(['classe', 'anneeacademique', 'niveau', 'genre', 'statuseleve'])->get();
-        $listeannee  = AnneeAcademique::all();
+        $anneesAcademiques  = $anneeScolaireActuelle;
         $listeniveaux  = Niveau::all();
-        $listeclasse  = AffectionAcademique::where('anneeacademique_id', $anneeScolaireActuelle->id)->get();
+        $listeclasse  = Classe::with(['niveau', 'anneeAcademique', 'salle'])
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+            ->get();
         $genres = Genre::all();
         $statuseleves = StatusEleve::all();
 
-        return view('eleves.index', compact('eleves', 'listeannee', 'listeclasse', 'listeniveaux', 'genres', 'statuseleves'));
+        return view('eleves.index', compact('eleves', 'anneesAcademiques', 'listeclasse', 'listeniveaux', 'genres', 'statuseleves'));
     }
 
 
@@ -132,17 +133,15 @@ class EleveController extends Controller
             return response()->json([
                 'message' => 'Cet élève est déjà inscrit dans cette classe pour cette année académique.',
                 'type' => 'duplicate'
-            ], 409); // 409 = Conflict
+            ], 409);
         }
 
-
-
-
+       
         // Création d'un nouvel élève
         $eleve = Eleve::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
-            'matricule' => $this->generateMatricule(),
+            'matricule' => $request->matricule ? $request->matricule : $this->generateMatricule(),
             'classe_id' => $request->classe_id,
             'anneeacademique_id' => $request->annee_academique_id,
             'niveau_id' => $request->niveau_id,

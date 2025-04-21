@@ -172,20 +172,23 @@
                                         <select id="classe_id" x-model="formData.classe_id" class="form-select" required>
                                             <option value="">Choisir une Classe</option>
                                             @foreach ($listeclasse as $classe)
-                                                <option value="{{ $classe->id }}">{{ $classe->classe->name }}</option>
+                                                <option value="{{ $classe->id }}">{{ $classe->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <!-- Année académique -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="annee_academique_id" class="form-label">Année Académique</label>
+                                        <label for="annee_academique" class="form-label">Année académique</label>
                                         <select id="annee_academique_id" x-model="formData.annee_academique_id"
                                             class="form-select" required>
-                                            <option value="">Choisir une Année Académique</option>
-                                            @foreach ($listeannee as $annee)
-                                                <option value="{{ $annee->id }}">{{ $annee->name }}</option>
-                                            @endforeach
+                                            <option value="">Selectionner une année </option>
+                                            @if ($anneesAcademiques)
+                                                <option value="{{ $anneesAcademiques->id }}">{{ $anneesAcademiques->name }}
+                                                </option>
+                                            @else
+                                                <option disabled>Aucune année active</option>
+                                            @endif
                                         </select>
                                     </div>
 

@@ -146,7 +146,7 @@
                                         <select id="classe_id" x-model="formData.classe_id" class="form-select" required>
                                             <option value="">Choisir une Classe</option>
                                             @foreach ($classes as $classe)
-                                                <option value="{{ $classe->id }}">{{ $classe->classe->name }}</option>
+                                                <option value="{{ $classe->id }}">{{ $classe->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -224,7 +224,7 @@
                         this.formData = {
                             niveau_id: this.currentScolarite.niveau_id,
                             classe_id: this.currentScolarite.classe_id,
-                            annee_academique_id: this.currentScolarite.annee_academique_id,
+                            annee_academique_id: this.currentScolarite.anneeacademique_id,
                             montant_scolarite: this.currentScolarite.montant_scolarite,
                         };
                     } else {

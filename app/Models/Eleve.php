@@ -14,7 +14,7 @@ class Eleve extends Model
         'prenom',
         'photo',
         'matricule',
-        'affectationscolaire_id', // correspond à la classe de l'année academique en cours
+        'classe_id',
         'statuseleve_id',
         'genre_id ',
         'niveau_id',
@@ -39,7 +39,7 @@ class Eleve extends Model
     // Define the relationship to Classe
     public function classe()
     {
-        return $this->belongsTo(AffectionAcademique::class);
+        return $this->belongsTo(Classe::class);
     }
 
     public function genre()

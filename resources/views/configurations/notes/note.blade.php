@@ -6,7 +6,10 @@
             <div class="app-toolbar py-3 py-lg-6">
                 <div class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-                        <h1 class="page-heading text-gray-900 fw-bold fs-3">GESTION DES NOTES</h1>
+                        <h1 class="page-heading text-gray-900 fw-bold fs-3">
+                            GESTION DES NOTES –
+                            <span x-text="semestre ? semestre.name : 'Aucun semestre actif'"></span>
+                        </h1>
                     </div>
                 </div>
             </div>
@@ -159,20 +162,6 @@
                                                         </template>
                                                     </select>
                                                 </div>
-
-                                                <div class="mb-3">
-                                                    <label>Semestre ou trimestre </label>
-                                                    <select class="form-control" x-model="formData.semestre_id" required>
-                                                        <option value="">Sélectionner un semestre ou trimestre
-                                                        </option>
-                                                        <template x-for="semestre in semestres" :key="semestre.id">
-                                                            <option :value="semestre.id" x-text="semestre.name"></option>
-                                                        </template>
-                                                    </select>
-                                                </div>
-
-
-
                                                 <div class="mb-3">
                                                     <label>Note</label>
                                                     <input type="number" class="form-control" x-model="formData.valeur"
@@ -200,14 +189,14 @@
                 matieres: @json($matieres),
                 notes: @json($notes),
                 typenotes: @json($typenotes),
-                semestres: @json($semestres),
+                semestre: @json($semestres),
                 selectedEleve: {},
                 searchTerm: '',
                 showModal: false,
                 formData: {
                     matiere_id: '',
                     valeur: '',
-                    semestre_id: ''
+                    typenote_id: ''
                 },
 
                 selectEleve(eleve) {
@@ -244,6 +233,7 @@
                     this.formData = {
                         matiere_id: '',
                         valeur: '',
+                        typenote_id: ''
                     };
                 },
 
@@ -253,7 +243,7 @@
                     form.append('matiere_id', this.formData.matiere_id);
                     form.append('note', this.formData.valeur);
                     form.append('typenote_id', this.formData.typenote_id);
-                    form.append('semestre_id', this.formData.semestre_id);
+                    form.append('semestre_id', this.semestre.id);
 
                     try {
                         const response = await fetch('{{ route('configurationnote.create.gestion.note') }}', {
@@ -331,7 +321,10 @@
                                     eleve_id: this.selectedEleve.id,
                                     matiere_id: matiereId,
                                     notes: notesForMatiere,
+                                    semestre_id: this.semestre.id
                                 })
+
+
                             });
 
                         if (response.ok) {

@@ -3,21 +3,23 @@
 namespace App\Http\Controllers\ConfigurationScolaire;
 
 use App\Http\Controllers\Controller;
-use App\Models\AffectionAcademique;
 use App\Models\AnneeAcademique;
+use App\Models\Classe;
 use App\Models\Matiere;
 use App\Models\Moyenne;
 use App\Models\Note;
 use App\Models\Semestre;
 use App\Models\TypeNote;
+use App\Services\AnneeAcademiqueService;
 use Illuminate\Http\Request;
 
 class NoteScolaireController extends Controller
 {
-
-    public function __construct()
+    protected $anneeAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
     }
     /**
      * Display a listing of the resource.
@@ -26,11 +28,11 @@ class NoteScolaireController extends Controller
      */
     public function index()
     {
-        $anneeAcademiqueEnCours = AnneeAcademique::anneeAcademiqueEnCours();
 
+        $anneeAcademiqueEnCours  = $this->anneeAcademiqueService->getAnneeActive();
 
-        $classes = AffectionAcademique::with(['classe', 'niveau', 'salle'])
-            ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
+        $classes = Classe::with(['niveau', 'salle'])
+            ->where('anneeacademique_id', $anneeAcademiqueEnCours->id)
             ->get();
 
         return view('configurations.notes.gestionote', compact('classes'));
@@ -38,18 +40,18 @@ class NoteScolaireController extends Controller
 
     public function gestionNote($classe)
     {
-        $classe = AffectionAcademique::find($classe);
+        $classe = Classe::find($classe);
 
-        $students  = $classe->classe->students;
+        $students  = $classe->students;
         $matieres = Matiere::all();
         $typenotes = TypeNote::all();
-        $anneeAcademiqueEnCours = AnneeAcademique::anneeAcademiqueEnCours();
+        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
-        $notes = Note::where('anneeacademique_id', $anneeAcademiqueEnCours->id)
+        $notes = Note::where('anneeacademique_id', $anneeScolaireActuelle->id)
             ->whereIn('eleve_id', $students->pluck('id'))
             ->with(['matiere', 'typenote'])
             ->get();
-        $semestres = $anneeAcademiqueEnCours->semestres;
+        $semestres = $anneeScolaireActuelle->semestres()->where('active', true)->first();
 
         return view('configurations.notes.note', compact('classe', 'students', 'matieres', 'typenotes', 'notes', 'semestres'));
     }
@@ -57,9 +59,8 @@ class NoteScolaireController extends Controller
 
     public function addNote(Request $request)
     {
-        $anneeAcademiqueEnCours = AnneeAcademique::anneeAcademiqueEnCours();
+        $anneeAcademiqueEnCours  = $this->anneeAcademiqueService->getAnneeActive();
 
-        // Vérifier si le semestre est clôturé
         $semestre = Semestre::find($request->semestre_id);
 
 
@@ -70,14 +71,6 @@ class NoteScolaireController extends Controller
             ], 404);
         }
 
-        if ($semestre->cloture) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Impossible d\'ajouter une note. Ce semestre est clôturé.',
-            ], 403);
-        }
-
-
 
         // Création de la note
         $note = Note::create([
@@ -86,7 +79,7 @@ class NoteScolaireController extends Controller
             'typenote_id' => $request->typenote_id,
             'note' => $request->note,
             'anneeacademique_id' => $anneeAcademiqueEnCours->id,
-            'semestre_id' => $request->semestre_id,
+            'semestre_id' => $semestre->id,
         ]);
 
         // Charger les relations utiles
@@ -117,18 +110,17 @@ class NoteScolaireController extends Controller
     public function validerMoyenne($matiereId, Request $request)
     {
 
-        $annee = AnneeAcademique::anneeAcademiqueEnCours();
-        $semestre = 1;
+        $anneeAcademiqueEnCours  = $this->anneeAcademiqueService->getAnneeActive();
+        $semestre = Semestre::find($request->semestre_id);
 
         // Récupération des notes à valider
         $notes = Note::where('matiere_id', $matiereId)
             ->where('eleve_id', $request->eleve_id)
-            ->where('anneeacademique_id', $annee->id)
-            ->where('semestre_id', $semestre)
+            ->where('anneeacademique_id', $anneeAcademiqueEnCours->id)
+            ->where('semestre_id', $semestre->id)
             ->get();
 
-        if ($notes->isEmpty())
-        {
+        if ($notes->isEmpty()) {
             return response()->json(['message' => 'Aucune note trouvée.'], 404);
         }
 
@@ -146,8 +138,8 @@ class NoteScolaireController extends Controller
             [
                 'eleve_id' => $request->eleve_id,
                 'matiere_id' => $matiereId,
-                'semestre_id' => $semestre,
-                'annee_academique_id' => $annee->id,
+                'semestre_id' => $semestre->id,
+                'anneeacademique_id' => $anneeAcademiqueEnCours->id,
             ],
             ['moyenne' => $moyenne]
         );

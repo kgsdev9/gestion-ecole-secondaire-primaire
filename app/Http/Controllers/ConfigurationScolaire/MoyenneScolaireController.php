@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\configurationScolaire;
 
 use App\Http\Controllers\Controller;
-use App\Models\AffectionAcademique;
 use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Eleve;
@@ -37,7 +36,7 @@ class MoyenneScolaireController extends Controller
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
         // Récupère les affectations de classes pour l'année en cours
-        $classes = AffectionAcademique::with(['classe', 'niveau', 'salle'])
+        $classes = Classe::with(['niveau', 'salle'])
             ->where('anneeacademique_id', $anneeScolaireActuelle->id)
             ->get();
 
@@ -50,7 +49,7 @@ class MoyenneScolaireController extends Controller
         $matieres = Matiere::all();
         $niveaux = Niveau::all();
         $semestres = $anneeScolaireActuelle->semestres;
-        $moyennes = Moyenne::where('annee_academique_id', $anneeScolaireActuelle->id)->get();
+        $moyennes = Moyenne::where('anneeacademique_id', $anneeScolaireActuelle->id)->get();
 
         return view('configurations.moyennes.gestionmoyenne', compact('classes', 'eleves', 'matieres', 'niveaux', 'semestres',  'moyennes'));
     }
@@ -65,7 +64,7 @@ class MoyenneScolaireController extends Controller
 
         // Récupération des moyennes de l'élève
         $moyenneEleve = Moyenne::where('semestre_id', $semestre->id)
-            ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
+            ->where('anneeacademique_id', $anneeAcademiqueEnCours->id)
             ->where('eleve_id', $eleve->id)
             ->get();
 
@@ -84,7 +83,7 @@ class MoyenneScolaireController extends Controller
         foreach ($eleveIds as $id) {
             $moyennes = Moyenne::where('eleve_id', $id)
                 ->where('semestre_id', $semestre->id)
-                ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
+                ->where('anneeacademique_id', $anneeAcademiqueEnCours->id)
                 ->get();
 
             $coefSum = $moyennes->sum(fn($m) => $m->matiere->coefficient ?? 1);
@@ -99,7 +98,7 @@ class MoyenneScolaireController extends Controller
         $rangsParMatiere = [];
         $moyennesParClasse = Moyenne::whereIn('eleve_id', $eleveIds)
             ->where('semestre_id', $semestre->id)
-            ->where('annee_academique_id', $anneeAcademiqueEnCours->id)
+            ->where('anneeacademique_id', $anneeAcademiqueEnCours->id)
             ->get()
             ->groupBy('matiere_id');
 

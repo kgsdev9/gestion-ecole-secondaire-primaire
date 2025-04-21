@@ -58,7 +58,7 @@
                                         <tbody class="text-gray-600 fw-semibold">
                                             <template x-for="classe in paginatedClasses" :key="classe.id">
                                                 <tr>
-                                                    <td x-text="classe.classe.name"></td>
+                                                    <td x-text="classe.name"></td>
                                                     <td x-text="classe.niveau.name"></td>
                                                     <td x-text="classe.annee_academique.name"></td>
                                                     <td x-text="classe.salle.name"></td>
@@ -112,6 +112,13 @@
                         <div class="modal-body">
                             <form @submit.prevent="submitForm">
                                 <div class="row">
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Libellé classe</label>
+                                        <input type="text" id="name" class="form-control" x-model="formData.name"
+                                            required>
+                                    </div>
+
                                     <div class="col-md-6 mb-3">
                                         <label for="niveau" class="form-label">Niveau</label>
                                         <select id="niveau_id" x-model="formData.niveau_id" class="form-select" required>
@@ -121,15 +128,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="classe" class="form-label">Classe</label>
-                                        <select id="classe_id" x-model="formData.classe_id" class="form-select" required>
-                                            <option value="">Choisir une classe</option>
-                                            @foreach ($classes as $classeroom)
-                                                <option value="{{ $classeroom->id }}">{{ $classeroom->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+
                                 </div>
 
                                 <div class="row">
@@ -188,7 +187,7 @@
                 isEdite: false,
                 formData: {
                     niveau_id: '',
-                    classe_id: '',
+                    name: '',
                     salle_id: '',
                     annee_academique_id: '',
                 },
@@ -210,8 +209,8 @@
                         this.formData = {
                             niveau_id: this.currentClasse.niveau_id,
                             salle_id: this.currentClasse.salle_id,
-                            classe_id: this.currentClasse.classe_id,
-                            annee_academique_id: this.currentClasse.annee_academique_id,
+                            name: this.currentClasse.name,
+                            annee_academique_id: this.currentClasse.anneeacademique_id,
                         };
                     } else {
                         this.resetForm();
@@ -231,7 +230,7 @@
 
                 async submitForm() {
                     // Vérifier si tous les champs sont remplis
-                    if (!this.formData.niveau_id || !this.formData.classe_id || !this.formData.salle_id || !this
+                    if (!this.formData.niveau_id || !this.formData.name || !this.formData.salle_id || !this
                         .formData.annee_academique_id) {
                         Swal.fire({
                             icon: 'error',
@@ -244,16 +243,16 @@
                     // Préparer les données du formulaire
                     const formData = new FormData();
                     formData.append('niveau_id', this.formData.niveau_id);
-                    formData.append('classe_id', this.formData.classe_id);
+                    formData.append('name', this.formData.name);
                     formData.append('salle_id', this.formData.salle_id);
                     formData.append('annee_academique_id', this.formData.annee_academique_id);
 
                     if (this.currentClasse) {
-                        formData.append('affectionacademique_id', this.currentClasse.id);
+                        formData.append('classe_id', this.currentClasse.id);
                     }
 
                     try {
-                        const response = await fetch('{{ route('affectionacademique.store') }}', {
+                        const response = await fetch('{{ route('classes.store') }}', {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -349,7 +348,7 @@
                     if (!confirmation.isConfirmed) return;
 
                     try {
-                        const url = `{{ route('affectionacademique.destroy', ['affectionacademique' => '__ID__']) }}`
+                        const url = `{{ route('classes.destroy', ['class' => '__ID__']) }}`
                             .replace(
                                 "__ID__",
                                 affectionId

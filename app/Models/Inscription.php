@@ -13,7 +13,7 @@ class Inscription extends Model
         'eleve_id',
         'niveau_id',
         'anneeacademique_id',
-        'affectationacademique_id', // classe
+        'classe_id',
         'date_inscription',
     ];
 

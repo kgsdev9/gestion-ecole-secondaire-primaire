@@ -40,70 +40,32 @@ class ClasseController extends Controller
     public function store(Request $request)
     {
         // Vérifier si l'ID de l'affection académique existe dans la requête
-        $affectionAcademiqueId = $request->input('affectionacademique_id');
+        $classeId = $request->input('classe_id');
 
-        if ($affectionAcademiqueId) {
+        if ($classeId) {
             // Si l'ID de l'affection académique existe, on modifie l'affection académique
-            $affectionAcademique = Classe::find($affectionAcademiqueId);
+            $classe = Classe::find($classeId);
 
             // Si l'affection académique n'existe pas, on la crée
-            if (!$affectionAcademique) {
+            if (!$classe) {
                 return $this->createAffectionAcademique($request);
             }
 
             // Si l'affection académique existe, on la met à jour
-            return $this->updateAffectionAcademique($affectionAcademique, $request);
+            return $this->updateAffectionAcademique($classe, $request);
         } else {
             // Si l'ID de l'affection académique est absent, on crée une nouvelle affection académique
             return $this->createAffectionAcademique($request);
         }
     }
 
-    // Mise à jour de l'affection académique
-    private function updateAffectionAcademique(Classe $affectionAcademique, Request $request)
-    {
 
-        // Vérifier si une affection académique similaire existe, autre que celle que l'on met à jour
-        $exists = Classe::where('classe_id', $request->classe_id)
-            ->where('niveau_id', $request->niveau_id)
-            ->where('anneeacademique_id', $request->annee_academique_id)
-            ->where('id', '!=', $affectionAcademique->id)
-            ->exists();
-
-        if ($exists) {
-            return response()->json([
-                'message' => 'Cette classe est déjà affectée à ce niveau pour cette année académique.',
-            ], 400);
-        }
-
-        // Mise à jour des informations de l'affection académique
-        $affectionAcademique->update([
-            'classe_id' => $request->classe_id,
-            'niveau_id' => $request->niveau_id,
-            'anneeacademique_id' => $request->annee_academique_id,
-            'salle_id' => $request->salle_id,
-        ]);
-
-        // Charger les relations associées
-        $affectionAcademique->load(['classe', 'niveau', 'anneeAcademique', 'salle']);
-
-        return response()->json([
-            'message' => 'Affection académique mise à jour avec succès',
-            'classe' => $affectionAcademique
-        ], 200);
-    }
-
-
-
-    // Création d'une nouvelle affection académique
     private function createAffectionAcademique(Request $request)
     {
 
-        $exists = Classe::where('classe_id', $request->classe_id)
-            ->where('niveau_id', $request->niveau_id)
+        $exists = Classe::where('niveau_id', $request->niveau_id)
             ->where('anneeacademique_id', $request->annee_academique_id)
             ->exists();
-
 
 
         if ($exists) {
@@ -113,21 +75,59 @@ class ClasseController extends Controller
         }
 
         // Création d'une nouvelle affection académique
-        $affectionAcademique = Classe::create([
-            'classe_id' => $request->classe_id,
+        $classe = Classe::create([
+            'name' => $request->name,
             'niveau_id' => $request->niveau_id,
             'anneeacademique_id' => $request->annee_academique_id,
             'salle_id' => $request->salle_id,
         ]);
 
         // Charger les relations associées
-        $affectionAcademique->load(['classe', 'niveau', 'anneeAcademique', 'salle']);
+        $classe->load(['niveau', 'anneeAcademique', 'salle']);
 
         return response()->json([
             'message' => 'Affection académique créée avec succès',
-            'classe' => $affectionAcademique
+            'classe' => $classe
         ], 201);
     }
+
+    // Mise à jour de l'affection académique
+    private function updateAffectionAcademique(Classe $classe, Request $request)
+    {
+
+        // Vérifier si une affection académique similaire existe, autre que celle que l'on met à jour
+        $exists = Classe::where('niveau_id', $request->niveau_id)
+            ->where('anneeacademique_id', $request->annee_academique_id)
+            ->where('id', '!=', $classe->id)
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'message' => 'Cette classe est déjà affectée à ce niveau pour cette année académique.',
+            ], 400);
+        }
+
+        // Mise à jour des informations de l'affection académique
+        $classe->update([
+            'name' => $request->name,
+            'niveau_id' => $request->niveau_id,
+            'anneeacademique_id' => $request->annee_academique_id,
+            'salle_id' => $request->salle_id,
+        ]);
+
+        // Charger les relations associées
+        $classe->load(['niveau', 'anneeAcademique', 'salle']);
+
+        return response()->json([
+            'message' => 'Affection académique mise à jour avec succès',
+            'classe' => $classe
+        ], 200);
+    }
+
+
+
+    // Création d'une nouvelle affection académique
+
 
 
     public function destroy($id)
@@ -135,7 +135,7 @@ class ClasseController extends Controller
         $affection = Classe::find($id);
         if (!$affection) {
             return response()->json([
-                'message' => 'Affection académique introuvable.'
+                'message' => 'classe académique introuvable.'
             ], 404);
         }
 

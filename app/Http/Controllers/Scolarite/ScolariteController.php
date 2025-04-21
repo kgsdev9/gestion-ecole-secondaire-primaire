@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Scolarite;
 
 use App\Http\Controllers\Controller;
-use App\Models\AffectionAcademique;
+use App\Models\Classe;
 use App\Models\Scolarite;
 use App\Models\Niveau;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class ScolariteController extends Controller
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
         $scolarites = Scolarite::with(['niveau', 'classe', 'anneeAcademique'])->get();
         $niveaux = Niveau::all();
-        $classes = AffectionAcademique::with(['classe', 'niveau', 'anneeAcademique', 'salle'])
+        $classes = Classe::with(['niveau', 'anneeAcademique', 'salle'])
             ->where('anneeacademique_id', $anneeScolaireActuelle->id)
             ->get();
         $anneesAcademiques =  $this->anneeAcademiqueService->getAnneeActive();
@@ -57,7 +57,7 @@ class ScolariteController extends Controller
     private function updateScolarite($scolarite, Request $request)
     {
         // Vérifie s'il existe déjà une autre scolarité avec les mêmes données
-        $exists = Scolarite::where('affectationacademique_id', $request->classe_id)
+        $exists = Scolarite::where('classe_id', $request->classe_id)
             ->where('niveau_id', $request->niveau_id)
             ->where('anneeacademique_id', $request->annee_academique_id)
             ->where('id', '!=', $scolarite->id) // Sauf celle qu'on est en train de modifier
@@ -72,7 +72,7 @@ class ScolariteController extends Controller
         // Mise à jour des informations de la scolarité
         $scolarite->update([
             'niveau_id' => $request->niveau_id,
-            'affectationacademique_id' => $request->classe_id,
+            'classe_id' => $request->classe_id,
             'anneeacademique_id' => $request->annee_academique_id,
             'montant_scolarite' => $request->montant_scolarite,
         ]);
@@ -89,8 +89,8 @@ class ScolariteController extends Controller
     private function createScolarite(Request $request)
     {
         // Vérification si une scolarité existe déjà pour cette combinaison
-        $exists = Scolarite::where('niveau_id', $request->niveau_id)
-
+        $exists = Scolarite::where('classe_id', $request->classe_id)
+            ->where('niveau_id', $request->niveau_id)
             ->where('anneeacademique_id', $request->annee_academique_id)
             ->exists();
 
@@ -103,7 +103,7 @@ class ScolariteController extends Controller
         // Création d'une nouvelle scolarité
         $scolarite = Scolarite::create([
             'niveau_id' => $request->niveau_id,
-            'affectationacademique_id' => $request->classe_id,
+            'classe_id' => $request->classe_id,
             'anneeacademique_id' => $request->annee_academique_id,
             'montant_scolarite' => $request->montant_scolarite,
         ]);
