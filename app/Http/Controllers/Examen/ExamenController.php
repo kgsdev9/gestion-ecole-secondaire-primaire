@@ -8,20 +8,26 @@ use App\Models\Classe;
 use App\Models\Examen;
 use App\Models\TypeExamen;
 use Illuminate\Http\Request;
-
+use App\Services\AnneeAcademiqueService;
 class ExamenController extends Controller
 {
-    public function __construct()
+    protected $anneeAcademiqueService;
+
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
     }
 
     public function index()
     {
-        $listeexamens = Examen::with('anneeAcademique', 'typeExamen', 'classe')->get();
+        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
         $classe = Classe::all();
         $anneAcademique = AnneeAcademique::all();
         $typexamen = TypeExamen::all();
+        $listeexamens = Examen::with('anneeAcademique', 'typeExamen', 'classe')
+                                ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+                                ->get();
 
         return view('examens.listeexamens.index', compact('listeexamens', 'classe', 'anneAcademique', 'typexamen'));
     }
@@ -53,7 +59,7 @@ class ExamenController extends Controller
     private function createExamen(Request $request)
     {
 
-        
+
         $cloture = ($request->cloture === true || $request->cloture == 'true') ? 1 : 0;
 
         $examen =  Examen::create([
