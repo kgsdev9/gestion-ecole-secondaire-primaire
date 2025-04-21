@@ -61,7 +61,7 @@
                                         <tbody class="text-gray-600 fw-semibold">
                                             <template x-for="examen in paginatedExamens" :key="examen.id">
                                                 <tr>
-                                                    <td x-text="examen.nom"></td>
+                                                    <td x-text="examen.name"></td>
 
                                                     <td x-text="examen.type_examen.name"></td>
                                                     <td x-text="examen.annee_academique.name"></td>
@@ -136,7 +136,7 @@
 
                 filterExamen() {
                     this.filteredExamens = this.examens.filter(examen => {
-                        return examen.nom.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        return examen.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             examen.description.toLowerCase().includes(this.searchTerm.toLowerCase());
                     });
                 },

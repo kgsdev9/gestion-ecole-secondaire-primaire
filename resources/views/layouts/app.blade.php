@@ -133,6 +133,7 @@
 
                                 </a>
 
+
                                 <a href="#" class="menu-item menu-lg-down-accordion me-0 me-lg-2">
                                     <span class="menu-link">
                                         <span class="menu-title">Rapport scolaire</span>
@@ -536,7 +537,7 @@
 
                                         </div>
 
-                                      
+
 
                                         <div class="menu-item">
                                             <a class="menu-link {{ request()->routeIs('salles.index') ? 'active' : '' }}"
@@ -706,6 +707,31 @@
 
                                             </div>
 
+
+                                            <div
+                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                <a class="menu-link"
+                                                    href="{{ route('examens.managementgrade.index') }}">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Programme examen</span>
+                                                </a>
+                                            </div>
+
+                                            <div
+                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                <a class="menu-link"
+                                                    href="{{ route('examens.managementgrade.index') }}">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Repartition</span>
+                                                </a>
+                                            </div>
+
+
+
                                             <div
                                                 class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
                                                 <a class="menu-link"
@@ -716,6 +742,8 @@
                                                     <span class="menu-title">Moyennes</span>
                                                 </a>
                                             </div>
+
+
                                             <div
                                                 class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
                                                 <a class="menu-link"
@@ -724,6 +752,17 @@
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
                                                     <span class="menu-title">Convocation</span>
+                                                </a>
+                                            </div>
+
+                                            <div
+                                                class="menu-item {{ request()->routeIs('examens.managementgrade.index') ? 'active' : '' }}">
+                                                <a class="menu-link"
+                                                    href="{{ route('examens.managementgrade.index') }}">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Resultats</span>
                                                 </a>
                                             </div>
 

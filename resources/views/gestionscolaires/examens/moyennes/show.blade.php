@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header border-0 pt-6 d-flex justify-content-between align-items-center">
                     <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 align-items-center my-0">
-                        MOYENNES DE L'EXAMEN : <span x-text="examen.nom" class="text-primary ms-2"></span>
+                        MOYENNES DE L'EXAMEN : <span x-text="examen.name" class="text-primary ms-2"></span>
                     </h1>
 
                     <div class="card-toolbar">
@@ -81,7 +81,7 @@
                 eleves: @json($eleves),
                 matieres: @json($matieres),
                 notes: @json($notes),
-                premiers: @json($premiers), 
+                premiers: @json($premiers),
                 moyennesGenerales: {},
                 moyenneMax: 0,
                 moyenneMin: 20,

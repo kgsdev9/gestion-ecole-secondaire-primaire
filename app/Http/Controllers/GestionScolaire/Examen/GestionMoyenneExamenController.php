@@ -25,6 +25,8 @@ class GestionMoyenneExamenController extends Controller
     public function index()
     {
         $listeexamens = Examen::with('anneeAcademique', 'typeExamen', 'classe')->get();
+
+
         $classe = Classe::all();
         $anneAcademique = AnneeAcademique::all();
         $typexamen = TypeExamen::all();
@@ -119,9 +121,9 @@ class GestionMoyenneExamenController extends Controller
     {
         $examen = Examen::find($request->examen_id);
         $anneeAcademiqueId = $examen->anneeacademique_id;
-       
+
         MoyenneExamen::where('examen_id', $examen->id)
-            ->where('annee_academique_id', $anneeAcademiqueId)
+            ->where('anneeacademique_id', $anneeAcademiqueId)
             ->delete();
 
         foreach ($request->notes as $eleve_id => $matieres) {
@@ -134,7 +136,7 @@ class GestionMoyenneExamenController extends Controller
                             'eleve_id' => $eleve_id,
                             'matiere_id' => $matiere_id,
                             'examen_id' => $examen->id,
-                            'annee_academique_id' => $anneeAcademiqueId,
+                            'anneeacademique_id' => $anneeAcademiqueId,
                         ],
                         [
                             'moyenne' => $note,
