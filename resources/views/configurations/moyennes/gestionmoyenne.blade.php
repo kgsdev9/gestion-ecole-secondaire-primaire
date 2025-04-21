@@ -115,6 +115,12 @@
                     },
 
                     filterEleves() {
+                        // Si aucun semestre n’est sélectionné, on vide la liste
+                        if (!this.semestre_id) {
+                            this.elevesFiltres = [];
+                            return;
+                        }
+
                         let result = this.eleves;
 
                         if (this.selectedClasseId) {
@@ -128,6 +134,7 @@
 
                         this.elevesFiltres = result;
                     },
+
 
                     matieresFiltres() {
                         if (!this.semestre_id) {

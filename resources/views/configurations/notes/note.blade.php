@@ -211,6 +211,7 @@
                 },
 
                 getMoyenneParMatiere(matiereId) {
+                    
                     const notes = this.notes.filter(n =>
                         n.eleve_id === this.selectedEleve.id &&
                         n.matiere_id === matiereId

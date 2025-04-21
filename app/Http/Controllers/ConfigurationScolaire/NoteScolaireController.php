@@ -46,12 +46,14 @@ class NoteScolaireController extends Controller
         $matieres = Matiere::all();
         $typenotes = TypeNote::all();
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
+        $semestres = $anneeScolaireActuelle->semestres()->where('active', true)->first();
 
         $notes = Note::where('anneeacademique_id', $anneeScolaireActuelle->id)
+            ->where('semestre_id', $semestres->id) 
             ->whereIn('eleve_id', $students->pluck('id'))
             ->with(['matiere', 'typenote'])
             ->get();
-        $semestres = $anneeScolaireActuelle->semestres()->where('active', true)->first();
+
 
         return view('configurations.notes.note', compact('classe', 'students', 'matieres', 'typenotes', 'notes', 'semestres'));
     }
