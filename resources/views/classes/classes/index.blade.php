@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Gestion des Classes')
+@section('title', 'Gestion des salles de classe par année académique')
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="classeForm()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
@@ -49,19 +49,25 @@
                                         <thead>
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                                 <th class="min-w-125px">Classe</th>
+                                                <th class="min-w-125px">Niveau</th>
+                                                <th class="min-w-125px">Année académique</th>
+                                                <th class="min-w-125px">Salle</th>
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 fw-semibold">
                                             <template x-for="classe in paginatedClasses" :key="classe.id">
                                                 <tr>
-                                                    <td x-text="classe.name"></td>
+                                                    <td x-text="classe.classe.name"></td>
+                                                    <td x-text="classe.niveau.name"></td>
+                                                    <td x-text="classe.annee_academique.name"></td>
+                                                    <td x-text="classe.salle.name"></td>
                                                     <td class="text-end">
                                                         <button @click="openModal(classe)"
                                                             class="btn btn-primary btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <button @click="deleteClasse(classe.id)"
+                                                        <button @click="deleteAffectionAcademique(classe.id)"
                                                             class="btn btn-danger btn-sm">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
@@ -106,12 +112,54 @@
                         <div class="modal-body">
                             <form @submit.prevent="submitForm">
                                 <div class="row">
-                                    <div class="col-md-12 mb-3">
-                                        <label for="name" class="form-label">Nom de la classe</label>
-                                        <input type="text" id="name" x-model="formData.name" class="form-control"
-                                            required>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="niveau" class="form-label">Niveau</label>
+                                        <select id="niveau_id" x-model="formData.niveau_id" class="form-select" required>
+                                            <option value="">Choisir un Niveau</option>
+                                            @foreach ($niveaux as $niveau)
+                                                <option value="{{ $niveau->id }}">{{ $niveau->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="classe" class="form-label">Classe</label>
+                                        <select id="classe_id" x-model="formData.classe_id" class="form-select" required>
+                                            <option value="">Choisir une classe</option>
+                                            @foreach ($classes as $classeroom)
+                                                <option value="{{ $classeroom->id }}">{{ $classeroom->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="salle" class="form-label">Salle</label>
+                                        <select id="salle_id" x-model="formData.salle_id" class="form-select" required>
+                                            <option value="">Choisir une Salle</option>
+                                            @foreach ($salles as $salle)
+                                                <option value="{{ $salle->id }}">{{ $salle->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="annee_academique" class="form-label">Année académique</label>
+                                        <select id="annee_academique_id" x-model="formData.annee_academique_id"
+                                            class="form-select" required>
+                                            <option value="">Choisir une année académique...</option>
+                                            @if ($anneesAcademiques)
+                                                <option value="{{ $anneesAcademiques->id }}">{{ $anneesAcademiques->name }}
+                                                </option>
+                                            @else
+                                                <option disabled>Aucune année active</option>
+                                            @endif
+                                        </select>
+                                    </div>
+
+
+                                </div>
+
                                 <div class="row">
                                     <div class="col-md-12">
                                         <button type="submit" class="btn btn-primary"
@@ -139,7 +187,10 @@
                 showModal: false,
                 isEdite: false,
                 formData: {
-                    name: '',
+                    niveau_id: '',
+                    classe_id: '',
+                    salle_id: '',
+                    annee_academique_id: '',
                 },
                 currentClasse: null,
 
@@ -157,7 +208,10 @@
                             ...classe
                         };
                         this.formData = {
-                            name: this.currentClasse.name
+                            niveau_id: this.currentClasse.niveau_id,
+                            salle_id: this.currentClasse.salle_id,
+                            classe_id: this.currentClasse.classe_id,
+                            annee_academique_id: this.currentClasse.annee_academique_id,
                         };
                     } else {
                         this.resetForm();
@@ -168,29 +222,38 @@
 
                 resetForm() {
                     this.formData = {
-                        name: ''
+                        niveau_id: '',
+                        classe_id: '',
+                        salle_id: '',
+                        annee_academique_id: '',
                     };
                 },
 
                 async submitForm() {
-                    if (!this.formData.name) {
+                    // Vérifier si tous les champs sont remplis
+                    if (!this.formData.niveau_id || !this.formData.classe_id || !this.formData.salle_id || !this
+                        .formData.annee_academique_id) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Le champ Nom est requis.',
+                            title: 'Tous les champs sont requis.',
                             showConfirmButton: true,
                         });
                         return;
                     }
 
+                    // Préparer les données du formulaire
                     const formData = new FormData();
-                    formData.append('name', this.formData.name);
+                    formData.append('niveau_id', this.formData.niveau_id);
+                    formData.append('classe_id', this.formData.classe_id);
+                    formData.append('salle_id', this.formData.salle_id);
+                    formData.append('annee_academique_id', this.formData.annee_academique_id);
 
                     if (this.currentClasse) {
-                        formData.append('classe_id', this.currentClasse.id);
+                        formData.append('affectionacademique_id', this.currentClasse.id);
                     }
 
                     try {
-                        const response = await fetch('{{ route('classes.store') }}', {
+                        const response = await fetch('{{ route('affectionacademique.store') }}', {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -230,21 +293,26 @@
                                 });
                             }
                         } else {
+                            const data = await response.json();
+                            const message = data.message;
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Une erreur s\'est produite.',
+                                title: message,
                                 showConfirmButton: true,
                             });
                         }
                     } catch (error) {
-                        console.error('Erreur réseau:', error);
+
+                        const data = await response.json();
+                        const message = data.message;
                         Swal.fire({
                             icon: 'error',
-                            title: 'Une erreur est survenue.',
+                            title: message,
                             showConfirmButton: true,
                         });
                     }
                 },
+
 
                 get paginatedClasses() {
                     return this.filteredClasses.slice((this.currentPage - 1) * this.classesPerPage, this.currentPage *
@@ -252,8 +320,11 @@
                 },
 
                 filterClasses() {
-                    this.filteredClasses = this.classes.filter(classe => classe.name.toLowerCase().includes(this.searchTerm
-                        .toLowerCase()));
+                    this.filteredClasses = this.classes.filter(classe => {
+                        return classe.classe.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                            classe.niveau.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                            classe.annee_academique.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+                    });
                     this.totalPages = Math.ceil(this.filteredClasses.length / this.classesPerPage);
                 },
 
@@ -263,22 +334,76 @@
                     }
                 },
 
-                deleteClasse(classeId) {
-                    if (confirm('Êtes-vous sûr de vouloir supprimer cette classe ?')) {
-                        fetch(`/classes/${classeId}`, {
-                                method: 'DELETE'
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.message === 'Classe supprimée avec succès') {
-                                    this.classes = this.classes.filter(classe => classe.id !== classeId);
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Erreur:", error);
+                async deleteAffectionAcademique(affectionId) {
+                    const confirmation = await Swal.fire({
+                        title: 'Êtes-vous sûr ?',
+                        text: "Cette action est irréversible !",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Oui, supprimer',
+                        cancelButtonText: 'Annuler'
+                    });
+
+                    if (!confirmation.isConfirmed) return;
+
+                    try {
+                        const url = `{{ route('affectionacademique.destroy', ['affectionacademique' => '__ID__']) }}`
+                            .replace(
+                                "__ID__",
+                                affectionId
+                            );
+
+                        const response = await fetch(url, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            },
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+
+                            Swal.fire({
+                                icon: "success",
+                                title: result.message || "Affection supprimée avec succès",
+                                showConfirmButton: false,
+                                timer: 1500,
                             });
+
+                            // Supprimer localement et rafraîchir le tableau
+                            this.classes = this.classes.filter(classe => classe.id !== affectionId);
+
+                            // Mettre à jour la liste filtrée et la pagination
+                            this.filterClasses();
+
+                            // Si la page actuelle devient vide, revenir à la page précédente
+                            const totalItems = this.filteredClasses.length;
+                            const totalPages = Math.ceil(totalItems / this.classesPerPage);
+                            if (this.currentPage > totalPages) {
+                                this.goToPage(totalPages || 1);
+                            }
+
+                        } else {
+                            const result = await response.json();
+                            Swal.fire({
+                                icon: "error",
+                                title: result.message || "Erreur lors de la suppression.",
+                                showConfirmButton: true,
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Erreur réseau :", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Une erreur réseau s'est produite.",
+                            showConfirmButton: true,
+                        });
                     }
                 },
+
+
 
                 init() {
                     this.filteredClasses = this.classes;

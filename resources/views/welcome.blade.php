@@ -32,7 +32,7 @@
                                     <div class="card-title d-flex flex-column">
                                         <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2"></span>
                                         <span class="text-white opacity-75 pt-1 fw-semibold fs-6">Année academique
-                                            {{ $anneeScolaireActuelle->name }}
+                                            {{ $anneeScolaireActuelle->name ?? 'Aucune année academique activée' }}
                                         </span>
                                     </div>
                                 </div>

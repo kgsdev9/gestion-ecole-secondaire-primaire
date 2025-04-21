@@ -5,13 +5,16 @@
     <base href="" />
     <title>@yield('title')</title>
     <meta charset="utf-8" />
-    <meta name="description" content="KGS Informatique - Spécialiste en solutions numériques : développement web, logiciels, maintenance et accompagnement digital en Côte d'Ivoire." />
-    <meta name="keywords" content="KGS Informatique, développement web, logiciels, informatique, Côte d'Ivoire, maintenance, digital, kgsinformatique.net" />
+    <meta name="description"
+        content="KGS Informatique - Spécialiste en solutions numériques : développement web, logiciels, maintenance et accompagnement digital en Côte d'Ivoire." />
+    <meta name="keywords"
+        content="KGS Informatique, développement web, logiciels, informatique, Côte d'Ivoire, maintenance, digital, kgsinformatique.net" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="KGS Informatique - Votre Partenaire Numérique" />
-    <meta property="og:description" content="Découvrez les solutions numériques de KGS Informatique : applications web, logiciels métiers, maintenance informatique et plus encore." />
+    <meta property="og:description"
+        content="Découvrez les solutions numériques de KGS Informatique : applications web, logiciels métiers, maintenance informatique et plus encore." />
     <meta property="og:url" content="https://kgsinformatique.net/" />
     <meta property="og:site_name" content="KGS Informatique" />
     <link rel="canonical" href="https://kgsinformatique.net/" />
@@ -533,16 +536,7 @@
 
                                         </div>
 
-                                        <div class="menu-item">
-                                            <a class="menu-link {{ request()->routeIs('affectionacademique.index') ? 'active' : '' }}"
-                                                href="{{ route('affectionacademique.index') }}">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">Afection Academique</span>
-                                            </a>
-
-                                        </div>
+                                      
 
                                         <div class="menu-item">
                                             <a class="menu-link {{ request()->routeIs('salles.index') ? 'active' : '' }}"
@@ -874,7 +868,8 @@
 
                         <div class="text-dark order-2 order-md-1">
                             <span class="text-muted fw-semibold me-1">2023&copy;</span>
-                            <a href="https://kgsinformatique.net/" target="_blank" class="text-gray-800 text-hover-primary">KGS
+                            <a href="https://kgsinformatique.net/" target="_blank"
+                                class="text-gray-800 text-hover-primary">KGS
                                 INFORMATIQUE
                                 agence digitale </a>
                         </div>
@@ -903,4 +898,5 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     @stack('scripts')
 </body>
+
 </html>
