@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EmploiDutemps;
 
 use App\Http\Controllers\Controller;
 use App\Models\AffectionAcademique;
+use App\Models\Classe;
 use App\Models\EmploiDuTemps;
 use App\Models\Jour;
 use Carbon\Carbon;
@@ -51,7 +52,7 @@ class EmploiDuTempsController extends Controller
         }
 
         // Récupérer les classes liées à AffectionAcademique
-        $classes = AffectionAcademique::with('classe')->get();
+        $classes = Classe::with('niveau')->get();
 
         return view('emploidutemps', compact('emploisParJourEtHeure', 'jours', 'heures', 'classes'));
     }

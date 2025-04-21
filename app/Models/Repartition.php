@@ -14,4 +14,14 @@ class Repartition extends Model
         'anneeacademique_id',
     ];
 
+
+    public function examen()
+    {
+        return $this->belongsTo(Examen::class);
+    }
+
+    public function anneeAcademique()
+    {
+        return $this->belongsTo(AnneeAcademique::class, 'anneeacademique_id');
+    }
 }

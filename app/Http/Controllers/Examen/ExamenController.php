@@ -53,10 +53,11 @@ class ExamenController extends Controller
     private function createExamen(Request $request)
     {
 
+        
         $cloture = ($request->cloture === true || $request->cloture == 'true') ? 1 : 0;
 
         $examen =  Examen::create([
-            'nom' => $request->nom,
+            'name' => $request->nom,
             'description' => $request->description,
             'typeexamen_id' => $request->typeexamen_id,
             'anneeacademique_id' => $request->anneeacademique_id,
@@ -80,7 +81,7 @@ class ExamenController extends Controller
         $cloture = ($request->cloture === true || $request->cloture == 'true') ? 1 : 0;
 
         $examen->update([
-            'nom' => $request->nom,
+            'name' => $request->nom,
             'description' => $request->description,
             'typeexamen_id' => $request->typeexamen_id,
             'anneeacademique_id' => $request->anneeacademique_id,

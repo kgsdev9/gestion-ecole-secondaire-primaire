@@ -39,7 +39,7 @@ class GestionMoyenneExamenController extends Controller
         // Récupérer les moyennes des examens
         $moyenneexamen = MoyenneExamen::with(['eleve', 'matiere'])
             ->where('examen_id', $examen->id)
-            ->where('annee_academique_id', $examen->anneeacademique_id)
+            ->where('anneeacademique_id', $examen->anneeacademique_id)
             ->get();
 
         // Récupérer les élèves (groupe par eleve_id)
@@ -119,7 +119,7 @@ class GestionMoyenneExamenController extends Controller
     {
         $examen = Examen::find($request->examen_id);
         $anneeAcademiqueId = $examen->anneeacademique_id;
-
+       
         MoyenneExamen::where('examen_id', $examen->id)
             ->where('annee_academique_id', $anneeAcademiqueId)
             ->delete();

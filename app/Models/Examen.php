@@ -13,7 +13,7 @@ class Examen extends Model
     protected $fillable = [
         'typeexamen_id',
         'anneeacademique_id',
-        'nom',
+        'name',
         'description',
         'classe_id',
         'date_debut',
@@ -46,5 +46,4 @@ class Examen extends Model
     {
         return $this->belongsTo(Classe::class);
     }
-
 }

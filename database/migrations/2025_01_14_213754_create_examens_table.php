@@ -21,9 +21,9 @@ class CreateExamensTable extends Migration
             $table->date('date_debut');
             $table->date('date_fin');
             $table->boolean('cloture')->default(false);
+            $table->boolean('active')->default(false);
             $table->foreignId('anneeacademique_id')->constrained('annee_academiques')->onDelete('cascade');
             $table->foreignId('typeexamen_id')->constrained('type_examens')->onDelete('cascade');
-            $table->unsignedBigInteger('affectationacademique_id');
             $table->timestamps();
         });
     }

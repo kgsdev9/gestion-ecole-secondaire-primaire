@@ -7,6 +7,7 @@ use App\Models\Examen;
 use App\Models\Matiere;
 use App\Models\ProgrammeExamen;
 use App\Models\Repartition;
+use App\Models\RepartitionDetail;
 use App\Models\Salle;
 use Illuminate\Http\Request;
 
@@ -32,27 +33,30 @@ class GestionExamenController extends Controller
 
     public function createRepartition($id)
     {
+
         $examen = Examen::with('classe.students')->findOrFail($id);
+
         $salles = Salle::all();
         $eleves = $examen->classe->students()->orderBy('nom')->get();
 
         $index = 0;
         $totalEleves = $eleves->count();
 
-        $repartitionexiste = Repartition::where('examen_id', $examen->id)
-            ->where('annee_academique_id', $examen->anneeacademique_id)
+        $repartitionexiste = RepartitionDetail::where('examen_id', $examen->id)
+            ->where('anneeacademique_id', $examen->anneeacademique_id)
             ->exists();
-
+       
         if (!$repartitionexiste) {
             foreach ($salles as $salle) {
                 $capacite = $salle->capacite;
 
+
                 for ($i = 0; $i < $capacite && $index < $totalEleves; $i++) {
-                    Repartition::create([
+                    RepartitionDetail::create([
                         'examen_id' => $examen->id,
                         'eleve_id' => $eleves[$index]->id,
                         'salle_id' => $salle->id,
-                        'annee_academique_id' => $examen->anneeacademique_id,
+                        'anneeacademique_id' => $examen->anneeacademique_id,
                     ]);
 
                     $index++;
@@ -68,9 +72,9 @@ class GestionExamenController extends Controller
             }
         }
 
-        $repartitions = Repartition::with(['examen', 'eleve', 'salle', 'anneeAcademique'])
+        $repartitions = RepartitionDetail::with(['examen', 'eleve', 'salle', 'anneeAcademique'])
             ->where('examen_id', $examen->id)
-            ->where('annee_academique_id', $examen->anneeacademique_id)
+            ->where('anneeacademique_id', $examen->anneeacademique_id)
             ->get();
 
 

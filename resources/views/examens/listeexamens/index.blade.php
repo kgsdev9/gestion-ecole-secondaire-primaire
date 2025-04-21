@@ -62,7 +62,7 @@
                                         <tbody class="text-gray-600 fw-semibold">
                                             <template x-for="examen in paginatedExamens" :key="examen.id">
                                                 <tr>
-                                                    <td x-text="examen.nom"></td>
+                                                    <td x-text="examen.name"></td>
 
                                                     <td x-text="examen.type_examen.name"></td>
                                                     <td x-text="examen.annee_academique.name"></td>
@@ -123,7 +123,7 @@
         <!-- Modal pour la création et la modification -->
         <template x-if="showModal">
             <div class="modal fade show d-block" tabindex="-1" aria-modal="true" style="background-color: rgba(0,0,0,0.5)">
-                <div class="modal-dialog modal-xl"> <!-- modal-xl pour largeur étendue -->
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" x-text="isEdite ? 'Modification' : 'Création'"></h5>
@@ -268,7 +268,7 @@
                             ...examen
                         };
                         this.formData = {
-                            nom: this.currentExamen.nom,
+                            nom: this.currentExamen.name,
                             description: this.currentExamen.description,
                             typeexamen_id: this.currentExamen.typeexamen_id,
                             anneeacademique_id: this.currentExamen.anneeacademique_id,
@@ -417,7 +417,7 @@
 
                 filterExamen() {
                     this.filteredExamens = this.examens.filter(examen => {
-                        return examen.nom.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                        return examen.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             examen.description.toLowerCase().includes(this.searchTerm.toLowerCase());
                     });
                 },
