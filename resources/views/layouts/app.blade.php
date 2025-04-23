@@ -672,6 +672,17 @@
                                                 </a>
 
                                             </div>
+
+                                            <div
+                                            class="menu-item {{ request()->routeIs('configurationnote.rapport.semestre') ? 'active' : '' }}">
+                                            <a class="menu-link" href="{{ route('configurationnote.rapport.semestre') }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">Parametre</span>
+                                            </a>
+
+                                        </div>
                                         </div>
                                     </div>
                                 </div>

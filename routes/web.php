@@ -7,6 +7,7 @@ use App\Http\Controllers\Commandes\CommandeController;
 use App\Http\Controllers\Configuration\Convocation\ConvocationController as ConvocationConvocationController;
 use App\Http\Controllers\configurationScolaire\MoyenneScolaireController;
 use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
+use App\Http\Controllers\ConfigurationScolaire\RapportSemestreTrimestreController;
 use App\Http\Controllers\Eleve\EleveController;
 use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
 use App\Http\Controllers\Enseignant\EnseignantController;
@@ -105,8 +106,8 @@ Route::prefix('configurationnote')->name('configurationnote.')->group(function (
     Route::get('/classe/note/by/classe/{id}', [NoteScolaireController::class, 'gestionNote'])->name('classe.gestion.note');
     Route::post('/note/create', [NoteScolaireController::class, 'addNote'])->name('create.gestion.note');
     Route::delete('/note/{note}', [NoteScolaireController::class, 'destroy'])->name('delete.gestion.note');
-
     Route::post('/validermoyennne/{id}', [NoteScolaireController::class, 'validerMoyenne'])->name('validate.matiere');
+    Route::get('/rapport/semestre', [RapportSemestreTrimestreController::class, 'index'])->name('rapport.semestre');
 });
 
 
@@ -141,5 +142,9 @@ Route::prefix('administration')->name('administration.')->group(function () {
 // systemes
 Route::prefix('configuration')->name('configuration.')->group(function () {
     Route::get('/convocation/impression/examen', [ConvocationConvocationController::class, 'formConvocation'])->name('convocation.examen');
+    Route::get('/historique', [ConvocationConvocationController::class, 'formConvocation'])->name('convocation.examen');
     Route::post('/print/convocation', [ConvocationConvocationController::class, 'imprimerConvocation'])->name('convocation.examens.print');
 });
+
+
+

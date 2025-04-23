@@ -22,6 +22,8 @@ class HomeController extends Controller
     public function index()
     {
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
+
+        
         return view('welcome', compact('anneeScolaireActuelle'));
     }
 }
