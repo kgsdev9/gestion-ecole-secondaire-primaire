@@ -17,6 +17,11 @@ class Scolarite extends Model
     ];
 
 
+    public function vesements()
+    {
+        return $this->hasMany(Versement::class);
+    }
+
 
     public function niveau()
     {

@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\configurationScolaire;
-
 use App\Http\Controllers\Controller;
-use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Eleve;
 use App\Models\Inscription;
@@ -58,7 +56,8 @@ class MoyenneScolaireController extends Controller
     public function printBulletin(Request $request)
     {
         $eleve = Eleve::find($request->eleve_id);
-        $anneeAcademiqueEnCours = AnneeAcademique::anneeAcademiqueEnCours();
+        $anneeAcademiqueEnCours  = $this->anneeAcademiqueService->getAnneeActive();
+
         $semestre = Semestre::find($request->semestre_id);
         $classe = Classe::find($request->classe_id);
 
@@ -108,7 +107,6 @@ class MoyenneScolaireController extends Controller
                 $rangsParMatiere[$matiere_id][$item->eleve_id] = $index + 1;
             }
         }
-
         // --- Création PDF ---
         $pdf = new Fpdf();
         $pdf->AddPage();

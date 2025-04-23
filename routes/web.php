@@ -13,6 +13,7 @@ use App\Http\Controllers\Enseignant\EnseignantController;
 use App\Http\Controllers\Examen\ConvocationController;
 use App\Http\Controllers\Examen\ExamenController;
 use App\Http\Controllers\Examen\MoyenneExamenController;
+use App\Http\Controllers\Examen\ParametreController;
 use App\Http\Controllers\Examen\ProgrammeExamenController;
 use App\Http\Controllers\Examen\RepartitionController;
 use App\Http\Controllers\Examen\ResultatController;
@@ -118,10 +119,6 @@ Route::prefix('gestionmoyenne')->name('gestionmoyenne.')->group(function () {
 
 Route::prefix('examens')->name('examens.')->group(function () {
     Route::resource('/gestion', ExamenController::class);
-    Route::resource('/managementgrade', GestionMoyenneExamenController::class);
-    //Route::get('/save/moyenne/examen/{id}', [GestionMoyenneExamenController::class, 'saveMoyenneExamen'])->name('save.moyenne');
-
-    // nouveaux controllers
     Route::resource('/programme', ProgrammeExamenController::class);
     Route::resource('/moyenne', MoyenneExamenController::class);
     Route::resource('/repartition', RepartitionController::class);
@@ -130,9 +127,7 @@ Route::prefix('examens')->name('examens.')->group(function () {
     Route::get('/create/programme/examens/{id}', [ProgrammeExamenController::class, 'createProgrammeExamen'])->name('programme.examens.create');
     Route::get('/create/repartition/examens/{id}', [RepartitionController::class, 'createRepartition'])->name('repartition.examens.create');
     Route::get('/create/moyenne/examens/{id}', [MoyenneExamenController::class, 'createMoyenne'])->name('moyenne.examens.create');
-
-
-
+    Route::get('/parametre/examen', [ParametreController::class, 'index'])->name('parametre.examens');
 });
 
 
@@ -146,7 +141,6 @@ Route::prefix('administration')->name('administration.')->group(function () {
 
 // systemes
 Route::prefix('configuration')->name('configuration.')->group(function () {
-
     Route::get('/convocation/impression/examen', [ConvocationConvocationController::class, 'formConvocation'])->name('convocation.examen');
     Route::post('/print/convocation', [ConvocationConvocationController::class, 'imprimerConvocation'])->name('convocation.examens.print');
 });

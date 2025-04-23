@@ -20,6 +20,15 @@ class Versement extends Model
         'montant_restant',
     ];
 
+        //scolarite_id
+
+        
+    public function scolarite()
+    {
+        return $this->belongsTo(Scolarite::class);
+    }
+
+
 
     // Relation avec le type de versement
     public function typeVersement()

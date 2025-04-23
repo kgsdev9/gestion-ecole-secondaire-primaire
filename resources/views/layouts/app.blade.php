@@ -751,13 +751,13 @@
 
 
                                             <div
-                                                class="menu-item {{ request()->routeIs('examens.convocation.index') ? 'active' : '' }}">
+                                                class="menu-item {{ request()->routeIs('examens.parametre.examens') ? 'active' : '' }}">
                                                 <a class="menu-link"
-                                                    href="{{ route('examens.convocation.index') }}">
+                                                    href="{{ route('examens.parametre.examens') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">Convocation</span>
+                                                    <span class="menu-title">Parametre</span>
                                                 </a>
                                             </div>
 

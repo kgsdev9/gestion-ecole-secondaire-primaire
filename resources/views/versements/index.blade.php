@@ -277,6 +277,7 @@
                     typeversement_id: '',
                     date_versement: '',
                     montant_reliquat: 0,
+                    scolarite_id:'',
                 },
 
                 filteredEleves() {
@@ -341,8 +342,12 @@
                     if (scolarite) {
 
                         this.selectedEleve.montantScolarite = scolarite.montant_scolarite;
+                        this.formData.scolarite_id = scolarite.id;
+
+
                     } else {
                         this.selectedEleve.montantScolarite = 0;
+                        this.formData.scolarite_id = '';
                     }
                 },
 
