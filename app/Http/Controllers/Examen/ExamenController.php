@@ -72,9 +72,6 @@ class ExamenController extends Controller
     // Méthode pour créer un nouvel examen
     private function createExamen(Request $request)
     {
-
-        $cloture = ($request->cloture === true || $request->cloture == 'true') ? 1 : 0;
-
         $examen =  Examen::create([
             'code'=> $this->generateCodeService->generateUniqueCode('examens', 'code'),
             'name' => $request->nom,
@@ -84,7 +81,6 @@ class ExamenController extends Controller
             'classe_id' => $request->classe_id,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
-            'cloture' => $cloture,
         ]);
 
         $programmeexamen = ProgrammeExamen::create([
@@ -120,8 +116,6 @@ class ExamenController extends Controller
     // Méthode pour mettre à jour un examen existant
     private function updateExamen(Examen $examen, Request $request)
     {
-        $cloture = ($request->cloture === true || $request->cloture == 'true') ? 1 : 0;
-
         $examen->update([
             'name' => $request->nom,
             'description' => $request->description,
@@ -130,7 +124,6 @@ class ExamenController extends Controller
             'classe_id' => $request->classe_id,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
-            'cloture' => $cloture,
         ]);
 
         $programmeexamen = ProgrammeExamen::where('examen_id', $examen->id)->update([

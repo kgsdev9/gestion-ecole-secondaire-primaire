@@ -19,7 +19,6 @@ use App\Http\Controllers\Examen\RepartitionController;
 use App\Http\Controllers\Examen\ResultatController;
 use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Factures\FacturePersonnaliseController;
-use App\Http\Controllers\GestionScolaire\Examen\GestionMoyenneExamenController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Impression\Facture\ImpressionFactureController;
 use App\Http\Controllers\Inscription\InscriptionController;

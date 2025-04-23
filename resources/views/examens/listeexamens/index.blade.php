@@ -168,14 +168,7 @@
                                             x-model="formData.date_fin" required>
                                     </div>
 
-                                    <!-- Clôture -->
-                                    <div class="col-md-6 d-flex align-items-center mt-4">
-                                        <div class="form-check">
-                                            <input type="checkbox" id="cloture" x-model="formData.cloture"
-                                                class="form-check-input">
-                                            <label for="cloture" class="form-check-label ms-2">Clôturé</label>
-                                        </div>
-                                    </div>
+                                
 
                                     <!-- Bouton submit -->
                                     <div class="col-md-12 text-end mt-4">

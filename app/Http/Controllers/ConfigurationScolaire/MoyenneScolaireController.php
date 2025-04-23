@@ -114,11 +114,12 @@ class MoyenneScolaireController extends Controller
 
         $pdf->SetXY(40, 10);
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->MultiCell(130, 5, utf8_decode("REPUBLIQUE DE CÔTE D'IVOIRE\nMINISTÈRE DE L'ENSEIGNEMENT TECHNIQUE DE LA\nFORMATION PROFESSIONNELLE ET DE L’APPRENTISSAGE\nDIRECTION RÉGIONALE SAN PEDRO"), 0, 'C');
+        $pdf->MultiCell(130, 5, utf8_decode("REPUBLIQUE DE CÔTE D'IVOIRE\nMINISTÈRE DE L'EDUCATION NATIONALE ET DE LA RECHERCHE SCIENTIFIQUE"), 0, 'C');
+
 
         $pdf->SetXY(150, 25);
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(50, 5, utf8_decode("LYCÉE PROFESSIONNEL DE SAN-PEDRO"), 0, 2, 'C');
+        $pdf->Cell(50, 5, utf8_decode("INSTITUT ROOSEVELT"), 0, 2, 'C');
         $pdf->Cell(50, 5, "Code: 058877", 0, 2, 'C');
         $pdf->Cell(50, 5, "Statut: Public", 0, 2, 'C');
 
@@ -138,18 +139,20 @@ class MoyenneScolaireController extends Controller
         $pdf->SetFont('Arial', '', 9);
         $y = $pdf->GetY();
         $pdf->SetXY(100, $y);
-        $pdf->MultiCell(100, 5, utf8_decode("Régime :\tInterne : Non\nSexe : Masculin\nNationalité : Ivoirienne\nAffecté(e):\tNé(e) le : 03/11/2006 à SAN PEDRO\nRedoublant(e): Non"), 0, 'L');
+        $pdf->MultiCell(100, 5, utf8_decode("Status eleve : " . ($eleve->statuseleve_id == 1 ? "Oui" : "Non") . "\nSexe : " . ($eleve->genre_id == 1 ? "Masculin" : "Féminin") . "\nNationalité : " . $eleve->nationalite . "\nAffecté(e) :\tNé(e) le : " . date('d/m/Y', strtotime($eleve->date_naissance)) . " à " . $eleve->adresse . "\nRedoublant(e): " . ($eleve->statuseleve_id == 2 ? "Oui" : "Non")), 0, 'L');
+
 
         $pdf->Ln(5);
 
         // --- Tableau des notes ---
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(60, 10, 'Matière', 1);
-        $pdf->Cell(20, 10, 'Moy', 1);
-        $pdf->Cell(20, 10, 'Coef.', 1);
-        $pdf->Cell(20, 10, 'M*Coeff.', 1);
-        $pdf->Cell(20, 10, 'Rang', 1);
+        $pdf->Cell(60, 10, utf8_decode('Matière'), 1);
+        $pdf->Cell(20, 10, utf8_decode('Moy'), 1);
+        $pdf->Cell(20, 10, utf8_decode('Coef.'), 1);
+        $pdf->Cell(20, 10, utf8_decode('M*Coeff.'), 1);
+        $pdf->Cell(20, 10, utf8_decode('Rang'), 1);
         $pdf->Cell(50, 10, utf8_decode('Appréciation'), 1);
+
         $pdf->Ln();
 
         $pdf->SetFont('Arial', '', 9);
@@ -182,14 +185,15 @@ class MoyenneScolaireController extends Controller
         // Moyenne générale et statistiques
         $pdf->Ln(5);
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(60, 8, 'Moyenne Générale', 1);
+        $pdf->Cell(60, 8, utf8_decode('Moyenne Générale'), 1);
         $pdf->Cell(20, 8, number_format($moyenneGenerale, 2), 1, 1, 'C');
 
-        $pdf->Cell(60, 8, 'Meilleure Moy. Classe', 1);
+        $pdf->Cell(60, 8, utf8_decode('Meilleure Moy. Classe'), 1);
         $pdf->Cell(20, 8, number_format($moyenneMax, 2), 1, 1, 'C');
 
-        $pdf->Cell(60, 8, 'Plus Faible Moy.', 1);
+        $pdf->Cell(60, 8, utf8_decode('Plus Faible Moy.'), 1);
         $pdf->Cell(20, 8, number_format($moyenneMin, 2), 1, 1, 'C');
+
 
         // Génération du fichier
         $filename = 'bulletin_' . $eleve->id . '_' . Str::random(6) . '.pdf';

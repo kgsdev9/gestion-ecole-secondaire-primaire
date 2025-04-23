@@ -20,7 +20,7 @@ class AnneeAcademiqueService
             AnneeAcademique::create([
                 'debut' => $debut,
                 'fin' => $fin,
-                'libelle' => $debut . '-' . $fin,
+                'date_debut' => $debut . '-' . $fin,
                 'active' => true,
             ]);
         });
@@ -62,6 +62,6 @@ class AnneeAcademiqueService
      */
     public function toutesLesAnnees()
     {
-        return AnneeAcademique::orderByDesc('debut')->get();
+        return AnneeAcademique::orderByDesc('date_debut')->get();
     }
 }
