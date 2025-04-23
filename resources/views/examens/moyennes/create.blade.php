@@ -7,16 +7,9 @@
             <div class="card">
                 <div class="card-header border-0 pt-6 d-flex justify-content-between align-items-center">
                     <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 align-items-center my-0">
-                        GESTION DES NOTES DE L'EXAMEN : <span x-text="examen.name" class="text-primary ms-2"></span>
+                        MOYENNES DE L'EXAMEN :
+                        <span class="text-primary ms-2" x-text="`${examen.name} (${examen.code})`"></span>
                     </h1>
-
-                    <div class="card-toolbar">
-                        <div class="d-flex justify-content-end align-items-center gap-3">
-                            <button @click="saveNotes" class="btn btn-primary btn-sm">
-                                <i class="fa fa-save"></i> Enregistrer
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="card-body py-4">
@@ -56,6 +49,20 @@
                             </table>
                         </template>
                     </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <div class="d-flex justify-content-end align-items-center gap-3">
+                        <button @click="saveNotes" class="btn btn-primary btn-sm">
+                            <i class="fa fa-save"></i> Enregistrer
+                        </button>
+                    </div>
+                    <div>
+                        <a href="{{route('examens.moyenne.index')}}" class="btn btn-light btn-sm" >
+                            <i class="fa fa-arrow-left me-1"></i> Retourner
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>

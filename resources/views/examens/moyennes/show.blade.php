@@ -7,8 +7,10 @@
             <div class="card">
                 <div class="card-header border-0 pt-6 d-flex justify-content-between align-items-center">
                     <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 align-items-center my-0">
-                        MOYENNES DE L'EXAMEN : <span x-text="examen.name" class="text-primary ms-2"></span>
+                        MOYENNES DE L'EXAMEN :
+                        <span class="text-primary ms-2" x-text="`${examen.name} (${examen.code})`"></span>
                     </h1>
+
 
                     <div class="card-toolbar">
                         {{-- <a :href="`{{ route('examens.managementgrade.print', ['id' => '__ID__']) }}`.replace('__ID__', examen.id)"
@@ -69,6 +71,15 @@
                             </tfoot>
                         </table>
                     </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <div>
+                        <a href="{{route('examens.moyenne.index')}}" class="btn btn-light btn-sm" >
+                            <i class="fa fa-arrow-left me-1"></i> Retourner
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>
