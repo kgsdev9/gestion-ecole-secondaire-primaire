@@ -3,36 +3,40 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Model;
 
-class ProgrammeExamen extends Model
-{
-    use HasFactory;
-
-    // Définir les attributs qui peuvent être assignés en masse
-    protected $fillable = [
-        'examen_id',
-        'matiere_id',
-        'heure_debut',
-        'heure_fin',
-        'anneeacademique_id',
-        'duree',
-        'jour'
-    ];
-
-    // Définir les relations
-
-    // Relation avec le modèle Examen
-    public function examen()
+    class ProgrammeExamen extends Model
     {
-        return $this->belongsTo(Examen::class);
-    }
+        use HasFactory;
 
-    // Relation avec le modèle Matiere
-    public function matiere()
-    {
-        return $this->belongsTo(Matiere::class);
-    }
+        public $timestamps = false;
+        // Définir les attributs qui peuvent être assignés en masse
+        protected $fillable = [
+            'code',
+            'title',
+            'examen_id',
+            'anneeacademique_id',
+        ];
+
+
+        // Définir les relations
+
+        // Relation avec le modèle Examen
+        public function examen()
+        {
+            return $this->belongsTo(Examen::class);
+        }
+
+
+        public function anneeAcademique()
+        {
+            return $this->belongsTo(AnneeAcademique::class, 'anneeacademique_id');
+        }
+        // Relation avec le modèle Matiere
+        public function matiere()
+        {
+            return $this->belongsTo(Matiere::class);
+        }
 
     /**
      * Calculer la durée de l'examen en minutes si ce n'est pas déjà renseigné.

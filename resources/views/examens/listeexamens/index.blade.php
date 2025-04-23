@@ -82,19 +82,19 @@
                                                         </button>
 
 
-                                                        <a :href="`{{ route('examens.programme.examens', ['id' => '__ID__']) }}`
+                                                        {{-- <a :href="`{{ route('examens.programme.examens', ['id' => '__ID__']) }}`
                                                         .replace(
                                                             '__ID__', examen.id)"
                                                             class="btn btn-warning btn-sm">
                                                             <i class="fa fa-calendar-check"></i>
                                                         </a>
-                                                        &nbsp; &nbsp;
-                                                        <a :href="`{{ route('examens.create.repartition', ['id' => '__ID__']) }}`
+                                                        &nbsp; &nbsp; --}}
+                                                        {{-- <a :href="`{{ route('examens.create.repartition', ['id' => '__ID__']) }}`
                                                         .replace
                                                             ('__ID__', examen.id)"
                                                             class="btn btn-info btn-sm">
                                                             <i class="fa fa-sitemap"></i>
-                                                        </a>
+                                                        </a> --}}
 
                                                         &nbsp; &nbsp;
                                                         <a :href="`{{ route('examens.save.moyenne', ['id' => '__ID__']) }}`

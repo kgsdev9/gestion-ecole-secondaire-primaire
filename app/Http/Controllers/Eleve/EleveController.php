@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Eleve;
 
 use App\Http\Controllers\Controller;
-use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Eleve;
 use App\Models\Genre;
@@ -13,14 +12,16 @@ use App\Models\StatusEleve;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\AnneeAcademiqueService;
-
+use App\Services\GenerateCodeService;
 class EleveController extends Controller
 {
     protected $anneeAcademiqueService;
-    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
+    protected $generateCodeService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService, GenerateCodeService $generateCodeService)
     {
         $this->middleware('auth');
         $this->anneeAcademiqueService = $anneeAcademiqueService;
+        $this->generateCodeService = $generateCodeService;
     }
 
 
@@ -141,6 +142,7 @@ class EleveController extends Controller
 
         // Création d'un nouvel élève
         $eleve = Eleve::create([
+
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'matricule' => $request->matricule ? $request->matricule : $this->generateMatricule(),
@@ -154,8 +156,6 @@ class EleveController extends Controller
             'nationalite' => $request->nationalite,
             'genre_id' => $request->genre_id,
         ]);
-
-
         // Création de l'inscription
         $this->createInscription($eleve, $request);
 
@@ -172,11 +172,12 @@ class EleveController extends Controller
     private function createInscription($eleve, Request $request)
     {
         $inscription = Inscription::create([
+            'code'=> $this->generateCodeService->generateUniqueCode('inscriptions', 'code'),
             'eleve_id' => $eleve->id,
             'niveau_id' => $request->niveau_id,
             'anneeacademique_id' => $request->annee_academique_id,
             'classe_id' => $request->classe_id,
-            'date_inscription' => now(), // Date de l'inscription actuelle
+            'date_inscription' => now(),
         ]);
     }
 

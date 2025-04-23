@@ -23,9 +23,16 @@ class Examen extends Model
     ];
 
 
+    public function typeExamen()
+    {
+        return $this->belongsTo(TypeExamen::class, 'typeexamen_id');
+    }
+
+
+
     public function examenProgrammes()
     {
-        return $this->hasMany(ProgrammeExamen::class);
+        return $this->hasMany(ProgrammeExamenLigne::class);
     }
 
     // Définir les relations
@@ -37,10 +44,7 @@ class Examen extends Model
     }
 
     // Relation avec le modèle TypeExamen
-    public function typeExamen()
-    {
-        return $this->belongsTo(TypeExamen::class, 'typeexamen_id');
-    }
+
 
     // Relation avec le modèle Classe
     public function classe()

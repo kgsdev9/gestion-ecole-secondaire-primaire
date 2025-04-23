@@ -13,19 +13,19 @@ class CreateResultatExamenLignesTable extends Migration
      */
     public function up()
     {
-        Schema::create('resultat_examen_lignes', function (Blueprint $table) {
-            $table->id();
-            $table->string('code')->unique();
-            $table->foreignId('resultat_examen_id')->constrained('resultat_examens')->onDelete('cascade');
-            $table->foreignId('eleve_id')->constrained('eleves')->onDelete('cascade');
-            $table->integer('nombre_total_points');
-            $table->decimal('moyenne', 5, 2)->nullable();
-            $table->boolean('admis')->default(false);
-            $table->string('mention')->nullable();
-            $table->integer('rang')->nullable();
-            $table->foreignId('anneeacademique_id')->constrained('annee_academiques')->onDelete('cascade');
-            $table->timestamps();
-        });
+            Schema::create('resultat_examen_lignes', function (Blueprint $table) {
+                $table->id();
+                $table->string('code');
+                $table->foreignId('resultat_examen_id')->constrained('resultat_examens')->onDelete('cascade');
+                $table->foreignId('eleve_id')->constrained('eleves')->onDelete('cascade');
+                $table->integer('nombre_total_points');
+                $table->decimal('moyenne', 5, 2)->nullable();
+                $table->boolean('admis')->default(false);
+                $table->string('mention')->nullable();
+                $table->integer('rang')->nullable();
+                $table->foreignId('anneeacademique_id')->constrained('annee_academiques')->onDelete('cascade');
+                $table->timestamps();
+            });
 
     }
 

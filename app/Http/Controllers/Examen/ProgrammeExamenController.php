@@ -3,37 +3,37 @@
 namespace App\Http\Controllers\Examen;
 
 use App\Http\Controllers\Controller;
-use App\Models\AnneeAcademique;
-use App\Models\Classe;
 use App\Models\Examen;
-use App\Models\TypeExamen;
+use App\Models\Matiere;
+use App\Models\ProgrammeExamen;
+use App\Models\ProgrammeExamenLigne;
 use Illuminate\Http\Request;
 use App\Services\AnneeAcademiqueService;
 class ProgrammeExamenController extends Controller
 {
+
+
+    protected $anneeAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
+    {
+        $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    protected $anneeAcademiqueService;
-     public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
-     {
-         $this->middleware('auth');
-         $this->anneeAcademiqueService = $anneeAcademiqueService;
-     }
+
     public function index()
     {
-
-
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
-        $classe = Classe::all();
-        $anneAcademique = AnneeAcademique::all();
-        $typexamen = TypeExamen::all();
-        $listeexamens = Examen::with('anneeAcademique', 'typeExamen', 'classe')
-                                ->where('anneeacademique_id', $anneeScolaireActuelle->id)
-                                ->get();
-        return view('examens.programmes.index', compact('listeexamens', 'classe', 'anneAcademique', 'typexamen'));
+        $programmesexamens =  ProgrammeExamen::where('anneeacademique_id', $anneeScolaireActuelle->id)
+        ->with(['examen.classe', 'anneeAcademique', 'examen.typeExamen'])
+        ->get();
+
+        return view('examens.programmes.index', compact('programmesexamens'));
     }
 
     /**
@@ -41,21 +41,47 @@ class ProgrammeExamenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function createProgrammeExamen($examenId)
     {
-        //
+        $examen = Examen::findOrFail($examenId);
+        $matieres = Matiere::all() ?? [];
+        $programmeexamens = $examen->examenProgrammes()->with('matiere')->get();
+        return view('examens.programmes.create', compact('examen', 'programmeexamens', 'matieres', 'examen'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        $examenId = $request->input('examen_id');
+        $code = $request->input('code');
+        $programmes = json_decode($request->input('programmeexamen'), true);
+
+        // Supprimer les anciennes lignes ayant le même code
+        ProgrammeExamenLigne::where('code', $code)
+                                ->where('examen_id', $examenId)
+                                ->delete();
+
+        // Créer les nouveaux programmes
+        foreach ($programmes as $programme) {
+            ProgrammeExamenLigne::create([
+                'examen_id' => $examenId,
+                'code' => $code,
+                'matiere_id' => $programme['matiere_id'] ?? null,
+                'heure_debut' => $programme['heure_debut'],
+                'heure_fin' => $programme['heure_fin'],
+                'jour' => $programme['jour'],
+                'duree' => $programme['duree'] ?? null,
+                'anneeacademique_id' => $this->anneeAcademiqueService->getAnneeActive()->id,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Programme d\'examen enregistré avec succès.'
+        ]);
     }
+
+
 
     /**
      * Display the specified resource.
@@ -63,42 +89,12 @@ class ProgrammeExamenController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($examenId)
     {
-        //
+        $examen = Examen::findOrFail($examenId);
+        $matieres = Matiere::all() ?? [];
+        $programmeexamens = $examen->examenProgrammes()->with('matiere')->get();
+        return view('examens.programmes.show', compact('examen', 'programmeexamens', 'matieres', 'examen'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

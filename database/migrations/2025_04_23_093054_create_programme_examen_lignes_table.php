@@ -15,7 +15,7 @@ class CreateProgrammeExamenLignesTable extends Migration
     {
         Schema::create('programme_examen_lignes', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->string('code');
             $table->unsignedBigInteger('examen_id');
             $table->unsignedBigInteger('matiere_id');
             $table->time('heure_debut');

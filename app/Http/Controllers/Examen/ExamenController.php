@@ -6,22 +6,31 @@ use App\Http\Controllers\Controller;
 use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Examen;
+use App\Models\ProgrammeExamen;
+use App\Models\Repartition;
 use App\Models\TypeExamen;
 use Illuminate\Http\Request;
 use App\Services\AnneeAcademiqueService;
+use App\Services\GenerateCodeService;
+use App\Services\GenerateTitleService;
+
 class ExamenController extends Controller
 {
     protected $anneeAcademiqueService;
-
-    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
+    protected $generateCodeService;
+    protected $generateTitleService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService, GenerateCodeService $generateCodeService, GenerateTitleService $generateTitleService)
     {
         $this->middleware('auth');
         $this->anneeAcademiqueService = $anneeAcademiqueService;
+        $this->generateCodeService = $generateCodeService;
+        $this->generateTitleService = $generateTitleService;
+
     }
 
     public function index()
     {
-       
+
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
         $classe = Classe::all();
         $anneAcademique = AnneeAcademique::all();
@@ -32,6 +41,9 @@ class ExamenController extends Controller
 
         return view('examens.listeexamens.index', compact('listeexamens', 'classe', 'anneAcademique', 'typexamen'));
     }
+
+
+
 
 
     public function store(Request $request)
@@ -60,10 +72,10 @@ class ExamenController extends Controller
     private function createExamen(Request $request)
     {
 
-
         $cloture = ($request->cloture === true || $request->cloture == 'true') ? 1 : 0;
 
         $examen =  Examen::create([
+            'code'=> $this->generateCodeService->generateUniqueCode('examens', 'code'),
             'name' => $request->nom,
             'description' => $request->description,
             'typeexamen_id' => $request->typeexamen_id,
@@ -72,6 +84,20 @@ class ExamenController extends Controller
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
             'cloture' => $cloture,
+        ]);
+
+        $programmeexamen = ProgrammeExamen::create([
+            'code' => $examen->code,
+            'title' =>  $this->generateTitleService->generateTitle($request->nom, 'programme-examen', $request->anneeacademique_id),
+            'examen_id' => $examen->id,
+            'anneeacademique_id' => $request->anneeacademique_id,
+        ]);
+
+        $repartitionexamen = Repartition::create([
+            'code' => $examen->code,
+            'title' =>  $this->generateTitleService->generateTitle($request->nom, 'programme-examen', $request->anneeacademique_id),
+            'examen_id' => $examen->id,
+            'anneeacademique_id' => $request->anneeacademique_id,
         ]);
 
         $examen->load('typeExamen', 'anneeAcademique', 'classe');
@@ -96,6 +122,18 @@ class ExamenController extends Controller
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
             'cloture' => $cloture,
+        ]);
+
+        $programmeexamen = ProgrammeExamen::where('examen_id', $examen->id)->update([
+            'title' =>  $this->generateTitleService->generateTitle($request->nom, 'programme-examen', $request->anneeacademique_id),
+            'examen_id' => $examen->id,
+            'anneeacademique_id' => $request->anneeacademique_id,
+        ]);
+
+        $repartitionexamen = Repartition::where('examen_id', $examen->id)->update([
+            'title' =>  $this->generateTitleService->generateTitle($request->nom, 'programme-examen', $request->anneeacademique_id),
+            'examen_id' => $examen->id,
+            'anneeacademique_id' => $request->anneeacademique_id,
         ]);
 
         $examen->load('typeExamen', 'anneeAcademique', 'classe');

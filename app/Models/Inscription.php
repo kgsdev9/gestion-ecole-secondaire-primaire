@@ -15,6 +15,7 @@ class Inscription extends Model
         'anneeacademique_id',
         'classe_id',
         'date_inscription',
+        'code'
     ];
 
     // Relation avec le modèle Eleve
