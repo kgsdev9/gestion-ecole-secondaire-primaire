@@ -12,13 +12,7 @@
                     </h1>
 
 
-                    <div class="card-toolbar">
-                        {{-- <a :href="`{{ route('examens.managementgrade.print', ['id' => '__ID__']) }}`.replace('__ID__', examen.id)"
-                            target="_blank"
-                            class="btn btn-secondary btn-sm" title="Imprimer les moyennes">
-                            <i class="fa fa-print"></i> Imprimer
-                        </a> --}}
-                    </div>
+
                 </div>
 
                 <div class="card-body py-4">
@@ -30,7 +24,8 @@
                                     <template x-for="matiere in matieres" :key="matiere.id">
                                         <th>
                                             <span x-text="matiere.name"></span><br>
-                                            <small class="text-success" x-text="`1er: ${premiers[matiere.id] ?? '-'}`"></small>
+                                            <small class="text-success"
+                                                x-text="`1er: ${premiers[matiere.id] ?? '-'}`"></small>
                                         </th>
                                     </template>
                                     <th>Moyenne Générale</th>
@@ -59,14 +54,17 @@
                                     <template x-for="matiere in matieres" :key="matiere.id">
                                         <td></td>
                                     </template>
-                                    <td class="text-success" x-text="moyenneMax.toFixed(2)"></td>
+                                    <td class="text-success" x-text="moyenneMax !== null ? moyenneMax.toFixed(2) : '-'"></td>
+
+
                                 </tr>
                                 <tr>
                                     <td>Moyenne min</td>
                                     <template x-for="matiere in matieres" :key="matiere.id">
                                         <td></td>
                                     </template>
-                                    <td class="text-danger" x-text="moyenneMin.toFixed(2)"></td>
+                                    <td class="text-danger" x-text="moyenneMin !== null ? moyenneMin.toFixed(2) : '-'"></td>
+
                                 </tr>
                             </tfoot>
                         </table>
@@ -75,7 +73,7 @@
 
                 <div class="card-footer d-flex justify-content-between">
                     <div>
-                        <a href="{{route('examens.moyenne.index')}}" class="btn btn-light btn-sm" >
+                        <a href="{{ route('examens.moyenne.index') }}" class="btn btn-light btn-sm">
                             <i class="fa fa-arrow-left me-1"></i> Retourner
                         </a>
                     </div>
@@ -94,8 +92,8 @@
                 notes: @json($notes),
                 premiers: @json($premiers),
                 moyennesGenerales: {},
-                moyenneMax: 0,
-                moyenneMin: 20,
+                moyenneMax: null,
+                moyenneMin: null,
 
                 init() {
                     this.calculerMoyennes();
@@ -118,8 +116,10 @@
                             const moyenne = total / count;
                             this.moyennesGenerales[eleve.id] = moyenne;
 
-                            if (moyenne > this.moyenneMax) this.moyenneMax = moyenne;
-                            if (moyenne < this.moyenneMin) this.moyenneMin = moyenne;
+                            this.moyenneMax = this.moyenneMax === null ? moyenne : Math.max(this.moyenneMax,
+                                moyenne);
+                            this.moyenneMin = this.moyenneMin === null ? moyenne : Math.min(this.moyenneMin,
+                                moyenne);
                         }
                     });
                 },

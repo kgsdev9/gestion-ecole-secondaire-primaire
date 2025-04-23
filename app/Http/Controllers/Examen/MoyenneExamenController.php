@@ -113,33 +113,92 @@ class MoyenneExamenController extends Controller
     }
 
 
+    // public function show($examenid)
+    // {
+    //     $examen = Examen::find($examenid);
+
+    //     // Récupérer les moyennes des examens
+    //     $moyenneexamen = MoyenneExamenLigne::with(['eleve', 'matiere'])
+    //         ->where('examen_id', $examen->id)
+    //         ->where('anneeacademique_id', $examen->anneeacademique_id)
+    //         ->get();
+
+    //     // Récupérer les élèves (groupe par eleve_id)
+    //     $eleves = $moyenneexamen->groupBy('eleve_id')->map(function ($group) {
+    //         return $group->first()->eleve;
+    //     })->values();
+
+    //     // Récupérer les matières (groupe par matiere_id)
+    //     $matieres = $moyenneexamen->groupBy('matiere_id')->map(function ($group) {
+    //         return $group->first()->matiere;
+    //     })->values();
+
+    //     // Préparer les notes au format [eleve_id][matiere_id] => moyenne
+    //     $notes = [];
+    //     foreach ($moyenneexamen as $moyenne) {
+    //         $notes[$moyenne->eleve_id][$moyenne->matiere_id] = $moyenne->moyenne;
+    //     }
+
+    //     // Calculer le premier de chaque matière
+    //     $premiers = [];
+    //     foreach ($matieres as $matiere) {
+    //         $notesParMatiere = $moyenneexamen->where('matiere_id', $matiere->id);
+    //         $meilleureNote = $notesParMatiere->max('moyenne');
+    //         $premiers[$matiere->id] = $meilleureNote;
+    //     }
+
+    //     // Calculer la moyenne générale pour chaque élève et les moyennes max et min
+    //     $moyennesGenerales = [];
+    //     $moyenneMax = 0;
+    //     $moyenneMin = 20;
+
+    //     foreach ($eleves as $eleve) {
+    //         $total = 0;
+    //         $count = 0;
+    //         foreach ($matieres as $matiere) {
+    //             $note = $notes[$eleve->id][$matiere->id] ?? null;
+    //             if ($note !== null && !is_nan($note)) {
+    //                 $total += $note;
+    //                 $count++;
+    //             }
+    //         }
+    //         if ($count > 0) {
+    //             $moyenne = $total / $count;
+    //             $moyennesGenerales[$eleve->id] = $moyenne;
+    //             $moyenneMax = max($moyenneMax, $moyenne);
+    //             $moyenneMin = min($moyenneMin, $moyenne);
+    //         }
+    //     }
+
+
+    //     dd($moyenneMin);
+    //     // Passer les données nécessaires à la vue
+    //     return view('examens.moyennes.show', compact('examen', 'eleves', 'matieres', 'notes', 'premiers', 'moyennesGenerales', 'moyenneMax', 'moyenneMin'));
+    // }
+
+
     public function show($examenid)
     {
         $examen = Examen::find($examenid);
 
-        // Récupérer les moyennes des examens
         $moyenneexamen = MoyenneExamenLigne::with(['eleve', 'matiere'])
             ->where('examen_id', $examen->id)
             ->where('anneeacademique_id', $examen->anneeacademique_id)
             ->get();
 
-        // Récupérer les élèves (groupe par eleve_id)
         $eleves = $moyenneexamen->groupBy('eleve_id')->map(function ($group) {
             return $group->first()->eleve;
         })->values();
 
-        // Récupérer les matières (groupe par matiere_id)
         $matieres = $moyenneexamen->groupBy('matiere_id')->map(function ($group) {
             return $group->first()->matiere;
         })->values();
 
-        // Préparer les notes au format [eleve_id][matiere_id] => moyenne
         $notes = [];
         foreach ($moyenneexamen as $moyenne) {
             $notes[$moyenne->eleve_id][$moyenne->matiere_id] = $moyenne->moyenne;
         }
 
-        // Calculer le premier de chaque matière
         $premiers = [];
         foreach ($matieres as $matiere) {
             $notesParMatiere = $moyenneexamen->where('matiere_id', $matiere->id);
@@ -147,10 +206,9 @@ class MoyenneExamenController extends Controller
             $premiers[$matiere->id] = $meilleureNote;
         }
 
-        // Calculer la moyenne générale pour chaque élève et les moyennes max et min
         $moyennesGenerales = [];
-        $moyenneMax = 0;
-        $moyenneMin = 20;
+        $moyenneMax = null;
+        $moyenneMin = null;
 
         foreach ($eleves as $eleve) {
             $total = 0;
@@ -162,16 +220,21 @@ class MoyenneExamenController extends Controller
                     $count++;
                 }
             }
+
             if ($count > 0) {
                 $moyenne = $total / $count;
                 $moyennesGenerales[$eleve->id] = $moyenne;
-                $moyenneMax = max($moyenneMax, $moyenne);
-                $moyenneMin = min($moyenneMin, $moyenne);
+
+                $moyenneMax = $moyenneMax === null ? $moyenne : max($moyenneMax, $moyenne);
+                $moyenneMin = $moyenneMin === null ? $moyenne : min($moyenneMin, $moyenne);
             }
         }
 
-        // Passer les données nécessaires à la vue
-        return view('examens.moyennes.show', compact('examen', 'eleves', 'matieres', 'notes', 'premiers', 'moyennesGenerales', 'moyenneMax', 'moyenneMin'));
+       
+        return view('examens.moyennes.show', compact(
+            'examen', 'eleves', 'matieres', 'notes', 'premiers',
+            'moyennesGenerales', 'moyenneMax', 'moyenneMin'
+        ));
     }
 
 

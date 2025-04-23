@@ -24,7 +24,7 @@ class ConvocationController extends Controller
      */
     public function create()
     {
-        //
+        //  
     }
 
     /**

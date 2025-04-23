@@ -43,9 +43,7 @@ class RepartitionController extends Controller
 
         $repartitionexiste = RepartitionDetail::where('examen_id', $examen->id)
             ->where('anneeacademique_id', $examen->anneeacademique_id)
-            ->exists();
-
-        if (!$repartitionexiste) {
+            ->delete();
 
             foreach ($salles as $salle) {
                 $capacite = $salle->capacite;
@@ -70,7 +68,6 @@ class RepartitionController extends Controller
 
                 return back()->with('error', 'Pas assez de salles pour tous les élèves.');
             }
-        }
 
         $repartitions = RepartitionDetail::with(['examen', 'eleve', 'salle', 'anneeAcademique'])
             ->where('examen_id', $examen->id)
