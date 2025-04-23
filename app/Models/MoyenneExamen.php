@@ -10,22 +10,12 @@ class MoyenneExamen extends Model
     use HasFactory;
 
     protected $fillable = [
-        'eleve_id',
-        'matiere_id',
+        'title',
+        'code',
         'examen_id',
         'anneeacademique_id',
-        'moyenne',
     ];
-
-    public function eleve()
-    {
-        return $this->belongsTo(Eleve::class);
-    }
-
-    public function matiere()
-    {
-        return $this->belongsTo(Matiere::class);
-    }
+    public $timestamps = false;
 
     public function examen()
     {
@@ -34,6 +24,6 @@ class MoyenneExamen extends Model
 
     public function anneeAcademique()
     {
-        return $this->belongsTo(AnneeAcademique::class);
+        return $this->belongsTo(AnneeAcademique::class, 'anneeacademique_id');
     }
 }

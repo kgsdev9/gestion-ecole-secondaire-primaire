@@ -4,7 +4,6 @@ use App\Http\Controllers\Bulletin\BulletinConroller;
 use App\Http\Controllers\Categorie\CategoryController;
 use App\Http\Controllers\Classe\ClasseController;
 use App\Http\Controllers\Commandes\CommandeController;
-use App\Http\Controllers\ConfigurationScolaire\GestionExamenController;
 use App\Http\Controllers\configurationScolaire\MoyenneScolaireController;
 use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
 use App\Http\Controllers\Eleve\EleveController;
@@ -118,20 +117,19 @@ Route::prefix('gestionmoyenne')->name('gestionmoyenne.')->group(function () {
 
 Route::prefix('examens')->name('examens.')->group(function () {
     Route::resource('/gestion', ExamenController::class);
-    Route::get('/planification/programme/examens/{id}', [GestionExamenController::class, 'createProgrammeExamen'])->name('programme.examens');
-    // Route::post('/programme/create', [GestionExamenController::class, 'store'])->name('programme.store');
-    // Route::get('/repartition/automatique/{id}', [GestionExamenController::class, 'createRepartition'])->name('create.repartition');
     Route::resource('/managementgrade', GestionMoyenneExamenController::class);
-    Route::get('/save/moyenne/examen/{id}', [GestionMoyenneExamenController::class, 'saveMoyenneExamen'])->name('save.moyenne');
-    // nouveaux controllers
+    //Route::get('/save/moyenne/examen/{id}', [GestionMoyenneExamenController::class, 'saveMoyenneExamen'])->name('save.moyenne');
 
+    // nouveaux controllers
     Route::resource('/programme', ProgrammeExamenController::class);
     Route::resource('/moyenne', MoyenneExamenController::class);
     Route::resource('/repartition', RepartitionController::class);
     Route::resource('/convocation', ConvocationController::class);
     Route::resource('/resultats', ResultatController::class);
     Route::get('/create/programme/examens/{id}', [ProgrammeExamenController::class, 'createProgrammeExamen'])->name('programme.examens.create');
-    // Route::get('/create/repartition/{id}', [GestionExamenController::class, 'createRepartition'])->name('create.repartition.examen');
+    Route::get('/create/repartition/examens/{id}', [RepartitionController::class, 'createRepartition'])->name('repartition.examens.create');
+    Route::get('/create/moyenne/examens/{id}', [MoyenneExamenController::class, 'createMoyenne'])->name('moyenne.examens.create');
+
 
 
 });

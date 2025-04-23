@@ -86,8 +86,8 @@
 
                         <div class="card-footer d-flex justify-content-between">
                             <div>
-                                <a href="{{route('examens.programme.index')}}" class="btn btn-primary btn-sm" >
-                                    <i class="fa fa-save me-1"></i> Retourner
+                                <a href="{{route('examens.programme.index')}}" class="btn btn-light btn-sm" >
+                                    <i class="fa fa-arrow-left me-1"></i> Retourner
                                 </a>
                             </div>
 

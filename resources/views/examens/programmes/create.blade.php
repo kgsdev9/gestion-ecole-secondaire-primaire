@@ -95,11 +95,18 @@
                                     @click="addRow()">
                                     <i class="fa fa-plus me-1"></i> Ajouter une ligne
                                 </button>
+
                             </div>
                             <div>
+
                                 <button class="btn btn-primary btn-sm" @click="submitProgrammeExamen()">
                                     <i class="fa fa-save me-1"></i> Enregistrer le programme
                                 </button>
+
+                                <a href="{{route('examens.programme.index')}}" class="btn btn-light btn-sm" >
+                                    <i class="fa fa-arrow-left me-1"></i>
+                                    Retourner
+                                </a>
                             </div>
                         </div>
                     </div>

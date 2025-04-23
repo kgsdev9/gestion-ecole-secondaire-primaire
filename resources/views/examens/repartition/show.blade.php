@@ -6,15 +6,13 @@
             <div class="card">
                 <div class="card-header border-0 pt-6 d-flex justify-content-between align-items-center">
                     <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 align-items-center my-0">
-                        RÉPARTITION DES ÉLÈVES À L'EXAMEN : <span x-text="examen.nom" class="text-primary ms-2"></span>
+                        RÉPARTITION DES ÉLÈVES À L'EXAMEN : <span x-text="examen.name" class="text-primary ms-2"></span>
                     </h1>
 
                     <div class="d-flex align-items-center">
                         <input type="text" class="form-control form-control-solid w-250px ps-13 form-control-sm"
                             placeholder="Rechercher un eleve" x-model="searchTerm" @input="filterData">
                     </div>
-
-
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end align-items-center gap-3">
                             <button @click="printRepartition" class="btn btn-light-primary btn-sm">
@@ -23,9 +21,7 @@
                             <button @click="exportRepartitoon" class="btn btn-light-primary btn-sm">
                                 <i class='fas fa-file-export'></i> Export
                             </button>
-                            <button @click="deleteRepartition()" class="btn btn-light btn-active-light-primary btn-sm">
-                                <i class="fa fa-trash"></i> Supprimer
-                            </button>
+                           
                         </div>
                     </div>
                 </div>

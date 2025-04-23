@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Examen;
+use App\Models\MoyenneExamen;
 use App\Models\ProgrammeExamen;
 use App\Models\Repartition;
 use App\Models\TypeExamen;
@@ -95,7 +96,15 @@ class ExamenController extends Controller
 
         $repartitionexamen = Repartition::create([
             'code' => $examen->code,
-            'title' =>  $this->generateTitleService->generateTitle($request->nom, 'programme-examen', $request->anneeacademique_id),
+            'title' =>  $this->generateTitleService->generateTitle($request->nom, 'repartition-examen', $request->anneeacademique_id),
+            'examen_id' => $examen->id,
+            'anneeacademique_id' => $request->anneeacademique_id,
+        ]);
+
+
+        $Moyeenneexamen = MoyenneExamen::create([
+            'code' => $examen->code,
+            'title' =>  $this->generateTitleService->generateTitle($request->nom, 'moyenne-examen', $request->anneeacademique_id),
             'examen_id' => $examen->id,
             'anneeacademique_id' => $request->anneeacademique_id,
         ]);

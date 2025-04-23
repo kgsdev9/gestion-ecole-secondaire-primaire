@@ -80,34 +80,7 @@
                                                             class="btn btn-danger btn-sm mx-2">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
-
-
-                                                        {{-- <a :href="`{{ route('examens.programme.examens', ['id' => '__ID__']) }}`
-                                                        .replace(
-                                                            '__ID__', examen.id)"
-                                                            class="btn btn-warning btn-sm">
-                                                            <i class="fa fa-calendar-check"></i>
-                                                        </a>
-                                                        &nbsp; &nbsp; --}}
-                                                        {{-- <a :href="`{{ route('examens.create.repartition', ['id' => '__ID__']) }}`
-                                                        .replace
-                                                            ('__ID__', examen.id)"
-                                                            class="btn btn-info btn-sm">
-                                                            <i class="fa fa-sitemap"></i>
-                                                        </a> --}}
-
-                                                        &nbsp; &nbsp;
-                                                        <a :href="`{{ route('examens.save.moyenne', ['id' => '__ID__']) }}`
-                                                        .replace
-                                                            ('__ID__', examen.id)"
-                                                            class="btn btn-info btn-sm">
-                                                            <i class="fa fa-calculator"></i>
-                                                        </a>
-
-
-
                                                     </td>
-
                                                 </tr>
                                             </template>
                                         </tbody>

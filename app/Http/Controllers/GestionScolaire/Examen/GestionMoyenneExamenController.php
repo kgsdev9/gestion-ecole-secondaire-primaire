@@ -9,6 +9,7 @@ use App\Models\Examen;
 use App\Models\Inscription;
 use App\Models\MoyenneExamen;
 use App\Models\ProgrammeExamen;
+use App\Models\ProgrammeExamenLigne;
 use App\Models\TypeExamen;
 use Illuminate\Http\Request;
 
@@ -108,11 +109,11 @@ class GestionMoyenneExamenController extends Controller
             ->get()
             ->pluck('eleve');
 
-        $programmexamens = ProgrammeExamen::with('matiere')
+        $programmexamens = ProgrammeExamenLigne::with('matiere')
             ->where('examen_id', $examen->id)
             ->get();
 
-
+       
         return view('gestionscolaires.examens.moyennes.gestionmoyenneexamen', compact('examen', 'eleves', 'programmexamens'));
     }
 
