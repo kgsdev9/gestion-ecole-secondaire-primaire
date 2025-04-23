@@ -141,6 +141,14 @@
                                     </span>
 
                                 </a>
+
+                                <a href="{{route('configuration.convocation.examen')}}" class="menu-item menu-lg-down-accordion me-0 me-lg-2">
+                                    <span class="menu-link">
+                                        <span class="menu-title">Convocation examen </span>
+                                        <span class=" d-lg-none"></span>
+                                    </span>
+
+                                </a>
                             </div>
                         </div>
 

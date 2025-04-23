@@ -4,6 +4,7 @@ use App\Http\Controllers\Bulletin\BulletinConroller;
 use App\Http\Controllers\Categorie\CategoryController;
 use App\Http\Controllers\Classe\ClasseController;
 use App\Http\Controllers\Commandes\CommandeController;
+use App\Http\Controllers\Configuration\Convocation\ConvocationController as ConvocationConvocationController;
 use App\Http\Controllers\configurationScolaire\MoyenneScolaireController;
 use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
 use App\Http\Controllers\Eleve\EleveController;
@@ -139,4 +140,13 @@ Route::prefix('examens')->name('examens.')->group(function () {
 Route::prefix('administration')->name('administration.')->group(function () {
     Route::resource('/anneeacademique', AnneAcademiqueController::class);
     Route::post('/annneacademique/active', [AnneAcademiqueController::class, 'active'])->name('active.anneeacademique');
+});
+
+
+
+// systemes
+Route::prefix('configuration')->name('configuration.')->group(function () {
+
+    Route::get('/convocation/impression/examen', [ConvocationConvocationController::class, 'formConvocation'])->name('convocation.examen');
+    Route::post('/print/convocation', [ConvocationConvocationController::class, 'imprimerConvocation'])->name('convocation.examens.print');
 });

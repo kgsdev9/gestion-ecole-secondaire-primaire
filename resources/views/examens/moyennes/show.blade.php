@@ -10,11 +10,7 @@
                         MOYENNES DE L'EXAMEN :
                         <span class="text-primary ms-2" x-text="`${examen.name} (${examen.code})`"></span>
                     </h1>
-
-
-
                 </div>
-
                 <div class="card-body py-4">
                     <div class="table-responsive">
                         <table class="table align-middle table-row-dashed fs-6 gy-5">
@@ -55,8 +51,6 @@
                                         <td></td>
                                     </template>
                                     <td class="text-success" x-text="moyenneMax !== null ? moyenneMax.toFixed(2) : '-'"></td>
-
-
                                 </tr>
                                 <tr>
                                     <td>Moyenne min</td>
