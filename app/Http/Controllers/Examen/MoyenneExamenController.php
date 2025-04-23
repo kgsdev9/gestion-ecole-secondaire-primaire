@@ -54,6 +54,7 @@ class MoyenneExamenController extends Controller
 
 
 
+
     public function store(Request $request)
     {
         $examen = Examen::find($request->examen_id);
@@ -85,6 +86,32 @@ class MoyenneExamenController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function edit($examenId)
+    {
+        $examen = Examen::findOrFail($examenId);
+
+        // Récupérer les lignes de moyennes existantes
+        $moyennes = MoyenneExamenLigne::with(['eleve', 'matiere'])
+            ->where('examen_id', $examen->id)
+            ->where('anneeacademique_id', $examen->anneeacademique_id)
+            ->get();
+
+        // Éleves concernés
+        $eleves = $moyennes->groupBy('eleve_id')->map(fn($group) => $group->first()->eleve)->values();
+
+        // Matières concernées
+        $matieres = $moyennes->groupBy('matiere_id')->map(fn($group) => $group->first()->matiere)->values();
+
+        // Organisation des notes
+        $notes = [];
+        foreach ($moyennes as $moyenne) {
+            $notes[$moyenne->eleve_id][$moyenne->matiere_id] = $moyenne->moyenne;
+        }
+
+        return view('examens.moyennes.edit', compact('examen', 'eleves', 'matieres', 'notes'));
+    }
+
 
     public function show($examenid)
     {

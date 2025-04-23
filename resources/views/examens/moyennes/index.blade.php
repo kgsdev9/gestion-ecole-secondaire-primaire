@@ -70,6 +70,15 @@
                                                        <i class="fa fa-eye"></i>
                                                     </a>
                                                     &nbsp;
+                                                    <a :href="`{{ route('examens.moyenne.edit', ['moyenne' => '__ID__']) }}`
+                                                        .replace('__ID__', moyenne.examen.id)"
+                                                       class="btn btn-light btn-sm"
+                                                       title="Modifier">
+                                                       <i class="fa fa-edit"></i>
+                                                    </a>
+
+
+                                                    &nbsp;
                                                     <a :href="`{{ route('examens.moyenne.examens.create', ['id' => '__ID__']) }}`
                                                         .replace('__ID__', moyenne.examen.id)"
                                                        class="btn btn-info btn-sm"
