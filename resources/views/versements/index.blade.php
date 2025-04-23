@@ -203,15 +203,6 @@
 
                                                     </select>
                                                 </div>
-
-                                                <!-- Date Versement -->
-                                                <div class="mb-3">
-                                                    <label for="date_versement" class="form-label">Date du
-                                                        Versement</label>
-                                                    <input type="date" id="date_versement" class="form-control"
-                                                        x-model="formData.date_versement" required>
-                                                </div>
-
                                                 <!-- Montant Versement -->
                                                 <div class="mb-3">
                                                     <label for="montant_verse" class="form-label">Montant Versé</label>

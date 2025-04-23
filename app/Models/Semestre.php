@@ -14,6 +14,7 @@ class Semestre extends Model
         'anneeacademique_id',
         'name',
         'active',
+        'cloture',
         'date_debut',
         'date_fin',
     ];

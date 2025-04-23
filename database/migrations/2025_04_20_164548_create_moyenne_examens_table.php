@@ -16,7 +16,6 @@ class CreateMoyenneExamensTable extends Migration
             $table->foreignId('anneeacademique_id')->constrained('annee_academiques')->onDelete('cascade');
             $table->decimal('moyenne', 5, 2)->nullable();
             $table->timestamps();
-
             $table->unique(['eleve_id', 'matiere_id', 'examen_id', 'anneeacademique_id'], 'unique_moyenne_examen');
         });
     }

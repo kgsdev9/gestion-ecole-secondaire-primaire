@@ -15,6 +15,7 @@ class CreateRepartitionsTable extends Migration
     {
         Schema::create('repartitions', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->string('title')->nullable();
             $table->unsignedBigInteger('anneeacademique_id');
             $table->foreignId('examen_id')->constrained('examens')->onDelete('cascade');

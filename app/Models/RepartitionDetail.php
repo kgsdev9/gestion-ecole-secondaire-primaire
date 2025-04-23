@@ -10,6 +10,7 @@ class RepartitionDetail extends Model
     use HasFactory;
 
     protected $fillable = [
+        'code',
         'examen_id',
         'eleve_id',
         'salle_id',

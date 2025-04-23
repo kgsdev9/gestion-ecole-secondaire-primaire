@@ -5,15 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Repartition extends Model
+class ProgrammeExamenLigne extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'code',
-        'title',
-        'anneeacademique_id',
         'examen_id',
+        'matiere_id',
+        'heure_debut',
+        'heure_fin',
+        'duree',
+        'jour',
+        'anneeacademique_id'
     ];
 
     /**
@@ -22,6 +26,14 @@ class Repartition extends Model
     public function examen()
     {
         return $this->belongsTo(Examen::class, 'examen_id');
+    }
+
+    /**
+     * Relation avec la matière
+     */
+    public function matiere()
+    {
+        return $this->belongsTo(Matiere::class, 'matiere_id');
     }
 
     /**

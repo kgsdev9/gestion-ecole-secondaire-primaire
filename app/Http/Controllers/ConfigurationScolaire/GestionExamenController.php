@@ -48,6 +48,13 @@ class GestionExamenController extends Controller
             ->exists();
 
         if (!$repartitionexiste) {
+
+            Repartition::create([
+                'examen_id' => $examen->id,
+                'anneeacademique_id' => $examen->anneeacademique_id,
+
+            ]);
+
             foreach ($salles as $salle) {
                 $capacite = $salle->capacite;
 

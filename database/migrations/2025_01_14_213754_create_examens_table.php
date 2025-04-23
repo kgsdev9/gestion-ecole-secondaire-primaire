@@ -15,6 +15,7 @@ class CreateExamensTable extends Migration
     {
         Schema::create('examens', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->string('name');
             $table->text('description')->nullable();
             $table->foreignId('classe_id')->constrained('classes')->onDelete('cascade');

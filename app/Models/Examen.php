@@ -11,6 +11,7 @@ class Examen extends Model
 
     // Définir les attributs qui peuvent être assignés en masse
     protected $fillable = [
+        'code',
         'typeexamen_id',
         'anneeacademique_id',
         'name',

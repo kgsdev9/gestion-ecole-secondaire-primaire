@@ -14,6 +14,7 @@ class AnneeAcademique extends Model
         'name',
         'date_debut',
         'date_fin',
+        'cloture',
         'active',
     ];
 

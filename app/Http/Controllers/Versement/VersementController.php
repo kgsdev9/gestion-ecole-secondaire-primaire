@@ -41,16 +41,21 @@ class VersementController extends Controller
     }
 
 
+    public function generateCodeVersement() {
+        
+    }
+
+
 
     public function store(Request $request)
     {
-        
+
         // Création du versement sans validation (en supposant que les données sont valides)
         $versement = Versement::create([
             'montant_verse' => $request->montant_verse,
             'montant_restant' => $request->montant_reliquat,
             'typeversement_id' => $request->typeversement_id,
-            'date_versement' => $request->date_versement,
+            'date_versement' => now(),
             'eleve_id' => $request->eleve_id,
             'anneeacademique_id' => $this->anneeAcademiqueService->getAnneeActive()->id,
             'reference' => rand(1000, 34445),

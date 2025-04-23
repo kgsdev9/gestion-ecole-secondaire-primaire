@@ -15,6 +15,7 @@ class CreateRepartitionDetailsTable extends Migration
     {
         Schema::create('repartition_details', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->foreignId('examen_id')->constrained()->onDelete('cascade');
             $table->foreignId('eleve_id')->constrained()->onDelete('cascade');
             $table->foreignId('salle_id')->constrained()->onDelete('cascade');

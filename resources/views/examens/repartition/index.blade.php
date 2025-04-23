@@ -73,10 +73,19 @@
                                                     <td x-text="examen.cloture ? 'Oui' : 'Non'"></td>
                                                     <td class="text-end d-flex justify-content-start">
                                                         <a :href="`{{ route('examens.programme.examens', ['id' => '__ID__']) }}`
-                                                        .replace(
-                                                            '__ID__', examen.id)"
-                                                            class="btn btn-warning btn-sm">
-                                                            <i class="fa fa-eye"></i>
+                                                            .replace(
+                                                                '__ID__', examen.id)"
+                                                                class="btn btn-warning btn-sm">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        &nbsp; &nbsp;
+
+
+                                                        <a :href="`{{ route('examens.save.moyenne', ['id' => '__ID__']) }}`
+                                                        .replace
+                                                            ('__ID__', examen.id)"
+                                                            class="btn btn-info btn-sm">
+                                                            <i class="fa fa-calculator"></i>
                                                         </a>
 
                                                         &nbsp; &nbsp;
