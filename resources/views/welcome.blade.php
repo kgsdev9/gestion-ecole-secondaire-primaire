@@ -310,13 +310,14 @@
                                 </div>
                             </div>
                         </div>
+                        
 
                     </div>
 
 
                     <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
 
-                        <div class="col-xl-12">
+                        <div class="col-xl-6">
                             <!--begin::Table widget 14-->
                             <div class="card card-flush h-md-100">
                                 <!--begin::Header-->
@@ -404,6 +405,7 @@
                         </div>
                         <!--end::Col-->
                     </div>
+
                     <!--end::Row-->
                 </div>
                 <!--end::Content container-->

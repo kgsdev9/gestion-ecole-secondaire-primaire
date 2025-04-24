@@ -6,7 +6,7 @@
     <title>@yield('title')</title>
     <meta charset="utf-8" />
     <meta name="description"
-        content="KGS Informatique - Spécialiste en solutions numériques : développement web, logiciels, maintenance et accompagnement digital en Côte d'Ivoire." />
+        content="KGS Informatique - Spécialiste en solutions numériques : développement web, applications mobile, maintenance et accompagnement digital en Côte d'Ivoire." />
     <meta name="keywords"
         content="KGS Informatique, développement web, logiciels, informatique, Côte d'Ivoire, maintenance, digital, kgsinformatique.net" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,7 +14,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="KGS Informatique - Votre Partenaire Numérique" />
     <meta property="og:description"
-        content="Découvrez les solutions numériques de KGS Informatique : applications web, logiciels métiers, maintenance informatique et plus encore." />
+        content="Découvrez les solutions numériques de KGS Informatique : applications web, applications mobile, maintenance informatique et plus encore." />
     <meta property="og:url" content="https://kgsinformatique.net/" />
     <meta property="og:site_name" content="KGS Informatique" />
     <link rel="canonical" href="https://kgsinformatique.net/" />
@@ -31,7 +31,6 @@
     data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true"
     data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
     data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
-    <!--begin::Theme mode setup on page load-->
     <script>
         var defaultThemeMode = "dark";
         var themeMode;
@@ -99,54 +98,72 @@
 
                             <div class="menu menu-rounded menu-column menu-lg-row my-5 my-lg-0 align-items-stretch fw-semibold px-2 px-lg-0"
                                 id="kt_app_header_menu" data-kt-menu="true">
+                                @php
+                                    $isDashboard = request()->is('/');
+                                @endphp
+
                                 <a href="{{ url('/') }}"
-                                    class="menu-item here show menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
-                                    <span class="menu-link">
+                                    class="menu-item menu-lg-down-accordion me-0 me-lg-2 {{ $isDashboard ? 'here show menu-here-bg' : '' }}">
+                                    <span class="menu-link {{ $isDashboard ? 'active' : '' }}">
                                         <span class="menu-title">Tableau de bord</span>
                                         <span class="menu-arrow d-lg-none"></span>
                                     </span>
-
                                 </a>
-
-                                <a href="{{ route('eleves.index') }}"
-                                    class="menu-item me-0 me-lg-2 {{ request()->routeIs('eleves.index') ? 'active' : '' }}">
-                                    <span class="menu-link">
+                                <a href="{{ route('eleves.index') }}" class="menu-item me-0 me-lg-2">
+                                    <span class="menu-link {{ request()->routeIs('eleves.index') ? 'active' : '' }}">
                                         <span class="menu-title">Eleves</span>
                                         <span class="d-lg-none"></span>
                                     </span>
                                 </a>
 
-                                <a href="{{ route('versements.index') }}"
-                                    class="menu-item menu-lg-down-accordion me-0 me-lg-2">
-                                    <span class="menu-link">
-                                        <span class="menu-title">Versements</span>
-                                        <span class=" d-lg-none"></span>
-                                    </span>
+                                @php
+                                    $isVersements = request()->routeIs('versements.index');
+                                @endphp
 
+                                <a href="{{ route('versements.index') }}"
+                                    class="menu-item menu-lg-down-accordion me-0 me-lg-2 {{ $isVersements ? 'here show menu-here-bg' : '' }}">
+                                    <span class="menu-link {{ $isVersements ? 'active' : '' }}">
+                                        <span class="menu-title">Versements</span>
+                                        <span class="d-lg-none"></span>
+                                    </span>
                                 </a>
+
+                                @php
+                                    $isExamens = request()->routeIs('examens.gestion.index');
+                                @endphp
+
                                 <a href="{{ route('examens.gestion.index') }}"
-                                    class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
-                                    <span class="menu-link">
+                                    class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2 {{ $isExamens ? 'here show menu-here-bg' : '' }}">
+                                    <span class="menu-link {{ $isExamens ? 'active' : '' }}">
                                         <span class="menu-title">Examens</span>
                                         <span class="d-lg-none"></span>
                                     </span>
-
                                 </a>
 
-                                <a href="{{route('configuration.convocation.examen')}}" class="menu-item menu-lg-down-accordion me-0 me-lg-2">
-                                    <span class="menu-link">
-                                        <span class="menu-title">Convocation examen </span>
-                                        <span class=" d-lg-none"></span>
+                                @php
+                                    $isConvocationExamen = request()->routeIs('configuration.convocation.examen');
+                                @endphp
+
+                                <a href="{{ route('configuration.convocation.examen') }}"
+                                    class="menu-item menu-lg-down-accordion me-0 me-lg-2 {{ $isConvocationExamen ? 'here show menu-here-bg' : '' }}">
+                                    <span class="menu-link {{ $isConvocationExamen ? 'active' : '' }}">
+                                        <span class="menu-title">Convocation examen</span>
+                                        <span class="d-lg-none"></span>
                                     </span>
                                 </a>
 
-                                <a href="#" class="menu-item menu-lg-down-accordion me-0 me-lg-2">
-                                    <span class="menu-link">
-                                        <span class="menu-title">Configuration avancee</span>
-                                        <span class=" d-lg-none"></span>
-                                    </span>
+                                @php
+                                    $isConfigAvancee = request()->routeIs('configuration.avancee'); // à ajuster si tu as une vraie route
+                                @endphp
 
+                                <a href="#"
+                                    class="menu-item menu-lg-down-accordion me-0 me-lg-2 {{ $isConfigAvancee ? 'here show menu-here-bg' : '' }}">
+                                    <span class="menu-link {{ $isConfigAvancee ? 'active' : '' }}">
+                                        <span class="menu-title">Configuration avancée</span>
+                                        <span class="d-lg-none"></span>
+                                    </span>
                                 </a>
+
 
 
                             </div>
@@ -434,8 +451,13 @@
                             data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px">
                             <div class="menu menu-column menu-rounded menu-sub-indention fw-semibold px-3"
                                 id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
-                                <div class="menu-item here show menu-accordion">
-                                    <a class="menu-link" href="{{ url('/') }}">
+                                @php
+                                    $isDashboard = request()->is('/');
+                                @endphp
+
+                                <div class="menu-item {{ $isDashboard ? 'here show' : '' }} menu-accordion">
+                                    <a class="menu-link {{ $isDashboard ? 'active' : '' }}"
+                                        href="{{ url('/') }}">
                                         <span class="menu-icon">
                                             <span class="svg-icon svg-icon-2">
                                                 <svg width="24" height="24" viewBox="0 0 24 24"
@@ -451,10 +473,8 @@
                                                 </svg>
                                             </span>
                                         </span>
-                                        <span class="menu-title">Tableau de bord </span>
-
+                                        <span class="menu-title">Tableau de bord</span>
                                     </a>
-
                                 </div>
 
                                 <div class="menu-item pt-5">
@@ -568,16 +588,16 @@
                                             </a>
                                         </div>
 
-                                        <div
-                                            class="menu-item {{ request()->routeIs('scolarites.index') ? 'active' : '' }}">
-                                            <a class="menu-link" href="{{ route('scolarites.index') }}">
+                                        <div class="menu-item">
+                                            <a class="menu-link {{ request()->routeIs('scolarites.index') ? 'active' : '' }}"
+                                                href="{{ route('scolarites.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Scolarite</span>
+                                                <span class="menu-title">Scolarité</span>
                                             </a>
-
                                         </div>
+
 
                                         <div class="menu-item">
                                             <a class="menu-link {{ request()->routeIs('inscription.index') ? 'active' : '' }}"
@@ -587,30 +607,31 @@
                                                 </span>
                                                 <span class="menu-title">Inscription</span>
                                             </a>
-
                                         </div>
+
+
                                     </div>
                                 </div>
 
-                                <a href="{{ route('eleves.index') }}"
-                                    class="menu-item  {{ request()->routeIs('eleves.index') ? 'active' : '' }}">
-                                    <span class="menu-link">
+
+                                <a href="{{ route('eleves.index') }}" class="menu-item">
+                                    <span class="menu-link {{ request()->routeIs('eleves.index') ? 'active' : '' }}">
                                         <span class="menu-icon">
-                                            <span class="svg-icon svg-icon-2">
-                                                <svg width="24" height="24" viewBox="0 0 24 24"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M20 14H18V10H20C20.6 10 21 10.4 21 11V13C21 13.6 20.6 14 20 14ZM21 19V17C21 16.4 20.6 16 20 16H18V20H20C20.6 20 21 19.6 21 19ZM21 7V5C21 4.4 20.6 4 20 4H18V8H20C20.6 8 21 7.6 21 7Z"
-                                                        fill="currentColor" />
-                                                    <path opacity="0.3"
-                                                        d="M17 22H3C2.4 22 2 21.6 2 21V3C2 2.4 2.4 2 3 2H17C17.6 2 18 2.4 18 3V21C18 21.6 17.6 22 17 22ZM10 7C8.9 7 8 7.9 8 9C8 10.1 8.9 11 10 11C11.1 11 12 10.1 12 9C12 7.9 11.1 7 10 7ZM13.3 16C14 16 14.5 15.3 14.3 14.7C13.7 13.2 12 12 10.1 12C8.10001 12 6.49999 13.1 5.89999 14.7C5.59999 15.3 6.19999 16 7.39999 16H13.3Z"
-                                                        fill="currentColor" />
-                                                </svg>
-                                            </span>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M20 14H18V10H20C20.6 10 21 10.4 21 11V13C21 13.6 20.6 14 20 14ZM21 19V17C21 16.4 20.6 16 20 16H18V20H20C20.6 20 21 19.6 21 19ZM21 7V5C21 4.4 20.6 4 20 4H18V8H20C20.6 8 21 7.6 21 7Z"
+                                                    fill="currentColor" />
+                                                <path opacity="0.3"
+                                                    d="M17 22H3C2.4 22 2 21.6 2 21V3C2 2.4 2.4 2 3 2H17C17.6 2 18 2.4 18 3V21C18 21.6 17.6 22 17 22ZM10 7C8.9 7 8 7.9 8 9C8 10.1 8.9 11 10 11C11.1 11 12 10.1 12 9C12 7.9 11.1 7 10 7ZM13.3 16C14 16 14.5 15.3 14.3 14.7C13.7 13.2 12 12 10.1 12C8.1 12 6.5 13.1 5.9 14.7C5.6 15.3 6.2 16 7.4 16H13.3Z"
+                                                    fill="currentColor" />
+                                            </svg>
                                         </span>
                                         <span class="menu-title">Eleves</span>
                                     </span>
                                 </a>
+
+
 
 
                                 <div class="menu-item pt-5">
@@ -640,49 +661,50 @@
                                     <div class="menu-sub menu-sub-accordion">
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
 
-                                            <div
-                                                class="menu-item {{ request()->routeIs('configurationnote.classe.anneeacademique') ? 'active' : '' }}">
-                                                <a class="menu-link"
-                                                    href="{{ route('configurationnote.classe.anneeacademique') }}">
+
+                                            <div class="menu-item">
+                                                <a class="menu-link {{ request()->routeIs('configurationnote.classe.anneeacademique') ? 'active' : '' }}"
+                                                    href="{{ request()->routeIs('configurationnote.classe.anneeacademique') ? 'active' : '' }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">Gestion Notes par classe</span>
+                                                    <span class="menu-title">Notes </span>
                                                 </a>
-
                                             </div>
-                                            <div
-                                                class="menu-item {{ request()->routeIs('gestionmoyenne.gestion.moyenne') ? 'active' : '' }}">
-                                                <a class="menu-link"
+
+
+                                            <div class="menu-item">
+                                                <a class="menu-link {{ request()->routeIs('gestionmoyenne.gestion.moyenne') ? 'active' : '' }}"
                                                     href="{{ route('gestionmoyenne.gestion.moyenne') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">Gestion des moyennes</span>
+                                                    <span class="menu-title">Moyennes </span>
                                                 </a>
                                             </div>
 
-                                            <div
-                                                class="menu-item {{ request()->routeIs('examens.gestion.index') ? 'active' : '' }}">
-                                                <a class="menu-link" href="{{ route('examens.gestion.index') }}">
+                                            <div class="menu-item">
+                                                <a class="menu-link {{ request()->routeIs('examens.gestion.index') ? 'active' : '' }}"
+                                                    href="{{ route('examens.gestion.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">Gestion des emplois du temps </span>
+                                                    <span class="menu-title">Emploi du temps </span>
+                                                </a>
+                                            </div>
+
+
+                                            <div
+                                                class="menu-item {{ request()->routeIs('configurationnote.rapport.semestre') ? 'active' : '' }}">
+                                                <a class="menu-link"
+                                                    href="{{ route('configurationnote.rapport.semestre') }}">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Parametre</span>
                                                 </a>
 
                                             </div>
-
-                                            <div
-                                            class="menu-item {{ request()->routeIs('configurationnote.rapport.semestre') ? 'active' : '' }}">
-                                            <a class="menu-link" href="{{ route('configurationnote.rapport.semestre') }}">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                <span class="menu-title">Parametre</span>
-                                            </a>
-
-                                        </div>
                                         </div>
                                     </div>
                                 </div>
@@ -713,11 +735,12 @@
                                         <span class="menu-arrow"></span>
                                     </span>
 
-                                    <div class="menu-sub menu-sub-accordion">
+                                    <div class="menu-sub menu-sub-accordion ">
                                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                                             <div
                                                 class="menu-item {{ request()->routeIs('examens.gestion.index') ? 'active' : '' }}">
-                                                <a class="menu-link" href="{{ route('examens.gestion.index') }}">
+                                                <a class="menu-link {{ request()->routeIs('examens.gestion.index') ? 'active' : '' }}"
+                                                    href="{{ route('examens.gestion.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -729,18 +752,23 @@
 
                                             <div
                                                 class="menu-item {{ request()->routeIs('examens.programme.index') ? 'active' : '' }}">
-                                                <a class="menu-link"
+
+
+                                                <a class="menu-link {{ request()->routeIs('examens.programme.index') ? 'active' : '' }}"
                                                     href="{{ route('examens.programme.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
                                                     <span class="menu-title">Programme examen</span>
                                                 </a>
+
                                             </div>
 
                                             <div
                                                 class="menu-item {{ request()->routeIs('examens.repartition.index') ? 'active' : '' }}">
-                                                <a class="menu-link"
+
+
+                                                <a class="menu-link {{ request()->routeIs('examens.repartition.index') ? 'active' : '' }}"
                                                     href="{{ route('examens.repartition.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
@@ -749,9 +777,8 @@
                                                 </a>
                                             </div>
 
-                                            <div
-                                                class="menu-item {{ request()->routeIs('examens.moyenne.index') ? 'active' : '' }}">
-                                                <a class="menu-link"
+                                            <div class="menu-item ">
+                                                <a class="menu-link {{ request()->routeIs('examens.moyenne.index') ? 'active' : '' }}"
                                                     href="{{ route('examens.moyenne.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
@@ -763,24 +790,28 @@
 
                                             <div
                                                 class="menu-item {{ request()->routeIs('examens.parametre.examens') ? 'active' : '' }}">
-                                                <a class="menu-link"
+
+                                                <a class="menu-link {{ request()->routeIs('examens.parametre.examens') ? 'active' : '' }}"
                                                     href="{{ route('examens.parametre.examens') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
                                                     <span class="menu-title">Parametre</span>
                                                 </a>
+
                                             </div>
 
                                             <div
                                                 class="menu-item {{ request()->routeIs('examens.resultats.index') ? 'active' : '' }}">
-                                                <a class="menu-link"
+
+                                                <a class="menu-link {{ request()->routeIs('examens.resultats.index') ? 'active' : '' }}"
                                                     href="{{ route('examens.resultats.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
                                                     <span class="menu-title">Resultats</span>
                                                 </a>
+
                                             </div>
 
                                         </div>
@@ -818,7 +849,7 @@
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Par Etudiant</span>
+                                                <span class="menu-title">Eleves</span>
                                             </a>
 
                                         </div>
@@ -829,7 +860,7 @@
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">Rapport de versement</span>
+                                                <span class="menu-title">Suivi versements</span>
                                             </a>
 
                                         </div>
