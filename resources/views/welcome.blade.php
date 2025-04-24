@@ -150,7 +150,7 @@
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        {{--  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
+                         <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
                             <!--begin::Card widget 17-->
                             <div class="card card-flush h-md-50 mb-5 mb-xl-10">
                                 <!--begin::Header-->
@@ -161,11 +161,11 @@
                                         <div class="d-flex align-items-center">
 
                                             <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">
-                                                {{ $countlisterecentesfactures }} </span>
+                                                 </span>
                                         </div>
                                         <!--end::Info-->
                                         <!--begin::Subtitle-->
-                                        <span class="text-gray-400 pt-1 fw-semibold fs-6">Total des factures (FCFA )
+                                        <span class="text-gray-400 pt-1 fw-semibold fs-6">Statistique des versements(FCFA )
                                         </span>
                                         <!--end::Subtitle-->
                                     </div>
@@ -182,10 +182,10 @@
                                             <div class="bullet w-8px h-3px rounded-2 bg-success me-3"></div>
                                             <!--end::Bullet-->
                                             <!--begin::Label-->
-                                            <div class="text-gray-500 flex-grow-1 me-4">Total jour </div>
+                                            <div class="text-gray-500 flex-grow-1 me-4">Cette Semaine </div>
                                             <!--end::Label-->
                                             <!--begin::Stats-->
-                                            <div class="fw-bolder text-gray-700 text-xxl-end">{{ $ventesJour }}</div>
+                                            <div class="fw-bolder text-gray-700 text-xxl-end">0</div>
                                             <!--end::Stats-->
                                         </div>
                                         <!--end::Label-->
@@ -195,10 +195,10 @@
                                             <div class="bullet w-8px h-3px rounded-2 bg-primary me-3"></div>
                                             <!--end::Bullet-->
                                             <!--begin::Label-->
-                                            <div class="text-gray-500 flex-grow-1 me-4">Total semaine</div>
+                                            <div class="text-gray-500 flex-grow-1 me-4">Ce mois </div>
                                             <!--end::Label-->
                                             <!--begin::Stats-->
-                                            <div class="fw-bolder text-gray-700 text-xxl-end">{{ $ventesSemaine }}</div>
+                                            <div class="fw-bolder text-gray-700 text-xxl-end">0</div>
                                             <!--end::Stats-->
                                         </div>
                                         <!--end::Label-->
@@ -209,10 +209,10 @@
                                                 style="background-color: #E4E6EF"></div>
                                             <!--end::Bullet-->
                                             <!--begin::Label-->
-                                            <div class="text-gray-500 flex-grow-1 me-4">Total mois </div>
+                                            <div class="text-gray-500 flex-grow-1 me-4">Sur L'année </div>
                                             <!--end::Label-->
                                             <!--begin::Stats-->
-                                            <div class="fw-bolder text-gray-700 text-xxl-end">{{ $ventesMois }} </div>
+                                            <div class="fw-bolder text-gray-700 text-xxl-end">0</div>
                                             <!--end::Stats-->
                                         </div>
                                         <!--end::Label-->
@@ -226,14 +226,14 @@
 
                             <div class="card card-flush h-lg-50">
                                 <div class="card-header pt-5">
-                                    <h3 class="card-title text-gray-800">Vos Activités </h3>
+                                    <h3 class="card-title text-gray-800">Modules scolaires</h3>
                                 </div>
 
                                 <div class="card-body pt-5">
                                     <!--begin::Item-->
                                     <div class="d-flex flex-stack">
                                         <!--begin::Section-->
-                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Total Client </div>
+                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Emploi du temps</div>
                                         <!--end::Section-->
                                         <!--begin::Statistics-->
                                         <div class="d-flex align-items-senter">
@@ -250,7 +250,7 @@
                                                 </svg>
                                             </span>
 
-                                            <span class="text-gray-900 fw-bolder fs-6">{{ $counCclient }}</span>
+                                            <span class="text-gray-900 fw-bolder fs-6">0</span>
 
                                         </div>
                                         <!--end::Statistics-->
@@ -262,7 +262,7 @@
                                     <!--begin::Item-->
                                     <div class="d-flex flex-stack">
                                         <!--begin::Section-->
-                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Total Factures Ventes </div>
+                                        <div class="text-gray-700 fw-semibold fs-6 me-2">Rapport scolaire</div>
                                         <!--end::Section-->
                                         <!--begin::Statistics-->
                                         <div class="d-flex align-items-senter">
@@ -280,7 +280,7 @@
                                             </span>
                                             <!--end::Svg Icon-->
                                             <!--begin::Number-->
-                                            <span class="text-gray-900 fw-bolder fs-6">{{ $counFaturesVentes }}</span>
+                                            <span class="text-gray-900 fw-bolder fs-6">0</span>
                                             <!--end::Number-->
                                         </div>
                                         <!--end::Statistics-->
@@ -293,24 +293,22 @@
                                 <!--end::Body-->
                             </div>
                             <!--end::LIst widget 25-->
-                        </div>  --}}
-                        <!--end::Col-->
-                        <!--begin::Col-->
+                        </div>
+
                         <div class="col-xxl-6">
                             <div class="card card-flush h-md-100">
                                 <div class="card-header pt-5">
                                     <h3 class="card-title align-items-start flex-column">
-                                        <span class="card-label fw-bold text-gray-800">Liste des etudiants par année
-                                        </span>
+                                        <span class="card-label fw-bold text-gray-800">Évolution des étudiants par classe</span>
                                         <span class="text-gray-400 mt-1 fw-semibold fs-6">Graphique des rapports</span>
                                     </h3>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="ventesChart"></canvas>
+                                    <canvas id="diagramme"></canvas>
                                 </div>
                             </div>
                         </div>
-                        
+
 
                     </div>
 
@@ -318,148 +316,170 @@
                     <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
 
                         <div class="col-xl-6">
-                            <!--begin::Table widget 14-->
                             <div class="card card-flush h-md-100">
                                 <!--begin::Header-->
                                 <div class="card-header pt-7">
-                                    <!--begin::Title-->
                                     <h3 class="card-title align-items-start flex-column">
-                                        <span class="card-label fw-bold text-gray-800">Liste des récentes versements
-                                            effectutés
-                                        </span>
-                                        <span class="text-gray-400 mt-1 fw-semibold fs-6">Les versements
-                                        </span>
+                                        <span class="card-label fw-bold text-gray-800">Liste des récentes versements effectués</span>
+                                        <span class="text-gray-400 mt-1 fw-semibold fs-6">Les versements récents</span>
                                     </h3>
-                                    <!--end::Title-->
-                                    <!--begin::Toolbar-->
                                     <div class="card-toolbar">
-                                        <a href="{{ route('ventes.index') }}" class="btn btn-sm btn-light">Consulter </a>
+                                        <a href="{{ route('versements.index') }}" class="btn btn-sm btn-light">Consulter</a>
                                     </div>
-                                    <!--end::Toolbar-->
                                 </div>
                                 <!--end::Header-->
+
                                 <!--begin::Body-->
-                                {{--  <div class="card-body pt-6">
-                                    <!--begin::Table container-->
+                                <div class="card-body pt-6">
                                     <div class="table-responsive">
-                                        <!--begin::Table-->
                                         <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
-                                            <!--begin::Table head-->
                                             <thead>
                                                 <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
-                                                    <th class="p-0 pb-3 min-w-175px text-start">CODE FACTURE</th>
-                                                    <th class="p-0 pb-3 min-w-100px text-end">Mode réglement </th>
-                                                    <th class="p-0 pb-3 min-w-175px text-end pe-12">MONTANT TTC</th>
+                                                    <th class="p-0 pb-3 min-w-175px text-start">Référence</th>
+                                                    <th class="p-0 pb-3 min-w-100px text-end">Élève</th>
+                                                    <th class="p-0 pb-3 min-w-175px text-end pe-12">Montant versé</th>
                                                     <th class="p-0 pb-3 w-125px text-end pe-7">Date</th>
-
                                                 </tr>
                                             </thead>
-                                            <!--end::Table head-->
-                                            <!--begin::Table body-->
                                             <tbody>
-                                                @foreach ($listerecentesfactures as $facture)
+                                                @foreach ($versements as $versement)
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex align-items-center">
-
                                                                 <div class="d-flex justify-content-start flex-column">
-                                                                    <a href="#"
-                                                                        class="text-gray-800 fw-bold text-hover-primary mb-1 fs-6">
-                                                                        {{ $facture->numvente }}</a>
+                                                                    <span class="text-gray-800 fw-bold text-hover-primary mb-1 fs-6">
+                                                                        {{ $versement->reference }}
+                                                                    </span>
                                                                     <span class="text-gray-400 fw-semibold d-block fs-7">
-                                                                        {{ $facture->nom }}</span>
+                                                                        {{ $versement->typeVersement->name ?? 'Non défini' }}
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td class="text-end pe-0">
-                                                            <span
-                                                                class="text-gray-600 fw-bold fs-6">{{ $facture->modereglement->libellemodereglement ?? '' }}</span>
+                                                            <span class="text-gray-600 fw-bold fs-6">
+                                                                {{ $versement->eleve->nom ?? 'Inconnu' }} {{ $versement->eleve->prenom ?? '' }}
+                                                            </span>
                                                         </td>
-
                                                         <td class="text-end pe-12">
                                                             <span class="badge py-3 px-4 fs-7 badge-light-primary">
-                                                                {{ $facture->montantttc }}</span>
+                                                                {{ $versement->montant_verse }} FCFA <!-- Montant versé -->
+                                                            </span>
                                                         </td>
                                                         <td class="text-end pe-0">
-                                                            {{ $facture->created_at->format('d/m/y') }}
-
-
+                                                            {{ date('d/m/y', strtotime($versement->date_versement)) }} <!-- Date du versement -->
                                                         </td>
 
                                                     </tr>
                                                 @endforeach
-
-
-
-
-
                                             </tbody>
-                                            <!--end::Table body-->
                                         </table>
                                     </div>
-                                    <!--end::Table-->
-                                </div>  --}}
-                                <!--end: Card Body-->
+                                </div>
                             </div>
-                            <!--end::Table widget 14-->
                         </div>
-                        <!--end::Col-->
+
+                        <div class="col-xl-6">
+                            <div class="card card-flush h-md-100">
+                                <!--begin::Header-->
+                                <div class="card-header pt-7">
+                                    <h3 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bold text-gray-800">Liste des récentes inscriptions</span>
+                                        <span class="text-gray-400 mt-1 fw-semibold fs-6">Les inscriptions récentes</span>
+                                    </h3>
+                                    <div class="card-toolbar">
+                                        <a href="{{ route('inscription.index') }}" class="btn btn-sm btn-light">Consulter</a>
+                                    </div>
+                                </div>
+                                <!--end::Header-->
+
+                                <!--begin::Body-->
+                                <div class="card-body pt-6">
+                                    <div class="table-responsive">
+                                        <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
+                                            <thead>
+                                                <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
+                                                    <th class="p-0 pb-3 min-w-175px text-start">Référence</th>
+                                                    <th class="p-0 pb-3 min-w-100px text-end">Élève</th>
+                                                    <th class="p-0 pb-3 min-w-175px text-end pe-12">Classe</th>
+                                                    <th class="p-0 pb-3 w-125px text-end pe-7">Date d'inscription</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($inscriptions as $inscription)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="d-flex justify-content-start flex-column">
+                                                                    <span class="text-gray-800 fw-bold text-hover-primary mb-1 fs-6">
+                                                                        {{ $inscription->code }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-end pe-0">
+                                                            <span class="text-gray-600 fw-bold fs-6">
+                                                                {{ $inscription->eleve->nom ?? 'Inconnu' }} {{ $inscription->eleve->prenom ?? '' }}
+                                                            </span>
+                                                        </td>
+                                                        <td class="text-end pe-12">
+                                                            <span class="text-gray-600 fw-bold fs-6">
+                                                                {{ $inscription->classe->name ?? 'Non défini' }}
+                                                            </span>
+                                                        </td>
+                                                        <td class="text-end pe-0">
+                                                            {{ date('d/m/y', strtotime($inscription->date_inscription)) }} <!-- Date d'inscription -->
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </div>
-
-                    <!--end::Row-->
                 </div>
-                <!--end::Content container-->
-            </div>
-            <!--end::Content-->
-        </div>
-        <!--end::Content wrapper-->
-        <!--begin::Footer-->
 
-        <!--end::Footer-->
+            </div>
+
+        </div>
+
     </div>
 @endsection
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    {{--  <script>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Récupérer les données du backend
-            const labels = @json($labels); // Mois
-            const data = @json($data); // Totaux
+            const labels = @json($annees); // Les années scolaires
+            const data = @json($data); // Le nombre d'élèves par classe et année
 
             // Configuration du graphique
-            const ctx = document.getElementById('ventesChart').getContext('2d');
+            const ctx = document.getElementById('diagramme').getContext('2d');
             new Chart(ctx, {
-                type: 'line',
+                type: 'line', // Type de graphique : ligne
                 data: {
-                    labels: labels, // Noms des mois
-                    datasets: [{
-                        label: 'Évolution des ventes (en TTC)',
-                        data: data,
+                    labels: labels, // Les années scolaires
+                    datasets: Object.keys(data).map(classe => ({
+                        label: classe,
+                        data: labels.map(annee => data[classe][annee]),
                         borderColor: 'rgba(54, 162, 235, 1)', // Bleu
                         backgroundColor: 'rgba(54, 162, 235, 0.2)', // Bleu clair
-                        borderWidth: 3,
+                        fill: false,
                         tension: 0.4, // Courbe lissée
-                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                    }]
+                        borderWidth: 2
+                    }))
                 },
                 options: {
                     responsive: true,
                     plugins: {
                         legend: {
-                            display: true,
-                            labels: {
-                                color: '#6c757d',
-                                font: {
-                                    size: 14,
-                                    family: "'Poppins', sans-serif"
-                                }
-                            }
+                            display: true
                         },
                         tooltip: {
                             backgroundColor: 'rgba(54, 162, 235, 0.9)',
@@ -470,17 +490,14 @@
                             bodyFont: {
                                 size: 14,
                                 family: "'Poppins', sans-serif"
-                            },
-                            padding: 10,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
+                            }
                         }
                     },
                     scales: {
                         x: {
                             title: {
                                 display: true,
-                                text: 'Mois',
+                                text: 'Années Scolaires',
                                 color: '#6c757d',
                                 font: {
                                     size: 14,
@@ -498,7 +515,7 @@
                         y: {
                             title: {
                                 display: true,
-                                text: 'Total des ventes (TTC)',
+                                text: 'Nombre d\'élèves',
                                 color: '#6c757d',
                                 font: {
                                     size: 14,
@@ -518,5 +535,5 @@
                 }
             });
         });
-    </script>  --}}
+    </script>
 @endpush
