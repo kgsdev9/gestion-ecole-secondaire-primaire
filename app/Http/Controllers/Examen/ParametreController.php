@@ -31,6 +31,13 @@ class ParametreController extends Controller
             return response()->json(['error' => 'Examen non trouvé'], 404);
         }
 
+        // Supprimer les anciens résultats s'ils existent
+        $ancienResultat = ResultatExamen::where('examen_id', $examen->id)->first();
+        if ($ancienResultat) {
+            ResultatExamenLigne::where('resultat_examen_id', $ancienResultat->id)->delete();
+            $ancienResultat->delete();
+        }
+
         // Récupérer toutes les moyennes (lignes matières)
         $moyenneExamens = $examen->moyenneExamens;
 
@@ -50,60 +57,91 @@ class ParametreController extends Controller
                 ];
             }
 
-            $parEleves[$eleveId]['total_points'] += $ligne->moyenne; // additionne les moyennes matières
+            $parEleves[$eleveId]['total_points'] += $ligne->moyenne;
             $parEleves[$eleveId]['nombre_matières'] += 1;
         }
 
-        // Maintenant on insère
-        $nbTotalParticipants = count($parEleves);
-        $nbAdmis = 0;
-        $totalMoyenne = 0;
-
+        // Calcul des moyennes générales
+        $elevesAvecMoyenne = [];
         foreach ($parEleves as $eleveId => $data) {
             $moyenneGenerale = $data['total_points'] / $data['nombre_matières'];
 
-            if ($moyenneGenerale >= 10) {
-                $nbAdmis++;
-            }
-
-            $totalMoyenne += $moyenneGenerale;
-
-            ResultatExamenLigne::create([
-                'code' => $request->code,
-                'resultat_examen_id' => null,
+            $elevesAvecMoyenne[] = [
                 'eleve_id' => $eleveId,
-                'nombre_total_points' => $data['total_points'],
                 'moyenne' => $moyenneGenerale,
-                'admis' => $moyenneGenerale >= 10,
-                'mention' => $this->determineMention($moyenneGenerale),
-                'rang' => 1, // à calculer après
-                'anneeacademique_id' => $examen->anneeacademique_id,
-            ]);
+                'total_points' => $data['total_points'],
+            ];
         }
 
-        $moyenneExamen = $totalMoyenne / $nbTotalParticipants;
-        $tauxReussite = ($nbTotalParticipants > 0) ? ($nbAdmis / $nbTotalParticipants) * 100 : 0;
+        // Trier par moyenne décroissante
+        usort($elevesAvecMoyenne, function ($a, $b) {
+            return $b['moyenne'] <=> $a['moyenne'];
+        });
 
+        $nbTotalParticipants = count($elevesAvecMoyenne);
+        $nbAdmis = 0;
+        $totalMoyenne = 0;
+
+        // Création du ResultatExamen d'abord
         $resultatExamen = ResultatExamen::create([
             'code' => $request->code,
             'examen_id' => $examen->id,
             'anneeacademique_id' => $examen->anneeacademique_id,
-            'taux_reussite' => $tauxReussite,
-            'moyenne_examen' => $moyenneExamen,
-            'nb_admis' => $nbAdmis,
+            'taux_reussite' => 0, // sera mis à jour après
+            'moyenne_examen' => 0,
+            'nb_admis' => 0,
             'nb_total_participant' => $nbTotalParticipants,
             'statut_publication' => 1,
         ]);
 
-        // Mise à jour resultat_examen_id
-        ResultatExamenLigne::where('code', 'like', $request->code . '-%')
-            ->update(['resultat_examen_id' => $resultatExamen->id]);
+        $rang = 1;
+        $precedenteMoyenne = null;
+        $compteur = 0;
+
+        foreach ($elevesAvecMoyenne as $eleve) {
+            $compteur++;
+
+            if ($precedenteMoyenne !== null && $eleve['moyenne'] < $precedenteMoyenne) {
+                $rang = $compteur;
+            }
+
+            if ($eleve['moyenne'] >= 10) {
+                $nbAdmis++;
+            }
+
+            $totalMoyenne += $eleve['moyenne'];
+
+            ResultatExamenLigne::create([
+                'code' => $request->code,
+                'resultat_examen_id' => $resultatExamen->examen_id,
+                'eleve_id' => $eleve['eleve_id'],
+                'nombre_total_points' => $eleve['total_points'],
+                'moyenne' => $eleve['moyenne'],
+                'admis' => $eleve['moyenne'] >= 10,
+                'mention' => $this->determineMention($eleve['moyenne']),
+                'rang' => $rang,
+                'anneeacademique_id' => $examen->anneeacademique_id,
+            ]);
+
+            $precedenteMoyenne = $eleve['moyenne'];
+        }
+
+        // Mettre à jour les stats du ResultatExamen
+        $moyenneExamen = $totalMoyenne / $nbTotalParticipants;
+        $tauxReussite = ($nbTotalParticipants > 0) ? ($nbAdmis / $nbTotalParticipants) * 100 : 0;
+
+        $resultatExamen->update([
+            'taux_reussite' => $tauxReussite,
+            'moyenne_examen' => $moyenneExamen,
+            'nb_admis' => $nbAdmis,
+        ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Résultats d\'examen générés avec succès.',
         ]);
     }
+
 
     // Déterminer la mention
     private function determineMention($moyenne)
