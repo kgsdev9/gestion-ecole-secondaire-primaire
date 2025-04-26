@@ -24,7 +24,7 @@
 
             <!-- Colonne formulaire -->
             <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 justify-content-center align-items-center">
-                <div class="w-lg-500px p-10 bg-white rounded shadow">
+                <div class="w-lg-500px p-10 bg-light rounded shadow">
                     <form class="form w-100" novalidate="novalidate" method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="text-center mb-11">

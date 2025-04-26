@@ -128,6 +128,7 @@ Route::prefix('examens')->name('examens.')->group(function () {
     Route::get('/create/repartition/examens/{id}', [RepartitionController::class, 'createRepartition'])->name('repartition.examens.create');
     Route::get('/create/moyenne/examens/{id}', [MoyenneExamenController::class, 'createMoyenne'])->name('moyenne.examens.create');
     Route::get('/parametre/examen', [ParametreController::class, 'index'])->name('parametre.examens');
+    Route::post('/action/examen', [ParametreController::class, 'executeExamAction'])->name('execute.action');
 });
 
 

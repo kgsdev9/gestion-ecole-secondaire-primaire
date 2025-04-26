@@ -22,6 +22,11 @@ class Examen extends Model
         'cloture',
     ];
 
+    public function moyenneExamens()
+    {
+        return $this->hasMany(MoyenneExamenLigne::class);
+    }
+
 
     public function typeExamen()
     {

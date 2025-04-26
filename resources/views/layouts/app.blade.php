@@ -664,7 +664,7 @@
 
                                             <div class="menu-item">
                                                 <a class="menu-link {{ request()->routeIs('configurationnote.classe.anneeacademique') ? 'active' : '' }}"
-                                                    href="{{ request()->routeIs('configurationnote.classe.anneeacademique') ? 'active' : '' }}">
+                                                    href="{{ route('configurationnote.classe.anneeacademique')}}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
