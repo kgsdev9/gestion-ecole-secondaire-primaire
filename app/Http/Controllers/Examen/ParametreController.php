@@ -24,25 +24,83 @@ class ParametreController extends Controller
 
     public function executeExamAction(Request $request)
     {
-        // Récupérer l'examen
+        // Vérifier si l'examen existe
         $examen = Examen::where('code', $request->code)->first();
 
         if (!$examen) {
-            return response()->json(['error' => 'Examen non trouvé'], 404);
+            // Si l'examen n'est pas trouvé, retourner un message d'erreur
+            return response()->json([
+                'success' => true,
+                'message' => 'Examen non trouvé.',
+            ], 404);
+        }
+
+        $message = "";
+
+        // Vérifier si une action est sélectionnée
+        if ($request->rapport) {
+            $message = "Résultats d'examen générés avec succès.";
+            $this->generateRapportExamen($request->code, $message);
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+            ]);
+        } elseif ($request->cloturer) {
+            $message = "Examen clôturé avec succès";
+            $this->closeExamen($request->code, $message);
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+            ]);
+        } elseif ($request->decloturer) {
+            $message = "Examen declôturé avec succès";
+            $this->openExamen($request->code, $message);
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+            ]);
+        }
+
+        // Si aucune action valide n'est choisie, retourner une erreur
+        return response()->json([
+            'error' => true,
+            'message' => "Action invalide.",
+        ], 400);
+    }
+
+
+
+    public function generateRapportExamen($code, $message)
+    {
+
+        // Récupérer l'examen
+        $examen = Examen::where('code', $code)->first();
+
+        if (!$examen) {
+            $message = "Examen non trouvé";
+            return response()->json([
+                'error' => true,
+                'message' => $message
+            ], 404);
         }
 
         // Supprimer les anciens résultats s'ils existent
-        $ancienResultat = ResultatExamen::where('examen_id', $examen->id)->first();
+        $ancienResultat = ResultatExamen::where('code', $code)->first();
         if ($ancienResultat) {
-            ResultatExamenLigne::where('resultat_examen_id', $ancienResultat->id)->delete();
+            ResultatExamenLigne::where('code', $code)->delete();
             $ancienResultat->delete();
         }
 
         // Récupérer toutes les moyennes (lignes matières)
         $moyenneExamens = $examen->moyenneExamens;
 
-        if ($moyenneExamens->isEmpty()) {
-            return response()->json(['error' => 'Aucun résultat de moyenne pour cet examen.'], 404);
+        if ($moyenneExamens->isEmpty())
+        {
+            $message = "Aucun résultat de moyenne pour cet examen";
+            return response()->json([
+                'error' => true,
+                'message' => $message
+            ], 404);
         }
 
         // Regrouper par élève
@@ -84,10 +142,10 @@ class ParametreController extends Controller
 
         // Création du ResultatExamen d'abord
         $resultatExamen = ResultatExamen::create([
-            'code' => $request->code,
+            'code' => $code,
             'examen_id' => $examen->id,
             'anneeacademique_id' => $examen->anneeacademique_id,
-            'taux_reussite' => 0, // sera mis à jour après
+            'taux_reussite' => 0,
             'moyenne_examen' => 0,
             'nb_admis' => 0,
             'nb_total_participant' => $nbTotalParticipants,
@@ -112,8 +170,8 @@ class ParametreController extends Controller
             $totalMoyenne += $eleve['moyenne'];
 
             ResultatExamenLigne::create([
-                'code' => $request->code,
-                'resultat_examen_id' => $resultatExamen->examen_id,
+                'code' => $code,
+                'resultat_examen_id' => $resultatExamen->id,
                 'eleve_id' => $eleve['eleve_id'],
                 'nombre_total_points' => $eleve['total_points'],
                 'moyenne' => $eleve['moyenne'],
@@ -136,12 +194,8 @@ class ParametreController extends Controller
             'nb_admis' => $nbAdmis,
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Résultats d\'examen générés avec succès.',
-        ]);
-    }
 
+    }
 
     // Déterminer la mention
     private function determineMention($moyenne)
@@ -159,19 +213,45 @@ class ParametreController extends Controller
         }
     }
 
-
-
-
-
     /**
-     * Show the form for creating a new resource.
+     * fermer l'examen.
      *
      * @return \Illuminate\Http\Response
      */
-    public function closeExamen()
+    public function openExamen($code, $message)
     {
-        //
+        $examen = Examen::where('code', $code)->first();
+
+        if (!$examen) {
+            $message = "Examen introuvable";
+            return response()->json([
+                'error' => true,
+                'message' => $message
+            ], 404);
+        }
+
+        $examen->cloture = 0;
+        $examen->save();
+
+
     }
 
-    public function openExamen() {}
+
+    public function closeExamen($code, $message)
+    {
+        $examen = Examen::where('code', $code)->first();
+
+
+        if (!$examen) {
+            $message = "Examen introuvable";
+            return response()->json([
+                'error' => true,
+                'message' => $message
+            ], 404);
+        }
+
+        $examen->cloture = 1;
+        $examen->save();
+
+    }
 }

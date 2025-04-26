@@ -72,15 +72,22 @@
                                                     <td x-text="new Date(examen.date_fin).toLocaleDateString('fr-FR')"></td>
                                                     <td x-text="examen.cloture ? 'Oui' : 'Non'"></td>
                                                     <td class="text-end d-flex justify-content-start">
-                                                        <button @click="openModal(examen)"
-                                                            class="btn btn-primary btn-sm mx-2">
+                                                        <button
+                                                            @click="openModal(examen)"
+                                                            class="btn btn-primary btn-sm mx-2"
+                                                            :disabled="examen.cloture == 1"
+                                                        >
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <button @click="deleteExamen(examen.id)"
-                                                            class="btn btn-danger btn-sm mx-2">
+                                                        <button
+                                                            @click="deleteExamen(examen.id)"
+                                                            class="btn btn-danger btn-sm mx-2"
+                                                            :disabled="examen.cloture == 1"
+                                                        >
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </td>
+
                                                 </tr>
                                             </template>
                                         </tbody>
@@ -168,7 +175,7 @@
                                             x-model="formData.date_fin" required>
                                     </div>
 
-                                
+
 
                                     <!-- Bouton submit -->
                                     <div class="col-md-12 text-end mt-4">

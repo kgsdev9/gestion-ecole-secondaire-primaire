@@ -8,12 +8,9 @@ git remote set-url origin https://github.com/kgsdev9/gestion-ecole-secondaire-pr
 suivi des versements
 si un versement a deja été ajouté on peut plus supprimer la scolarite 
 
-# module lie au deroulement de l'anne academique
-rapport du semestre ou du trimestre en cours 
-une fois cloturé on peut plus ajouter de moyennes ou ni de notes 
+# module lie au deroulement de l'anne academique 
 impresion de la fiche d'inscription 
-importation des eleves
-afficher la liste des recentes etudiants inscrits au ocurs de l'année academique en cours 
+importation des eleves 
 basculement des eleves dans une classe n+ 1 
 
 automaiser l'envoi des rapports de classes et aussi la moyenne des etudiants 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Examen;
 
 use App\Http\Controllers\Controller;
+use App\Models\Examen;
+use App\Models\ResultatExamen;
 use Illuminate\Http\Request;
 
 class ResultatController extends Controller
@@ -14,28 +16,9 @@ class ResultatController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $resultats = ResultatExamen::with(['examen', 'anneeAcademique'])->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('examens.resultats.index',compact('resultats'));
     }
 
     /**
@@ -44,20 +27,12 @@ class ResultatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($codeexamen)
     {
-        //
-    }
+        $examen = ResultatExamen::where('code', $codeexamen)->first();
+        $resultatexamens = $examen->resultatExamensLignes;
+        return view('examens.resultats.show', compact('resultatexamens', 'examen'));
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

@@ -108,6 +108,7 @@ Route::prefix('configurationnote')->name('configurationnote.')->group(function (
     Route::delete('/note/{note}', [NoteScolaireController::class, 'destroy'])->name('delete.gestion.note');
     Route::post('/validermoyennne/{id}', [NoteScolaireController::class, 'validerMoyenne'])->name('validate.matiere');
     Route::get('/rapport/semestre', [RapportSemestreTrimestreController::class, 'index'])->name('rapport.semestre');
+    Route::post('/semestre/action', [RapportSemestreTrimestreController::class, 'actionSurSemestre'])->name('action.semestre');
 });
 
 
@@ -123,7 +124,7 @@ Route::prefix('examens')->name('examens.')->group(function () {
     Route::resource('/moyenne', MoyenneExamenController::class);
     Route::resource('/repartition', RepartitionController::class);
     Route::resource('/convocation', ConvocationController::class);
-    Route::resource('/resultats', ResultatController::class);
+    Route::resource('/resultats', ResultatController::class)->except(['edit', 'store']);
     Route::get('/create/programme/examens/{id}', [ProgrammeExamenController::class, 'createProgrammeExamen'])->name('programme.examens.create');
     Route::get('/create/repartition/examens/{id}', [RepartitionController::class, 'createRepartition'])->name('repartition.examens.create');
     Route::get('/create/moyenne/examens/{id}', [MoyenneExamenController::class, 'createMoyenne'])->name('moyenne.examens.create');

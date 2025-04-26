@@ -57,23 +57,31 @@
                                                 <td x-text="repartition.annee_academique?.name ?? '-'"></td>
 
                                                 <td class="text-end">
-                                                    <td class="text-end">
-                                                        <a :href="`{{ route('examens.repartition.examens.create', ['id' => '__ID__']) }}`
-                                                            .replace(
-                                                                '__ID__', repartition.examen?.id)"
-                                                                class="btn btn-warning btn-sm"  title="Créeer la repartition">
-                                                                <i class="fa fa-random"></i>
-                                                            </a>
-                                                            &nbsp; &nbsp;
 
-                                                            <a :href="`{{ route('examens.repartition.show', ['repartition' => '__ID__']) }}`
-                                                                .replace(
-                                                                    '__ID__', repartition.examen?.id)"
-                                                                    class="btn btn-light btn-sm" title="Visualisation de la repartition">
-                                                                    <i class="fa fa-eye"></i>
-                                                                </a>
-                                                    </td>
+                                                    <!-- Bouton "Créer la répartition" affiché seulement si l'examen n'est pas clôturé -->
+                                                    <template x-if="repartition.examen?.cloture != 1">
+                                                        <a
+                                                            :href="`{{ route('examens.repartition.examens.create', ['id' => '__ID__']) }}`.replace('__ID__', repartition.examen?.id)"
+                                                            class="btn btn-warning btn-sm"
+                                                            title="Créer la répartition"
+                                                        >
+                                                            <i class="fa fa-random"></i>
+                                                        </a>
+                                                    </template>
+
+                                                    &nbsp;&nbsp;
+
+                                                    <!-- Bouton "Visualisation de la répartition" (toujours affiché) -->
+                                                    <a
+                                                        :href="`{{ route('examens.repartition.show', ['repartition' => '__ID__']) }}`.replace('__ID__', repartition.examen?.id)"
+                                                        class="btn btn-light btn-sm"
+                                                        title="Visualisation de la répartition"
+                                                    >
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+
                                                 </td>
+
                                             </tr>
                                         </template>
                                     </tbody>

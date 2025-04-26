@@ -101,8 +101,24 @@
 
                         <div class="row mt-12">
                             <div class="col-md-9 offset-md-3">
-                                <button type="button" @click="submitAction()" class="btn btn-primary">Soumettre</button>
+                                <button
+                                    type="button"
+                                    @click="submitAction()"
+                                    class="btn btn-primary"
+                                    :disabled="isLoading"
+                                >
+                                    <template x-if="!isLoading">
+                                        <span>Soumettre</span>
+                                    </template>
+                                    <template x-if="isLoading">
+                                        <span>
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Chargement...
+                                        </span>
+                                    </template>
+                                </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -118,7 +134,7 @@
                     cloturer: 0,
                     decloturer: 0,
                     rapport: 0,
-                    isLoading:false,
+                    isLoading: false,
 
                     init() {
                         console.log('Init lancé');
@@ -149,9 +165,9 @@
                     },
 
                     async submitAction() {
-                        this.isLoading = true;
 
-                        // Validation des champs obligatoires
+
+                        this.isLoading = true;
                         if (!this.code || this.code.trim() === '') {
                             Swal.fire({
                                 icon: 'error',
@@ -162,11 +178,49 @@
                             return;
                         }
 
+
+                        // Vérifier qu'une seule action est sélectionnée
+                        if (this.cloturer && (this.decloturer || this.rapport)) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Vous ne pouvez pas sélectionner plusieurs actions à la fois.',
+                                showConfirmButton: true
+                            });
+                            this.isLoading = false;
+                            return;
+                        }
+
+                        if (this.decloturer && (this.cloturer || this.rapport)) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Vous ne pouvez pas sélectionner plusieurs actions à la fois.',
+                                showConfirmButton: true
+                            });
+                            this.isLoading = false;
+                            return;
+                        }
+
+                        if (this.rapport && (this.cloturer || this.decloturer)) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Vous ne pouvez pas sélectionner plusieurs actions à la fois.',
+                                showConfirmButton: true
+                            });
+                            this.isLoading = false;
+                            return;
+                        }
+
                         const formData = new FormData();
                         formData.append('code', this.code);
-                        formData.append('cloturer', this.cloturer);
-                        formData.append('decloturer', this.decloturer);
-                        formData.append('rapport', this.rapport);
+
+                        // Ajouter seulement l'action choisie
+                        if (this.cloturer) {
+                            formData.append('cloturer', this.cloturer);
+                        } else if (this.decloturer) {
+                            formData.append('decloturer', this.decloturer);
+                        } else if (this.rapport) {
+                            formData.append('rapport', this.rapport);
+                        }
 
 
                         try {
@@ -179,41 +233,27 @@
                             });
 
                             if (response.ok) {
-                                // const data = await response.json();
-                                // const eleve = data.eleve;
+                                const data = await response.json();
+                                const message = data.message;
 
-                                // if (eleve) {
-                                //     Swal.fire({
-                                //         icon: 'success',
-                                //         title: 'Élève enregistré avec succès!',
-                                //         showConfirmButton: false,
-                                //         timer: 1500
-                                //     });
-
-                                //     if (this.isEdite) {
-                                //         const index = this.eleves.findIndex(e => e.id === eleve.id);
-                                //         if (index !== -1) this.eleves[index] = eleve;
-                                //     } else {
-                                //         this.eleves.push(eleve);
-                                //         this.eleves.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                                //     }
-
-                                //     this.filterEleves();
-                                //     this.resetForm();
-                                //     this.hideModal();
-                                // }
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
                             } else {
                                 Swal.fire({
-                                        icon: 'error',
-                                        title: 'Erreur.',
-                                        showConfirmButton: true
-                                    });
+                                    icon: 'error',
+                                    title: message,
+                                    showConfirmButton: true
+                                });
                             }
                         } catch (error) {
                             console.error('Erreur réseau :', error);
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Une erreur est survenue.',
+                                title:'examen non trouvé',
                                 showConfirmButton: true
                             });
                         } finally {

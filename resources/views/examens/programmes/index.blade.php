@@ -61,23 +61,29 @@
                                                 <td x-text="programme.annee_academique?.name ?? '-'"></td>
 
                                                 <td class="text-end">
-                                                    <a :href="`{{ route('examens.programme.examens.create', ['id' => '__ID__']) }}`
-                                                        .replace(
-                                                            '__ID__', programme.examen?.id)"
-                                                            class="btn btn-warning btn-sm">
+                                                    <!-- Bouton Voir le programme (toujours visible) -->
+                                                    <a
+                                                        :href="`{{ route('examens.programme.show', ['programme' => '__ID__']) }}`.replace('__ID__', programme.examen?.id)"
+                                                        class="btn btn-light btn-sm"
+                                                        title="Voir le programme"
+                                                    >
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+
+                                                    &nbsp;
+
+                                                    <!-- Bouton Créer programme (visible uniquement si l'examen n'est pas clôturé) -->
+                                                    <template x-if="programme.examen?.cloture != 1">
+                                                        <a
+                                                            :href="`{{ route('examens.programme.examens.create', ['id' => '__ID__']) }}`.replace('__ID__', programme.examen?.id)"
+                                                            class="btn btn-warning btn-sm"
+                                                            title="Créer un programme"
+                                                        >
                                                             <i class="fa fa-calendar-check"></i>
                                                         </a>
-                                                        &nbsp; &nbsp;
-
-                                                        <a :href="`{{ route('examens.programme.show', ['programme' => '__ID__']) }}`
-                                                            .replace(
-                                                                '__ID__', programme.examen?.id)"
-                                                                class="btn btn-light btn-sm">
-                                                                <i class="fa fa-eye"></i>
-                                                            </a>
-                                                            &nbsp; &nbsp;
-
+                                                    </template>
                                                 </td>
+
                                             </tr>
                                         </template>
                                     </tbody>

@@ -63,29 +63,42 @@
                                                 <td x-text="moyenne.examen?.classe?.name ?? '-'"></td>
                                                 <td x-text="moyenne.annee_academique?.name ?? '-'"></td>
                                                 <td class="text-end">
-                                                    <a :href="`{{ route('examens.moyenne.show', ['moyenne' => '__ID__']) }}`
-                                                        .replace('__ID__', moyenne.examen.id)"
-                                                       class="btn btn-light btn-sm"
-                                                       title="Voir la moyenne">
-                                                       <i class="fa fa-eye"></i>
-                                                    </a>
-                                                    &nbsp;
-                                                    <a :href="`{{ route('examens.moyenne.edit', ['moyenne' => '__ID__']) }}`
-                                                        .replace('__ID__', moyenne.examen.id)"
-                                                       class="btn btn-light btn-sm"
-                                                       title="Modifier">
-                                                       <i class="fa fa-edit"></i>
+                                                    <!-- Bouton Voir la moyenne (toujours visible) -->
+                                                    <a
+                                                        :href="`{{ route('examens.moyenne.show', ['moyenne' => '__ID__']) }}`.replace('__ID__', moyenne.examen.id)"
+                                                        class="btn btn-light btn-sm"
+                                                        title="Voir la moyenne"
+                                                    >
+                                                        <i class="fa fa-eye"></i>
                                                     </a>
 
+                                                    &nbsp;
+
+                                                    <!-- Bouton Modifier (visible uniquement si l'examen n'est pas clôturé) -->
+                                                    <template x-if="moyenne.examen?.cloture != 1">
+                                                        <a
+                                                            :href="`{{ route('examens.moyenne.edit', ['moyenne' => '__ID__']) }}`.replace('__ID__', moyenne.examen.id)"
+                                                            class="btn btn-light btn-sm"
+                                                            title="Modifier"
+                                                        >
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                    </template>
 
                                                     &nbsp;
-                                                    <a :href="`{{ route('examens.moyenne.examens.create', ['id' => '__ID__']) }}`
-                                                        .replace('__ID__', moyenne.examen.id)"
-                                                       class="btn btn-info btn-sm"
-                                                       title="Calculer la moyenne">
-                                                       <i class="fa fa-calculator"></i>
-                                                    </a>
+
+                                                    <!-- Bouton Calculer la moyenne (visible uniquement si l'examen n'est pas clôturé) -->
+                                                    <template x-if="moyenne.examen?.cloture != 1">
+                                                        <a
+                                                            :href="`{{ route('examens.moyenne.examens.create', ['id' => '__ID__']) }}`.replace('__ID__', moyenne.examen.id)"
+                                                            class="btn btn-info btn-sm"
+                                                            title="Calculer la moyenne"
+                                                        >
+                                                            <i class="fa fa-calculator"></i>
+                                                        </a>
+                                                    </template>
                                                 </td>
+
                                             </tr>
                                         </template>
                                     </tbody>

@@ -28,6 +28,10 @@ class ResultatExamen extends Model
         return $this->belongsTo(Examen::class);
     }
 
+    public function resultatExamensLignes() {
+        return $this->hasMany(ResultatExamenLigne::class, 'code', 'code');
+    }
+
     /**
      * Relation avec l'année académique
      */
