@@ -22,6 +22,8 @@ class InscriptionController extends Controller
     }
     public function index()
     {
+        $this->anneeAcademiqueService->checkAndCreateAnneeAcademique();
+        
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
         $inscriptions = Inscription::with(['eleve', 'classe', 'niveau', 'anneeAcademique'])

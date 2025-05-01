@@ -18,11 +18,9 @@ class Versement extends Model
         'date_versement',
         'montant_verse',
         'montant_restant',
-    ];
+        'scolarite_id'
+    ];  
 
-        //scolarite_id
-
-        
     public function scolarite()
     {
         return $this->belongsTo(Scolarite::class);

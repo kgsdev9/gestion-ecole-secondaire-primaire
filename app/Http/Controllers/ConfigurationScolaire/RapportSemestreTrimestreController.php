@@ -29,6 +29,8 @@ class RapportSemestreTrimestreController extends Controller
      */
     public function index()
     {
+        $this->anneeAcademiqueService->checkAndCreateAnneeAcademique();
+
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
         $semestres = $anneeScolaireActuelle->semestres;
 
@@ -94,7 +96,7 @@ class RapportSemestreTrimestreController extends Controller
 
          // Trier par moyenne décroissante
          $notes = $notes->sortByDesc('moyenne')->values();
-       
+
 
 
          $nbTotalEleves = $notes->count();

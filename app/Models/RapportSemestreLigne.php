@@ -18,4 +18,10 @@ class RapportSemestreLigne extends Model
         'admis',
         'observation',
     ];
+
+
+    public function eleve()
+    {
+        return $this->belongsTo(Eleve::class, 'eleve_id');
+    }
 }

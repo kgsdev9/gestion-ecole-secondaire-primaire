@@ -1,43 +1,48 @@
 <?php
 
-use App\Http\Controllers\Bulletin\BulletinConroller;
-use App\Http\Controllers\Categorie\CategoryController;
-use App\Http\Controllers\Classe\ClasseController;
-use App\Http\Controllers\Commandes\CommandeController;
-use App\Http\Controllers\Configuration\Convocation\ConvocationController as ConvocationConvocationController;
-use App\Http\Controllers\configurationScolaire\MoyenneScolaireController;
-use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
-use App\Http\Controllers\ConfigurationScolaire\RapportSemestreTrimestreController;
-use App\Http\Controllers\Eleve\EleveController;
-use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
-use App\Http\Controllers\Enseignant\EnseignantController;
-use App\Http\Controllers\Examen\ConvocationController;
-use App\Http\Controllers\Examen\ExamenController;
-use App\Http\Controllers\Examen\MoyenneExamenController;
-use App\Http\Controllers\Examen\ParametreController;
-use App\Http\Controllers\Examen\ProgrammeExamenController;
-use App\Http\Controllers\Examen\RepartitionController;
-use App\Http\Controllers\Examen\ResultatController;
-use App\Http\Controllers\Factures\FactureController;
-use App\Http\Controllers\Factures\FacturePersonnaliseController;
+use App\Http\Controllers\Administration\Impressions\PrintResultatSemestreController;
+use App\Http\Controllers\Administration\PrintFicheInscriptionController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Home\HomeController;
-use App\Http\Controllers\Impression\Facture\ImpressionFactureController;
-use App\Http\Controllers\Inscription\InscriptionController;
-use App\Http\Controllers\Matiere\MatiereController;
-use App\Http\Controllers\Niveau\NiveauController;
 use App\Http\Controllers\Note\NoteController;
+use App\Http\Controllers\Role\RoleController;
+use App\Http\Controllers\Eleve\EleveController;
+use App\Http\Controllers\Salle\SalleController;
+use App\Http\Controllers\Vente\VenteController;
+use App\Http\Controllers\Classe\ClasseController;
+use App\Http\Controllers\Examen\ExamenController;
+use App\Http\Controllers\Niveau\NiveauController;
+use App\Http\Controllers\Examen\ResultatController;
+use App\Http\Controllers\Matiere\MatiereController;
 use App\Http\Controllers\Pos\ProductPostController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Rapport\RapportController;
-use App\Http\Controllers\Role\RoleController;
-use App\Http\Controllers\Salle\AnneAcademiqueController;
-use App\Http\Controllers\Salle\SalleController;
-use App\Http\Controllers\Scolarite\ScolariteController;
+use App\Http\Controllers\Bulletin\BulletinConroller;
+use App\Http\Controllers\Examen\ParametreController;
+use App\Http\Controllers\Factures\FactureController;
 use App\Http\Controllers\Semestre\SemestreController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\Vente\VenteController;
+use App\Http\Controllers\Categorie\CategoryController;
+use App\Http\Controllers\Commandes\CommandeController;
+use App\Http\Controllers\Examen\ConvocationController;
+use App\Http\Controllers\Examen\PrintExamenController;
+use App\Http\Controllers\Examen\RepartitionController;
+use App\Http\Controllers\Scolarite\ScolariteController;
 use App\Http\Controllers\Versement\VersementController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Examen\MoyenneExamenController;
+use App\Http\Controllers\Salle\AnneAcademiqueController;
+use App\Http\Controllers\Enseignant\EnseignantController;
+use App\Http\Controllers\Examen\ProgrammeExamenController;
+use App\Http\Controllers\Inscription\InscriptionController;
+use App\Http\Controllers\EmploiDutemps\EmploiDuTempsController;
+use App\Http\Controllers\Factures\FacturePersonnaliseController;
+use App\Http\Controllers\ConfigurationScolaire\NoteScolaireController;
+use App\Http\Controllers\Impression\Facture\ImpressionFactureController;
+use App\Http\Controllers\configurationScolaire\MoyenneScolaireController;
+use App\Http\Controllers\ConfigurationScolaire\ResultatSemestreController;
+use App\Http\Controllers\ConfigurationScolaire\RapportSemestreTrimestreController;
+use App\Http\Controllers\Configuration\Convocation\ConvocationController as ConvocationConvocationController;
+use App\Http\Controllers\Versement\SuiviVersementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +114,8 @@ Route::prefix('configurationnote')->name('configurationnote.')->group(function (
     Route::post('/validermoyennne/{id}', [NoteScolaireController::class, 'validerMoyenne'])->name('validate.matiere');
     Route::get('/rapport/semestre', [RapportSemestreTrimestreController::class, 'index'])->name('rapport.semestre');
     Route::post('/semestre/action', [RapportSemestreTrimestreController::class, 'actionSurSemestre'])->name('action.semestre');
+    Route::resource('/resultat/semestre', ResultatSemestreController::class);
+
 });
 
 
@@ -130,6 +137,7 @@ Route::prefix('examens')->name('examens.')->group(function () {
     Route::get('/create/moyenne/examens/{id}', [MoyenneExamenController::class, 'createMoyenne'])->name('moyenne.examens.create');
     Route::get('/parametre/examen', [ParametreController::class, 'index'])->name('parametre.examens');
     Route::post('/action/examen', [ParametreController::class, 'executeExamAction'])->name('execute.action');
+    Route::get('/print/resultat/{id}', [PrintExamenController::class, 'printresultatExam'])->name('print.examens');
 });
 
 
@@ -149,4 +157,14 @@ Route::prefix('configuration')->name('configuration.')->group(function () {
 });
 
 
+
+Route::prefix('administration')->name('administration.')->group(function () {
+    Route::get('/print/fiche/inscription/{inscriptionId}', [PrintFicheInscriptionController::class, 'printFicheInscription'])->name('print.fiche.inscription');
+    Route::resource('/suiviversement', SuiviVersementController::class);
+
+    // pritn semstre
+
+    Route::get('/print/resultat/semestre/{resultatsemestreId}', [PrintResultatSemestreController::class, 'printResultatSemestre'])->name('print.resultat.semestre');
+
+});
 

@@ -703,8 +703,20 @@
                                                     </span>
                                                     <span class="menu-title">Parametre</span>
                                                 </a>
+                                            </div>
+
+                                            <div
+                                                class="menu-item {{ request()->routeIs('configurationnote.semestre.index') ? 'active' : '' }}">
+                                                <a class="menu-link"
+                                                    href="{{ route('configurationnote.semestre.index') }}">
+                                                    <span class="menu-bullet">
+                                                        <span class="bullet bullet-dot"></span>
+                                                    </span>
+                                                    <span class="menu-title">Resultats</span>
+                                                </a>
 
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -856,7 +868,7 @@
 
                                         <div class="menu-item">
 
-                                            <a class="menu-link" href="#">
+                                            <a class="menu-link" href="{{route('administration.suiviversement.index')}}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>

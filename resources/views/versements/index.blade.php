@@ -144,6 +144,7 @@
                                                         <th class="min-w-100px">Montant Restant</th>
                                                         <th class="min-w-100px">Type Versement</th>
                                                         <th class="min-w-100px">Date</th>
+                                                        <th class="min-w-100px">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="fs-6 fw-semibold text-gray-600">
@@ -155,6 +156,12 @@
                                                             <td x-text="versement.montant_restant"></td>
                                                             <td x-text="versement.type_versement.name"></td>
                                                             <td x-text="versement.date_versement"></td>
+                                                            <td>
+                                                                <button @click="deleteVersement(versement.id)"
+                                                                    class="btn btn-sm btn-danger">
+                                                                    Supprimer
+                                                                </button>
+                                                            </td>
                                                         </tr>
                                                     </template>
                                                 </tbody>
@@ -277,7 +284,8 @@
                     typeversement_id: '',
                     date_versement: '',
                     montant_reliquat: 0,
-                    scolarite_id:'',
+                    scolarite_id: '',
+
                 },
 
                 filteredEleves() {
@@ -290,6 +298,7 @@
                         montant_restant: '',
                         typeversement_id: '',
                         date_versement: '',
+                        scolarite_id: this.formData.scolarite_id, // ✅ on garde la valeur
                     };
                     this.montantError = false; // Réinitialiser l'erreur de montant
                 },
@@ -329,12 +338,68 @@
                     this.filterScolarite();
                 },
 
+
+                async deleteVersement(id) {
+                    const url = `{{ route('versements.destroy', ['versement' => '__ID__']) }}`.replace('__ID__', id);
+
+                    const confirmation = confirm('Voulez-vous vraiment supprimer ce versement ?');
+                    if (!confirmation) return;
+
+                    try {
+                        const response = await fetch(url, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            }
+                        });
+
+                        if (response.ok) {
+                            // Supprimer le versement du tableau
+                            this.versements = this.versements.filter(v => v.id !== id);
+
+                            // Recalcule les montants restants des versements après suppression
+                            this.updateMontantsRestants();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Versement supprimé avec succès',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur lors de la suppression.'
+                            });
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erreur serveur.',
+                            text: error.message
+                        });
+                    }
+                },
+
+                // Fonction pour recalculer les montants restants des versements
+                updateMontantsRestants() {
+                    const montantTotal = this.selectedEleve.montantScolarite;
+                    let montantCumul = 0;
+
+                    // Calculer le montant restant pour chaque versement après suppression
+                    this.filteredVersements().forEach(versement => {
+                        montantCumul += parseFloat(versement.montant_verse);
+                        versement.montant_restant = montantTotal - montantCumul;
+                    });
+                },
+
+
                 // Filtrer la scolarité de l'élève
                 filterScolarite() {
                     const scolarite = this.scolarites.find(s =>
                         s.niveau_id === this.selectedEleve.niveau_id &&
                         s.classe_id === this.selectedEleve.classe_id &&
-                        s.anneeacademique_id  === this.selectedEleve.annee_academique_id
+                        s.anneeacademique_id === this.selectedEleve.annee_academique_id
                     );
 
 
@@ -416,6 +481,9 @@
                     formData.append('typeversement_id', this.formData.typeversement_id);
                     formData.append('date_versement', this.formData.date_versement);
                     formData.append('eleve_id', this.selectedEleve.id);
+                    formData.append('scolarite_id', this.formData.scolarite_id);
+
+                    alert(this.formData.scolarite_id);
                     try {
                         const response = await fetch(
                             '{{ route('versements.store') }}', {

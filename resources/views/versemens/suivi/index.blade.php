@@ -1,9 +1,8 @@
 @extends('layouts.app')
-
+@section('title', 'Suvii des versements')
 @section('content')
-    <div class="app-main flex-column flex-row-fluid mt-4" x-data="productSearch()" x-init="init()">
+    <div class="app-main flex-column flex-row-fluid mt-4" x-data="versementApp()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
-
             <div class="app-toolbar py-3 py-lg-6">
                 <div class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
@@ -17,7 +16,7 @@
                             <li class="breadcrumb-item">
                                 <span class="bullet bg-gray-500 w-5px h-2px"></span>
                             </li>
-                            <li class="breadcrumb-item text-muted">Eleves</li>
+                            <li class="breadcrumb-item text-muted">Versements</li>
                         </ul>
                     </div>
                 </div>
@@ -26,35 +25,34 @@
             <div class="app-content flex-column-fluid">
                 <div class="app-container container-xxl">
                     <div class="card">
+
                         <div class="card-header border-0 pt-6">
                             <div class="card-title">
                                 <div class="d-flex align-items-center position-relative my-1">
-                                    <i class='fas fa-search  position-absolute ms-5'></i>
+                                    <i class='fas fa-search position-absolute ms-5'></i>
                                     <input type="text"
                                         class="form-control form-control-solid w-250px ps-13 form-control-sm"
-                                        placeholder="Rechercher" x-model="searchTerm" @input="filterProducts">
+                                        placeholder="Rechercher" x-model="searchTerm">
                                 </div>
                             </div>
                             <div class="card-toolbar">
                                 <div class="d-flex justify-content-end align-items-center gap-3">
                                     <div>
-                                        <select x-model="selectedCategory" @change="filterByCategory"
+                                        <select x-model="classe_id" @change="filterClasse"
                                             class="form-select form-select-sm" data-live-search="true">
                                             <option value="">Toutes les classes </option>
-                                            <template x-for="category in categories" :key="category.id">
-                                                <option :value="category.id" x-text="category.name  ">
-                                                </option>
+                                            <template x-for="classe in classes" :key="classe.id">
+                                                <option :value="classe.id" x-text="classe.name"></option>
                                             </template>
                                         </select>
                                     </div>
 
                                     <div>
-                                        <select x-model="selectedCategory" @change="filterByCategory"
+                                        <select x-model="annee_id" @change="filterYear"
                                             class="form-select form-select-sm" data-live-search="true">
                                             <option value="">Toutes les annees academique </option>
-                                            <template x-for="category in categories" :key="category.id">
-                                                <option :value="category.id" x-text="category.name  ">
-                                                </option>
+                                            <template x-for="annee in allAnneesAcademique" :key="annee.id">
+                                                <option :value="annee.id" x-text="annee.name"></option>
                                             </template>
                                         </select>
                                     </div>
@@ -65,9 +63,6 @@
                                     <button @click="exportProducts" class="btn btn-light-primary btn-sm">
                                         <i class='fas fa-file-export'></i> Export
                                     </button>
-
-
-
                                 </div>
                             </div>
                         </div>
@@ -85,55 +80,59 @@
                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                                         <thead>
                                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                                                <th class="min-w-125px">Code Product</th>
-                                                <th class="min-w-125px">Prix d'achat </th>
-                                                <th class="min-w-125px">Prix De Vente</th>
-                                                <th class="min-w-125px">Qte</th>
-                                                <th class="min-w-125px">Date de création </th>
+                                                <th class="min-w-125px">Élève</th>
+                                                <th class="min-w-125px">Classe / Matricule</th>
+                                                <th class="min-w-125px">Versements</th>
                                                 <th class="text-end min-w-100px">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-gray-600 fw-semibold">
-                                            <template x-for="product in paginatedProducts" :key="product.id">
+                                            <template x-for="(eleve, index) in filteredVersements" :key="index">
                                                 <tr>
                                                     <td class="d-flex align-items-center">
-                                                        <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                                            <div class="symbol-label">
-                                                                <!-- Ne pas dupliquer l'URL dans 'src', utilisez directement 'product.image_url' -->
-                                                                <img :src="product.image_url" alt="Image"
-                                                                    class="w-100 h-100">
+                                                        <div class="d-flex flex-column">
+                                                            <span x-text="eleve.nom + ' ' + eleve.prenom"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span x-text="'Classe: ' + eleve.classe.name"></span><br>
+                                                        <span x-text="'Matricule: ' + eleve.matricule"></span>
+                                                    </td>
+                                                    <td>
+                                                        <template x-for="versement in eleve.versements" :key="versement.id">
+                                                            <div class="d-flex justify-content-between">
+                                                                <span x-text="'Montant: ' + new Intl.NumberFormat('fr-FR').format(versement.montant_verse) + ' CFA'"></span>
+                                                                <span x-text="'Date: ' + new Date(versement.date_versement).toLocaleDateString('fr-FR')"></span>
                                                             </div>
 
+                                                            <!-- Affichage du montant de la scolarité en vert -->
+                                                            <div class="d-flex justify-content-between">
+                                                                <!-- Débogage de la scolarité -->
+                                                                <template x-if="versement.scolarite && versement.scolarite.montant_scolarite">
+                                                                    <span class="text-success" x-text="'Scolarité: ' + new Intl.NumberFormat('fr-FR').format(versement.scolarite.montant_scolarite) + ' CFA'"></span>
+                                                                </template>
+                                                                <template x-if="!(versement.scolarite && versement.scolarite.montant_scolarite)">
+                                                                    <span class="text-muted">Pas de scolarité disponible</span>
+                                                                </template>
 
-                                                        </div>
-                                                        <div class="d-flex flex-column">
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1"
-                                                                x-text="product.libelleproduct"></a>
-                                                            <span x-text="product.category.libellecategorieproduct"></span>
-                                                        </div>
+                                                                <!-- Vérification dans la console pour la scolarité -->
+                                                                <template x-if="versement.scolarite">
+                                                                    <span x-text="console.log(versement.scolarite)"></span>
+                                                                </template>
+                                                            </div>
+
+                                                        </template>
                                                     </td>
-                                                    <td x-text="product.prixachat"></td>
-                                                    <td x-text="product.prixvente"></td>
-                                                    <td x-text="product.qtedisponible"></td>
-                                                    <td x-text="new Date(product.created_at).toLocaleDateString('fr-FR')">
-                                                    </td>
+
                                                     <td class="text-end">
-
-                                                        <button @click="openModal(product)"
-                                                            class="btn btn-primary btn-sm mx-2"> <i
-                                                                class="fa fa-edit"></i></button>
-
-                                                        <button @click="deleteProduct(product.id)"
-                                                            class="btn btn-danger btn-sm ms-2 btn-sm">
-                                                            <i class="fa fa-trash"></i>
+                                                        <button @click="printVersement(eleve.id)"
+                                                            class="btn btn-danger btn-sm">
+                                                            <i class="fa fa-print"></i>
                                                         </button>
-
-
-
                                                     </td>
-
                                                 </tr>
                                             </template>
+
                                         </tbody>
                                     </table>
                                 </template>
@@ -145,14 +144,14 @@
                                         <ul class="pagination">
                                             <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
                                                 <button class="page-link"
-                                                    @click="goToPage(currentPage - 1)">Précedent</button>
+                                                    @click="goToPage(currentPage - 1)">Précédent</button>
                                             </li>
                                             <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
                                                 <button class="page-link"
                                                     @click="goToPage(currentPage + 1)">Suivant</button>
-                                            </li>
-                                        </ul>
-                                    </nav>
+                                            </ul>
+                                        </nav>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -160,349 +159,71 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
-        function productSearch() {
+        function versementApp() {
             return {
                 searchTerm: '',
-                categories: @json($listeclasse),
-                products: @json($listeeleves),
-                filteredProducts: [],
-                selectedCategory: '',
-                showCategorySelect: true,
+                annee_id: '',
+                classe_id: '', // Ajout du modèle pour la classe
+                classes: @json($classes), // On suppose que tu passes les classes dans la vue
+                allAnneesAcademique: @json($allAnneesAcademique),
+                versements: @json($versements),
+                isLoading: false,
                 currentPage: 1,
                 productsPerPage: 10,
                 totalPages: 0,
-                isLoading: true,
-                showModal: false,
-                isEdite: false,
-                formData: {
-                    name: '',
-                    prixachat: '',
-                    qtedisponible: '',
-                    prixvente: '',
-                    image: '',
-                    imagePreview: null,
-                    category_id: ''
-                },
-                currentProduct: null,
 
-                hideModal() {
-
-                    this.showModal = false;
-                    this.currentProduct = null;
-                    this.resetForm();
-                    this.isEdite = false;
-                },
-
-                openModal(product = null) {
-                    this.isEdite = product !== null;
-                    if (this.isEdite) {
-                        this.currentProduct = {
-                            ...product
-                        };
-                        this.formData = {
-                            name: this.currentProduct.libelleproduct,
-                            prixachat: this.currentProduct.prixachat,
-                            prixvente: this.currentProduct.prixvente,
-                            qtedisponible: this.currentProduct.qtedisponible,
-                            category_id: this.currentProduct.category.id,
-                            image: null,
-                            imagePreview: this.currentProduct.image_url || '/default-image.jpg',
-                        };
-                    } else {
-                        this.resetForm();
-
-                        this.isEdite = false;
-                    }
-                    this.showModal = true;
-                },
-
-
-                handleFileChange(event) {
-                    // Récupère le fichier sélectionné
-                    const file = event.target.files[0];
-
-                    if (file) {
-                        // Met à jour l'image dans formData
-                        this.formData.image = file;
-
-                        // Crée un aperçu de l'image en utilisant FileReader
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                            this.formData.imagePreview = reader.result; // Met à jour l'aperçu
-                        };
-                        reader.readAsDataURL(file); // Lire l'image en tant qu'URL base64
-                    }
-                },
-
-                resetForm() {
-                    this.formData = {
-                        name: '',
-                        prixachat: '',
-                        prixvente: '',
-                        category_id: '',
-                        qtedisponible: '',
-                        imagePreview: null,
-                        image: null,
-                    };
-                    document.getElementById('image').value = '';
-                },
-
-
-                async submitForm() {
-                    this.isLoading = true;
-
-                    if (!this.formData.name || this.formData.name.trim() === '') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Le nom du produit est requis.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-                    if (!this.formData.prixachat || isNaN(this.formData.prixachat) || parseFloat(this.formData
-                            .prixachat) <= 0) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Le prix du produit doit être un nombre valide et supérieur à 0.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-
-                    if (!this.formData.prixvente || isNaN(this.formData.prixvente) || parseFloat(this.formData
-                            .prixvente) <= 0) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Le prix de vente du produit doit être un nombre valide et supérieur à 0.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-
-
-                    if (!this.formData.qtedisponible || isNaN(this.formData.qtedisponible) || parseFloat(this.formData
-                            .qtedisponible) <= 0) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'La quantité disponible doit être un nombre valide et supérieur à 0.',
-                            showConfirmButton: true
-                        });
-                        this.isLoading = false;
-                        return;
-                    }
-                    const formData = new FormData();
-                    formData.append('name', this.formData.name);
-                    formData.append('prixachat', this.formData.prixachat);
-                    formData.append('prixvente', this.formData.prixvente);
-                    formData.append('category_id', this.formData.category_id);
-                    formData.append('qtedisponible', this.formData.qtedisponible);
-                    formData.append('product_id', this.currentProduct ? this.currentProduct.id : null);
-                    if (this.formData.image) {
-                        formData.append('image', this.formData.image);
-                    }
-
-                    try {
-                        const response = await fetch('{{ route('product.store') }}', {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            },
-                            body: formData,
-                        });
-
-                        if (response.ok) {
-                            const data = await response.json();
-                            const product = data.product;
-
-                            if (product) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Produit enregistré avec succès !',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
-
-                                if (this.isEdite) {
-                                    const index = this.products.findIndex(p => p.id === product.id);
-                                    if (index !== -1) {
-                                        this.products[index] = product;
-                                    }
-
-                                } else {
-                                    this.products.push(product);
-                                    this.products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                                }
-
-                                this.filterProducts();
-                                this.resetForm();
-                                this.hideModal();
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Produit non valide.',
-                                    showConfirmButton: true
-                                });
-                            }
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erreur lors de l\'enregistrement.',
-                                showConfirmButton: true
-                            });
+                // Regrouper les versements par élève et ajouter la classe et matricule
+                get groupedVersements() {
+                    let grouped = [];
+                    this.versements.forEach(versement => {
+                        let eleve = grouped.find(eleve => eleve.id === versement.eleve_id);
+                        if (!eleve) {
+                            eleve = {
+                                id: versement.eleve_id,
+                                nom: versement.eleve.nom,
+                                prenom: versement.eleve.prenom,
+                                classe: versement.eleve.classe, // Ajouter la classe
+                                matricule: versement.eleve.matricule, // Ajouter le matricule
+                                versements: [],
+                            };
+                            grouped.push(eleve);
                         }
-                    } catch (error) {
-                        console.error('Erreur réseau :', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Une erreur est survenue.',
-                            showConfirmButton: true
-                        });
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
-
-
-                get paginatedProducts() {
-                    let start = (this.currentPage - 1) * this.productsPerPage;
-                    let end = start + this.productsPerPage;
-                    return this.filteredProducts.slice(start, end);
-                },
-
-
-                filterProducts() {
-
-                    const term = this.searchTerm.toLowerCase();
-                    this.filteredProducts = this.products.filter(product => {
-                        return product.libelleproduct && product.libelleproduct.toLowerCase().includes(
-                            term);
+                        eleve.versements.push(versement);
                     });
-                    this.totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
-                    this.currentPage = 1;
+                    return grouped;
                 },
 
-                printProducts() {
-                    let printContent = '<h1>Liste des Produits</h1>';
-                    printContent +=
-                        '<table border="1"><thead><tr><th>ID</th><th>Nom</th><th>Catégorie</th></tr></thead><tbody>';
-
-                    this.filteredProducts.forEach(product => {
-                        printContent +=
-                            `<tr><td>${product.id}</td><td>${product.libelleproduct}</td><td>${product.category.libellecategorieproduct}</td></tr>`;
-                    });
-
-                    printContent += '</tbody></table>';
-
-                    const printWindow = window.open('', '', 'height=500,width=800');
-                    printWindow.document.write('<html><head><title>Impression des produits</title></head><body>');
-                    printWindow.document.write(printContent);
-                    printWindow.document.write('</body></html>');
-                    printWindow.document.close();
-                    printWindow.print();
+                // Fonction pour filtrer par classe
+                filterClasse() {
+                    this.currentPage = 1; // Remettre à la première page lors du filtrage
                 },
 
-                exportProducts() {
-                    let csvContent = "ID,Nom,Catégorie\n";
+                // Recherche filtrée sur les données (ajout de la classe au filtrage)
+                get filteredVersements() {
+                    let filtered = this.groupedVersements;
 
-                    this.filteredProducts.forEach(product => {
-                        csvContent +=
-                            `${product.id},${product.libelleproduct},${product.category.libellecategorieproduct}\n`;
-                    });
-
-                    // Créer un fichier CSV et le télécharger
-                    const blob = new Blob([csvContent], {
-                        type: 'text/csv;charset=utf-8;'
-                    });
-                    const link = document.createElement("a");
-                    const url = URL.createObjectURL(blob);
-                    link.setAttribute("href", url);
-                    link.setAttribute("download", "produits_filtrés.csv");
-                    link.click();
-                },
-
-
-                filterByCategory() {
-                    // Réinitialiser filteredProducts à la liste complète des produits
-                    this.filteredProducts = this.products;
-
-                    if (this.selectedCategory) {
-                        // Appliquer le filtre sur les produits par catégorie
-                        this.filteredProducts = this.filteredProducts.filter(product => product.category.id === parseInt(
-                            this.selectedCategory));
+                    // Filtrage sur la classe
+                    if (this.classe_id) {
+                        filtered = filtered.filter(eleve => eleve.classe.id == this.classe_id);
                     }
 
-                    // Optionnel : Appliquer également un filtrage par recherche textuelle (si nécessaire)
+                    // Filtrage par recherche texte
                     if (this.searchTerm) {
-                        this.filteredProducts = this.filteredProducts.filter(product => {
-                            return product.libelleproduct.toLowerCase().includes(this.searchTerm.toLowerCase());
-                        });
-                    }
-
-                    // Calculer le nombre de pages en fonction du nombre de produits filtrés
-                    this.totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
-                },
-
-                async deleteProduct(productId) {
-                    try {
-                        const url =
-                            `{{ route('product.destroy', ['product' => '__ID__']) }}`.replace(
-                                "__ID__",
-                                productId
+                        const term = this.searchTerm.toLowerCase();
+                        filtered = filtered.filter(eleve => {
+                            return (
+                                eleve.nom.toLowerCase().includes(term) ||
+                                eleve.prenom.toLowerCase().includes(term) ||
+                                eleve.classe?.name?.toLowerCase().includes(term) ||
+                                eleve.matricule.toLowerCase().includes(term)
                             );
-
-                        const response = await fetch(url, {
-                            method: "DELETE",
-                            headers: {
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                            },
-                        });
-
-                        if (response.ok) {
-                            const result = await response.json();
-                            if (result.success) {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: result.message,
-                                    showConfirmButton: false,
-                                    timer: 1500,
-                                });
-
-                                // Retirer le produit de la liste `this.products`
-                                this.products = this.products.filter(product => product.id !== productId);
-
-                                // Après suppression, appliquer le filtre pour mettre à jour la liste affichée
-                                this.filterProducts();
-                            } else {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: result.message,
-                                    showConfirmButton: true,
-                                });
-                            }
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Erreur lors de la requête.",
-                                showConfirmButton: true,
-                            });
-                        }
-                    } catch (error) {
-                        console.error("Erreur réseau :", error);
-                        Swal.fire({
-                            icon: "error",
-                            title: "Une erreur réseau s'est produite.",
-                            showConfirmButton: true,
                         });
                     }
+
+                    return filtered;
                 },
 
                 goToPage(page) {
@@ -511,8 +232,11 @@
                 },
 
                 init() {
-                    this.filterProducts();
                     this.isLoading = false;
+                },
+
+                printVersement(id) {
+                    // Logic for printing a versement
                 }
             };
         }

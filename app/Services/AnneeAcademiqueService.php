@@ -3,10 +3,45 @@
 namespace App\Services;
 
 use App\Models\AnneeAcademique;
+use App\Models\Semestre;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AnneeAcademiqueService
 {
+
+
+    public function checkAndCreateAnneeAcademique()
+    {
+        // Récupérer l'année académique en cours (année actuelle)
+        $currentYear = Carbon::now()->year;
+        $anneeAcademique = AnneeAcademique::where('name', (string)$currentYear)->first();
+
+        // Si l'année académique n'existe pas, on la crée
+        if (!$anneeAcademique) {
+            $anneeAcademique = AnneeAcademique::create([
+                'name' => (string)$currentYear,
+                'date_debut' => Carbon::now()->startOfYear(),
+                'date_fin' => Carbon::now()->endOfYear(),
+                'active' => 1,
+            ]);
+
+            Semestre::create([
+                'anneeacademique_id' => $anneeAcademique->id,
+                'name' => 'Semestre 1',
+                'active' => 1,
+            ]);
+
+            Semestre::create([
+                'anneeacademique_id' => $anneeAcademique->id,
+                'name' => 'Semestre 2',
+                'active' => false,
+            ]);
+        }
+
+    }
+
+
     /**
      * Crée une nouvelle année scolaire et désactive les autres.
      */

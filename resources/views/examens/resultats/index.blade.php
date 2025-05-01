@@ -69,11 +69,11 @@
 
                                                     <td class="text-end">
                                                         <td class="text-end">
-                                                            <a :href="`{{ route('examens.resultats.show', ['resultat' => '__ID__']) }}`
+                                                            <a :href="`{{ route('examens.print.examens', ['id' => '__ID__']) }}`
                                                                 .replace(
                                                                     '__ID__', resultat.code)"
                                                                     class="btn btn-warning btn-sm"  title="Créeer la repartition">
-                                                                    <i class="fa fa-print me-1"></i> 
+                                                                    <i class="fa fa-print me-1"></i>
                                                                 </a>
                                                                 &nbsp; &nbsp;
 

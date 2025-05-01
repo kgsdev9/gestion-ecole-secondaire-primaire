@@ -20,9 +20,11 @@ class ScolariteController extends Controller
 
     public function index()
     {
+        $this->anneeAcademiqueService->checkAndCreateAnneeAcademique();
+
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
-        $scolarites = Scolarite::with(['niveau', 'classe', 'anneeAcademique'])
+        $scolarites = Scolarite::with(['niveau', 'classe', 'anneeAcademique', 'versements'])
             ->where('anneeacademique_id', $anneeScolaireActuelle->id)
             ->get();
 

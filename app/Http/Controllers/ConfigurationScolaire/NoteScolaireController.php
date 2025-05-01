@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\ConfigurationScolaire;
 
 use App\Http\Controllers\Controller;
-use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Matiere;
 use App\Models\Moyenne;
@@ -11,15 +10,19 @@ use App\Models\Note;
 use App\Models\Semestre;
 use App\Models\TypeNote;
 use App\Services\AnneeAcademiqueService;
+use App\Services\ClasseService;
 use Illuminate\Http\Request;
 
 class NoteScolaireController extends Controller
 {
     protected $anneeAcademiqueService;
-    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
+    protected $classeService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService, ClasseService $classeService)
     {
         $this->middleware('auth');
         $this->anneeAcademiqueService = $anneeAcademiqueService;
+        $this->classeService = $classeService;
+
     }
     /**
      * Display a listing of the resource.
@@ -28,7 +31,8 @@ class NoteScolaireController extends Controller
      */
     public function index()
     {
-
+        $this->anneeAcademiqueService->checkAndCreateAnneeAcademique();
+        
         $anneeAcademiqueEnCours  = $this->anneeAcademiqueService->getAnneeActive();
 
         $classes = Classe::with(['niveau', 'salle'])
@@ -49,7 +53,7 @@ class NoteScolaireController extends Controller
         $semestres = $anneeScolaireActuelle->semestres()->where('active', true)->first();
 
         $notes = Note::where('anneeacademique_id', $anneeScolaireActuelle->id)
-            ->where('semestre_id', $semestres->id) 
+            ->where('semestre_id', $semestres->id)
             ->whereIn('eleve_id', $students->pluck('id'))
             ->with(['matiere', 'typenote'])
             ->get();

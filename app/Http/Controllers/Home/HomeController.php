@@ -7,6 +7,7 @@ use App\Models\Eleve;
 use App\Models\Inscription;
 use App\Models\Versement;
 use App\Services\AnneeAcademiqueService;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -24,6 +25,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // DB::table('type_notes')->insert([
+        //     'name'=> 'Interrogation'
+        // ]);
         // Récupérer l'année scolaire active
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 

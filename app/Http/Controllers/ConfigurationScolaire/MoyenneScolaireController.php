@@ -31,6 +31,9 @@ class MoyenneScolaireController extends Controller
 
     public function index()
     {
+
+        $this->anneeAcademiqueService->checkAndCreateAnneeAcademique();
+
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
         // Récupère les affectations de classes pour l'année en cours

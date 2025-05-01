@@ -17,12 +17,14 @@ class CreateVersementsTable extends Migration
             $table->id();
             $table->string('reference')->unique();
             $table->unsignedBigInteger('anneeacademique_id');
+            $table->unsignedBigInteger('scolarite_id')->nullable();
             $table->foreignId('typeversement_id')->constrained('type_versements')->onDelete('cascade');
             $table->foreignId('eleve_id')->constrained('eleves')->onDelete('cascade');
             $table->decimal('montant_verse', 10, 2);
             $table->decimal('montant_restant', 10, 2);
-            $table->date('date_versement');
+            $table->date('date_versement')->nullable();
             $table->foreign('anneeacademique_id')->references('id')->on('annee_academiques')->onDelete('cascade');
+            $table->foreign('scolarite_id')->references('id')->on('scolarites')->onDelete('cascade');
             $table->timestamps();
         });
     }

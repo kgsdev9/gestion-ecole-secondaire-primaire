@@ -22,6 +22,8 @@ class RepartitionController extends Controller
     public function index()
     {
 
+        $this->anneeAcademiqueService->checkAndCreateAnneeAcademique();
+        
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
         $repartitions = Repartition::where('anneeacademique_id', $anneeScolaireActuelle->id)
                                     ->with(['examen.classe', 'anneeAcademique', 'examen.typeExamen'])

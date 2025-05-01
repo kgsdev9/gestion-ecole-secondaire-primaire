@@ -28,6 +28,8 @@ class ProgrammeExamenController extends Controller
 
     public function index()
     {
+        $this->anneeAcademiqueService->checkAndCreateAnneeAcademique();
+        
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
         $programmesexamens =  ProgrammeExamen::where('anneeacademique_id', $anneeScolaireActuelle->id)
         ->with(['examen.classe', 'anneeAcademique', 'examen.typeExamen'])

@@ -205,6 +205,7 @@
                     annee_academique_id: '',
                     montant_scolarite: '',
                 },
+
                 currentScolarite: null,
 
                 hideModal() {

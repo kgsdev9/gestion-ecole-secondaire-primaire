@@ -56,10 +56,12 @@
                                                     <td x-text="inscription.niveau.name"></td>
                                                     <td x-text="inscription.annee_academique.name"></td>
                                                     <td class="text-end">
-                                                        <button @click="viewInscription(inscription)"
-                                                            class="btn btn-primary btn-sm mx-2">
-                                                            <i class="fa fa-eye"></i>
-                                                        </button>
+                                                        <a :href="`{{ route('administration.print.fiche.inscription', ['inscriptionId' => '__ID__']) }}`
+                                                            .replace(
+                                                                '__ID__', inscription.eleve.id)"
+                                                                class="btn btn-light btn-sm" title="Imprimer la fiche d'inscription">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
                                                     </td>
                                                 </tr>
                                             </template>
@@ -90,25 +92,7 @@
             </div>
         </div>
 
-        <template x-if="showModal">
-            <div class="modal fade show d-block" tabindex="-1" aria-modal="true" style="background-color: rgba(0,0,0,0.5)">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Détails de l'inscription</h5>
-                            <button type="button" class="btn-close" @click="hideModal()"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong>Élève : </strong><span x-text="currentInscription.eleve.name"></span></p>
-                            <p><strong>Classe : </strong><span x-text="currentInscription.classe.name"></span></p>
-                            <p><strong>Niveau : </strong><span x-text="currentInscription.niveau.name"></span></p>
-                            <p><strong>Année académique : </strong><span x-text="currentInscription.annee_academique.name"></span></p>
-                            <p><strong>Date d'inscription : </strong><span x-text="currentInscription.date_inscription"></span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
+
     </div>
 
     <script>
@@ -123,16 +107,6 @@
                 isLoading: false,
                 showModal: false,
                 currentInscription: null,
-
-                hideModal() {
-                    this.showModal = false;
-                    this.currentInscription = null;
-                },
-
-                viewInscription(inscription) {
-                    this.currentInscription = inscription;
-                    this.showModal = true;
-                },
 
                 get paginatedInscriptions() {
                     return this.filteredInscriptions.slice((this.currentPage - 1) * this.inscriptionsPerPage, this.currentPage * this.inscriptionsPerPage);
