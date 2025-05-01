@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Gestion des scolarites')
 @section('content')
     <div class="app-main flex-column flex-row-fluid mt-4" x-data="scolariteForm()" x-init="init()">
         <div class="d-flex flex-column flex-column-fluid">
@@ -78,10 +78,10 @@
                                                     <td x-text="scolarite.niveau.name"></td>
                                                     <td x-text="scolarite.classe.name"></td>
                                                     <td x-text="scolarite.annee_academique.name"></td>
-                                                    <td x-text="scolarite.montant_scolarite"></td>
+                                                    <td x-text="new Intl.NumberFormat('fr-FR').format(scolarite.montant_scolarite) + ' FCFA'"></td>
                                                     <td x-text="new Date(scolarite.created_at).toLocaleDateString('fr-FR')">
                                                     </td>
-                                                    <td class="text-end">
+                                                    <td class="text-end" x-show="scolarite.versements.length === 0">
                                                         <button @click="openModal(scolarite)"
                                                             class="btn btn-primary btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
@@ -92,6 +92,7 @@
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </td>
+
                                                 </tr>
                                             </template>
                                         </tbody>
@@ -244,9 +245,91 @@
                     };
                 },
 
+                // async submitForm() {
+                //     if (!this.formData.niveau_id || !this.formData.classe_id || !this.formData.annee_academique_id || !
+                //         this.formData.montant_scolarite) {
+                //         Swal.fire({
+                //             icon: 'error',
+                //             title: 'Tous les champs sont requis.',
+                //             showConfirmButton: true,
+                //         });
+                //         return;
+                //     }
+
+                //     const formData = new FormData();
+                //     formData.append('niveau_id', this.formData.niveau_id);
+                //     formData.append('classe_id', this.formData.classe_id);
+                //     formData.append('annee_academique_id', this.formData.annee_academique_id);
+                //     formData.append('montant_scolarite', this.formData.montant_scolarite);
+
+                //     if (this.currentScolarite) {
+                //         formData.append('scolarite_id', this.currentScolarite.id);
+                //     }
+
+                //     try {
+                //         const response = await fetch('{{ route('scolarites.store') }}', {
+                //             method: 'POST',
+                //             headers: {
+                //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                //             },
+                //             body: formData,
+                //         });
+
+                //         if (response.ok) {
+                //             const data = await response.json();
+                //             const scolarite = data.scolarite;
+
+                //             if (scolarite) {
+                //                 Swal.fire({
+                //                     icon: 'success',
+                //                     title: this.isEdite ? 'Scolarité mise à jour avec succès !' :
+                //                         'Scolarité créée avec succès !',
+                //                     showConfirmButton: false,
+                //                     timer: 1500,
+                //                 });
+
+                //                 if (this.isEdite) {
+                //                     const index = this.scolarites.findIndex(e => e.id === scolarite.id);
+                //                     if (index !== -1) {
+                //                         this.scolarites[index] = scolarite;
+                //                     }
+                //                 } else {
+                //                     this.scolarites.push(scolarite);
+                //                 }
+
+                //                 this.resetForm();
+                //                 this.hideModal();
+                //             } else {
+                //                 Swal.fire({
+                //                     icon: 'error',
+                //                     title: 'Erreur lors de l\'enregistrement.',
+                //                     showConfirmButton: true,
+                //                 });
+                //             }
+                //         } else {
+                //             Swal.fire({
+                //                 icon: 'error',
+                //                 title: 'Une erreur s\'est produite.',
+                //                 showConfirmButton: true,
+                //             });
+                //         }
+                //     } catch (error) {
+                //         console.error('Erreur réseau:', error);
+                //         Swal.fire({
+                //             icon: 'error',
+                //             title: 'Une erreur est survenue.',
+                //             showConfirmButton: true,
+                //         });
+                //     }
+                // },
+
                 async submitForm() {
-                    if (!this.formData.niveau_id || !this.formData.classe_id || !this.formData.annee_academique_id || !
-                        this.formData.montant_scolarite) {
+                    if (
+                        !this.formData.niveau_id ||
+                        !this.formData.classe_id ||
+                        !this.formData.annee_academique_id ||
+                        !this.formData.montant_scolarite
+                    ) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Tous les champs sont requis.',
@@ -274,41 +357,36 @@
                             body: formData,
                         });
 
+                        const data = await response.json();
+
                         if (response.ok) {
-                            const data = await response.json();
                             const scolarite = data.scolarite;
 
-                            if (scolarite) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: this.isEdite ? 'Scolarité mise à jour avec succès !' :
-                                        'Scolarité créée avec succès !',
-                                    showConfirmButton: false,
-                                    timer: 1500,
-                                });
+                            Swal.fire({
+                                icon: 'success',
+                                title: this.isEdite ? 'Scolarité mise à jour avec succès !' :
+                                    'Scolarité créée avec succès !',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
 
-                                if (this.isEdite) {
-                                    const index = this.scolarites.findIndex(e => e.id === scolarite.id);
-                                    if (index !== -1) {
-                                        this.scolarites[index] = scolarite;
-                                    }
-                                } else {
-                                    this.scolarites.push(scolarite);
+                            if (this.isEdite) {
+                                const index = this.scolarites.findIndex(e => e.id === scolarite.id);
+                                if (index !== -1) {
+                                    this.scolarites[index] = scolarite;
                                 }
-
-                                this.resetForm();
-                                this.hideModal();
                             } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Erreur lors de l\'enregistrement.',
-                                    showConfirmButton: true,
-                                });
+                                this.scolarites.push(scolarite);
                             }
+
+                            this.resetForm();
+                            this.hideModal();
+
                         } else {
+                            // Affichage d'un message spécifique si Laravel retourne une erreur de doublon
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Une erreur s\'est produite.',
+                                title: data.message || 'Une erreur s\'est produite.',
                                 showConfirmButton: true,
                             });
                         }
@@ -316,11 +394,13 @@
                         console.error('Erreur réseau:', error);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Une erreur est survenue.',
+                            title: 'Une erreur réseau est survenue.',
+                            text: 'Veuillez vérifier votre connexion ou réessayer plus tard.',
                             showConfirmButton: true,
                         });
                     }
                 },
+
 
                 get paginatedScolarites() {
                     return this.filteredScolarites.slice((this.currentPage - 1) * this.scolaritesPerPage, this

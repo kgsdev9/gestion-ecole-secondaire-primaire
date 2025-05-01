@@ -47,6 +47,7 @@ class ScolariteController extends Controller
             // Si l'ID de la scolarité existe, on modifie la scolarité
             $scolarite = Scolarite::find($scolariteId);
 
+
             // Si la scolarité n'existe pas, on crée une nouvelle scolarité
             if (!$scolarite) {
                 return $this->createScolarite($request);
@@ -83,7 +84,7 @@ class ScolariteController extends Controller
             'montant_scolarite' => $request->montant_scolarite,
         ]);
 
-        $scolarite->load(['niveau', 'classe', 'anneeAcademique']);
+        $scolarite->load(['niveau', 'classe', 'anneeAcademique', 'versements']);
 
         return response()->json([
             'message' => 'Scolarité mise à jour avec succès',
@@ -114,7 +115,7 @@ class ScolariteController extends Controller
             'montant_scolarite' => $request->montant_scolarite,
         ]);
 
-        $scolarite->load(['niveau', 'classe', 'anneeAcademique']);
+        $scolarite->load(['niveau', 'classe', 'anneeAcademique', 'versements']);
 
         return response()->json([
             'message' => 'Scolarité créée avec succès',
@@ -126,6 +127,7 @@ class ScolariteController extends Controller
     {
         $scolarite = Scolarite::find($id);
 
+       
         if (!$scolarite) {
             return response()->json([
                 'message' => 'Scolarité non trouvée.',

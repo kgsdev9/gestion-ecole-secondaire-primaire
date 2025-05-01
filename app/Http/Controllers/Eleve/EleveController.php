@@ -104,7 +104,7 @@ class EleveController extends Controller
         // Mise à jour ou création de l'inscription
         $this->updateInscription($eleve, $request);
 
-        $eleve->load('classe', 'anneeacademique', 'niveau', 'genre', 'statuseleve');
+            $eleve->load('classe', 'anneeacademique', 'niveau', 'genre', 'statuseleve');
 
         return response()->json([
             'message' => 'Élève mis à jour avec succès',

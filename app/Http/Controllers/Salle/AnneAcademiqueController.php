@@ -18,7 +18,7 @@ class AnneAcademiqueController extends Controller
 
     public function index()
     {
-        $listeanneeacademique = AnneeAcademique::orderByDesc('created_at')->get();
+        $listeanneeacademique = AnneeAcademique::with('inscriptions')->orderByDesc('created_at')->get();
         return view('anneacademique.index', compact('listeanneeacademique'));
     }
 
@@ -75,6 +75,8 @@ class AnneAcademiqueController extends Controller
             'active' => 1
         ]);
 
+        $anneeAcademique->load('inscriptions');
+
         return response()->json([
             'message' => 'Année académique mise à jour avec succès.',
             'anneeAcademique' => $anneeAcademique
@@ -91,6 +93,7 @@ class AnneAcademiqueController extends Controller
             'date_fin' => $request->date_fin,
         ]);
 
+        $anneeAcademique->load('inscriptions');
         return response()->json([
             'message' => 'Année académique créée avec succès.',
             'anneeAcademique' => $anneeAcademique
@@ -107,6 +110,7 @@ class AnneAcademiqueController extends Controller
         // Si l'année académique n'existe pas, retourner une erreur
         if (!$anneeAcademique) {
             return response()->json([
+                'success' => false,
                 'message' => 'Année académique introuvable.'
             ], 404);
         }
@@ -116,7 +120,9 @@ class AnneAcademiqueController extends Controller
 
         // Retourner une réponse JSON avec un message de succès
         return response()->json([
+            'success' => true,
             'message' => 'Année académique supprimée avec succès.'
         ], 200);
     }
+
 }

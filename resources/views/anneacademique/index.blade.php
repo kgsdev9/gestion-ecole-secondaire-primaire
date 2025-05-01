@@ -78,11 +78,15 @@
 
 
                                                     <td class="text-end">
-                                                        <button @click="openModal(annee)"
+                                                        <button x-show="annee.inscriptions.length === 0"
+                                                            @click="openModal(annee)"
                                                             class="btn btn-primary ms-2 btn-sm mx-2">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <button @click="deleteAnneeAcademique(annee.id)"
+
+                                                        <!-- Bouton Supprimer (affiché uniquement si aucune inscription) -->
+                                                        <button x-show="annee.inscriptions.length === 0"
+                                                            @click="deleteAnneeAcademique(annee.id)"
                                                             class="btn btn-danger btn-sm">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
@@ -376,49 +380,58 @@
                     },
 
 
-                    async deleteAnneeAcademique(id) {
-                        try {
-                            const url =
-                                `{{ route('administration.anneeacademique.destroy', ['anneeacademique' => '__ID__']) }}`
-                                .replace(
-                                    "__ID__", id);
+                    async deleteAnneeAcademique(eleveId) {
+    try {
+        const url =
+            `{{ route('administration.anneeacademique.destroy', ['anneeacademique' => '__ID__']) }}`.replace(
+                "__ID__",
+                eleveId
+            );
 
-                            const response = await fetch(url, {
-                                method: "DELETE",
-                                headers: {
-                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                                },
-                            });
+        const response = await fetch(url, {
+            method: "DELETE",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            },
+        });
 
-                            if (response.ok) {
-                                const result = await response.json();
-                                if (result.success) {
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: result.message,
-                                        timer: 1500
-                                    });
-                                    this.anneeAcademiques = this.anneeAcademiques.filter(annee => annee.id !== id);
-                                    this.filterAnneeAcademiques();
-                                } else {
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: result.message
-                                    });
-                                }
-                            } else {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Erreur serveur."
-                                });
-                            }
-                        } catch (error) {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Erreur réseau."
-                            });
-                        }
-                    },
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success) {  // Maintenant on vérifie `success` dans la réponse
+                Swal.fire({
+                    icon: "success",
+                    title: result.message,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+
+                this.anneeAcademiques = this.anneeAcademiques.filter(annee => annee.id !== eleveId);
+                this.filterAnneeAcademiques();
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: result.message,
+                    showConfirmButton: true,
+                });
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Erreur lors de la requête.",
+                showConfirmButton: true,
+            });
+        }
+    } catch (error) {
+        console.error("Erreur réseau :", error);
+        Swal.fire({
+            icon: "error",
+            title: "Une erreur réseau s'est produite.",
+            showConfirmButton: true,
+        });
+    }
+},
+
+
                 };
             }
         </script>

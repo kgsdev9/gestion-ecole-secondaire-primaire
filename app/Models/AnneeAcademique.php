@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class AnneeAcademique extends Model
 {
@@ -19,12 +18,11 @@ class AnneeAcademique extends Model
     ];
 
 
-    public static function anneeAcademiqueEnCours()
+    public function  inscriptions()
     {
-        return self::whereDate('date_debut', '<=', Carbon::today())
-            ->whereDate('date_fin', '>=', Carbon::today())
-            ->first();
+        return $this->hasMany(Inscription::class, 'anneeacademique_id');
     }
+
 
     public function semestres()
     {
