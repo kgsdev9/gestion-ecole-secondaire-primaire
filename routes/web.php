@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Administration\Impressions\PrintListeClasseController;
 use App\Http\Controllers\Administration\Impressions\PrintResultatSemestreController;
 use App\Http\Controllers\Administration\PrintFicheInscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -165,6 +166,8 @@ Route::prefix('administration')->name('administration.')->group(function () {
     // pritn semstre
 
     Route::get('/print/resultat/semestre/{resultatsemestreId}', [PrintResultatSemestreController::class, 'printResultatSemestre'])->name('print.resultat.semestre');
+    Route::post('/imprimer/liste/classe', [PrintListeClasseController::class, 'printClasseListe'])->name('impression.classe');
+
 
 });
 

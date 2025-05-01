@@ -23,7 +23,7 @@ class InscriptionController extends Controller
     public function index()
     {
         $this->anneeAcademiqueService->checkAndCreateAnneeAcademique();
-        
+
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
         $inscriptions = Inscription::with(['eleve', 'classe', 'niveau', 'anneeAcademique'])
@@ -31,10 +31,13 @@ class InscriptionController extends Controller
             ->get();
 
 
+
         $eleves = Eleve::all();
         $niveaux = Niveau::all();
-        $classes = Classe::all();
         $anneesAcademiques = AnneeAcademique::all();
+        $classes = Classe::with(['niveau', 'salle'])
+        ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+        ->get();
         return view('inscriptions.index', compact('inscriptions', 'eleves', 'niveaux', 'classes', 'anneesAcademiques'));
     }
 }
