@@ -41,7 +41,7 @@
 
 
 
-                                    <button @click="printListeClasse" class="btn btn-light-primary btn-sm">
+                                    <button @click="printProducts" class="btn btn-light-primary btn-sm">
                                         <i class="fa fa-print"></i> Imprimer
                                     </button>
                                     <button @click="exportProducts" class="btn btn-light-primary btn-sm">

@@ -35,6 +35,11 @@ class Eleve extends Model
         return $this->hasMany(Inscription::class);
     }
 
+    public function versements()
+    {
+        return $this->hasMany(Inscription::class);
+    }
+
 
     // Define the relationship to Classe
     public function classe()

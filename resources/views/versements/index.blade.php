@@ -119,7 +119,7 @@
                                     </div>
                                     <div class="card-toolbar">
                                         <div class="d-flex justify-content-end align-items-center gap-3">
-                                            <button @click="printRapport" class="btn btn-light-dark btn-sm">
+                                            <button @click="printVersement" class="btn btn-light-dark btn-sm">
                                                 <i class="fa fa-print"></i> Imprimer
                                             </button>
                                             <button @click="exportRaport" class="btn btn-light-success btn-sm">
@@ -379,6 +379,45 @@
                             text: error.message
                         });
                     }
+                },
+
+                printVersement() {
+
+                    // Vérifier si toutes les valeurs sont renseignées
+                    if (!this.selectedEleve.id) {
+                        alert("Veuillez selectionner l'eleve ou l'etudiant svp.");
+                        return; // Empêche l'envoi si des données sont manquantes
+                    }
+
+                    const formData = new FormData();
+                    formData.append('eleve_id', this.selectedEleve.id);
+
+
+                    fetch('{{ route('administration.impression.versement') }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            },
+                            body: formData,
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.url) {
+                                window.open(data.url, '_blank');
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.message || "Impossible de générer le bulletin.",
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur lors de l’envoi :', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur serveur ou réseau.',
+                            });
+                        });
                 },
 
                 // Fonction pour recalculer les montants restants des versements

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Administration\Impressions\PrintListeClasseController;
 use App\Http\Controllers\Administration\Impressions\PrintResultatSemestreController;
 use App\Http\Controllers\Administration\PrintFicheInscriptionController;
+use App\Http\Controllers\Administration\PrintVersementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Home\HomeController;
@@ -139,6 +140,7 @@ Route::prefix('examens')->name('examens.')->group(function () {
     Route::get('/parametre/examen', [ParametreController::class, 'index'])->name('parametre.examens');
     Route::post('/action/examen', [ParametreController::class, 'executeExamAction'])->name('execute.action');
     Route::get('/print/resultat/{id}', [PrintExamenController::class, 'printresultatExam'])->name('print.examens');
+    Route::post('/imprimer/repartition/examen', [PrintExamenController::class, 'printRepartitonExamen'])->name('impression.repartition.examen');
 });
 
 
@@ -162,12 +164,9 @@ Route::prefix('configuration')->name('configuration.')->group(function () {
 Route::prefix('administration')->name('administration.')->group(function () {
     Route::get('/print/fiche/inscription/{inscriptionId}', [PrintFicheInscriptionController::class, 'printFicheInscription'])->name('print.fiche.inscription');
     Route::resource('/suiviversement', SuiviVersementController::class);
-
-    // pritn semstre
-
     Route::get('/print/resultat/semestre/{resultatsemestreId}', [PrintResultatSemestreController::class, 'printResultatSemestre'])->name('print.resultat.semestre');
     Route::post('/imprimer/liste/classe', [PrintListeClasseController::class, 'printClasseListe'])->name('impression.classe');
-
+    Route::post('/print/versement', [PrintVersementController::class, 'printVersement'])->name('impression.versement');
 
 });
 

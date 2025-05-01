@@ -398,6 +398,44 @@
                 },
 
 
+                printVersement() {
+                    // Vérifier si toutes les valeurs sont renseignées
+                    if (!this.classe_id) {
+                        alert("Veuillez selectionner la classt svp.");
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('classe_id', this.classe_id);
+
+                    fetch('{{ route('administration.impression.classe') }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            },
+                            body: formData,
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.url) {
+                                window.open(data.url, '_blank');
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: data.message || "Impossible de générer le bulletin.",
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur lors de l’envoi :', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur serveur ou réseau.',
+                            });
+                        });
+                },
+
+
                 init() {
                     this.filteredScolarites = this.scolarites;
                     this.totalPages = Math.ceil(this.filteredScolarites.length / this.scolaritesPerPage);

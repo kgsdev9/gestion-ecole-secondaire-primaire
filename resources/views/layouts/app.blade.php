@@ -899,20 +899,7 @@
 
                                 </div>
 
-                                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                                    <span class="menu-link">
-                                        <span class="menu-icon">
-                                            <span class="svg-icon svg-icon-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none">
-                                                    <path fill="currentColor"
-                                                        d="M12 2C6.48 2 2 6.48 2 12C2 16.97 6.03 21 12 21C17.97 21 22 16.97 22 12C22 7.03 17.97 2 12 2ZM12 19C8.69 19 6 16.31 6 13C6 9.69 8.69 7 12 7C15.31 7 18 9.69 18 13C18 16.31 15.31 19 12 19ZM12 5C8.69 5 6 7.69 6 11C6 14.31 8.69 17 12 17C15.31 17 18 14.31 18 11C18 7.69 15.31 5 12 5Z" />
-                                                </svg>
-                                            </span>
-                                        </span>
-                                        <span class="menu-title">Historique</span>
-                                    </span>
-                                </div>
+                                
 
                                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                                     <span class="menu-link">
@@ -993,7 +980,7 @@
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="{{asset('assets/js/alpine.js')}}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     @stack('scripts')
 </body>
