@@ -44,12 +44,10 @@ class EmploiDuTempsController extends Controller
         $classe = Classe::findOrFail($classeID);
         $matieres = Matiere::all();
         $jours = Jour::all();
-        $emplois = EmploiDuTemps::where('classe_id', $classeID)->get();
+        $emplois =  EmploiDuTemps::with(['matiere', 'jour'])->get();
 
         return view('emploidutemps.configuration', compact('classe', 'matieres', 'jours', 'emplois'));
     }
-
-
 
 
     public function store(Request $request)
@@ -58,6 +56,7 @@ class EmploiDuTempsController extends Controller
         $classeId = $data['classe_id'];
         $lignes = $data['emplois'];
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
+
         foreach ($lignes as $ligne) {
             EmploiDuTemps::updateOrCreate(
                 ['id' => $ligne['id'] ?? null],
@@ -72,9 +71,16 @@ class EmploiDuTempsController extends Controller
             );
         }
 
-        return response()->json(['message' => 'Emploi du temps enregistré avec succès']);
-    }
+        // Récupérer les emplois enregistrés pour cette classe
+        $emplois = EmploiDuTemps::where('classe_id', $classeId)
+                                 ->with(['matiere', 'jour']) // Assurer d'inclure les relations pour matiere et jour
+                                 ->get();
 
+        return response()->json([
+            'message' => 'Emploi du temps enregistré avec succès',
+            'emplois' => $emplois // Inclure les emplois dans la réponse JSON
+        ]);
+    }
 
 
 
