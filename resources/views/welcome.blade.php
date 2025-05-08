@@ -89,7 +89,7 @@
 
                                     <div class="d-flex flex-stack">
 
-                                        <a href="{{ route('versements.index') }}"
+                                        <a href="{{ route('versement.index') }}"
                                             class="text-primary fw-semibold fs-6 me-2">
                                             Gestion des versements </a>
                                         <button type="button"
@@ -324,7 +324,7 @@
                                         <span class="text-gray-400 mt-1 fw-semibold fs-6">Les versements récents</span>
                                     </h3>
                                     <div class="card-toolbar">
-                                        <a href="{{ route('versements.index') }}" class="btn btn-sm btn-light">Consulter</a>
+                                        <a href="{{ route('versement.index') }}" class="btn btn-sm btn-light">Consulter</a>
                                     </div>
                                 </div>
                                 <!--end::Header-->

@@ -117,10 +117,10 @@
                                 </a>
 
                                 @php
-                                    $isVersements = request()->routeIs('versements.index');
+                                    $isVersements = request()->routeIs('versement.index');
                                 @endphp
 
-                                <a href="{{ route('versements.index') }}"
+                                <a href="{{ route('versement.index') }}"
                                     class="menu-item menu-lg-down-accordion me-0 me-lg-2 {{ $isVersements ? 'here show menu-here-bg' : '' }}">
                                     <span class="menu-link {{ $isVersements ? 'active' : '' }}">
                                         <span class="menu-title">Versements</span>
@@ -684,8 +684,8 @@
                                             </div>
 
                                             <div class="menu-item">
-                                                <a class="menu-link {{ request()->routeIs('examens.gestion.index') ? 'active' : '' }}"
-                                                    href="{{ route('examens.gestion.index') }}">
+                                                <a class="menu-link {{ request()->routeIs('administration.emplois-du-temps.index') ? 'active' : '' }}"
+                                                    href="{{ route('administration.emplois-du-temps.index') }}">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -856,8 +856,8 @@
                                     <div class="menu-sub menu-sub-accordion">
                                         <div class="menu-item">
 
-                                            <a class="menu-link {{ request()->routeIs('versements.index') ? 'active' : '' }}"
-                                                href="{{ route('versements.index') }}">
+                                            <a class="menu-link {{ request()->routeIs('versement.index') ? 'active' : '' }}"
+                                                href="{{ route('versement.index') }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
@@ -882,8 +882,8 @@
 
 
                                 <div class="menu-item menu-accordion">
-                                    <a href="{{ route('emplois-du-temps.index') }}"
-                                        class="menu-link {{ request()->routeIs('emplois-du-temps.index') ? 'active' : '' }}">
+                                    <a href="{{ route('administration.emplois-du-temps.index') }}"
+                                        class="menu-link {{ request()->routeIs('administration.emplois-du-temps.index') ? 'active' : '' }}">
                                         <span class="menu-icon">
                                             <span class="svg-icon svg-icon-2">
                                                 <svg width="24" height="24" viewBox="0 0 24 24"
@@ -899,7 +899,7 @@
 
                                 </div>
 
-                                
+
 
                                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                                     <span class="menu-link">

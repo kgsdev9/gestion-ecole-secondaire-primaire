@@ -78,8 +78,7 @@ Route::resource('/scolarites', ScolariteController::class);
 Route::resource('/classes', ClasseController::class);
 Route::resource('/inscription', InscriptionController::class);
 Route::resource('/notes', NoteController::class);
-Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
-Route::resource('/versements', VersementController::class);
+Route::resource('/versement', VersementController::class);
 Route::resource('/bulletin', BulletinConroller::class);
 
 
@@ -167,6 +166,7 @@ Route::prefix('administration')->name('administration.')->group(function () {
     Route::get('/print/resultat/semestre/{resultatsemestreId}', [PrintResultatSemestreController::class, 'printResultatSemestre'])->name('print.resultat.semestre');
     Route::post('/imprimer/liste/classe', [PrintListeClasseController::class, 'printClasseListe'])->name('impression.classe');
     Route::post('/print/versement', [PrintVersementController::class, 'printVersement'])->name('impression.versement');
-
+    Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
+    Route::get('/emploidutempsbyclasse/{classeId}', [EmploiDuTempsController::class, 'configurationEmploiTime'])->name('configuration.emploidutemp');
 });
 

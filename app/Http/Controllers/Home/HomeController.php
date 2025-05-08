@@ -25,8 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // DB::table('type_notes')->insert([
-        //     'name'=> 'Interrogation'
+        // DB::table('jours')->insert([
+        //     'name'=> 'Mardi'
         // ]);
         // Récupérer l'année scolaire active
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();

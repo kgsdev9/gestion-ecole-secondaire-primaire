@@ -340,7 +340,7 @@
 
 
                 async deleteVersement(id) {
-                    const url = `{{ route('versements.destroy', ['versement' => '__ID__']) }}`.replace('__ID__', id);
+                    const url = `{{ route('versement.destroy', ['versement' => '__ID__']) }}`.replace('__ID__', id);
 
                     const confirmation = confirm('Voulez-vous vraiment supprimer ce versement ?');
                     if (!confirmation) return;
@@ -525,7 +525,7 @@
                     alert(this.formData.scolarite_id);
                     try {
                         const response = await fetch(
-                            '{{ route('versements.store') }}', {
+                            '{{ route('versement.store') }}', {
                                 method: 'POST',
                                 headers: {
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',

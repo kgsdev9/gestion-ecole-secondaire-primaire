@@ -7,8 +7,10 @@ use App\Models\AffectionAcademique;
 use App\Models\Classe;
 use App\Models\EmploiDuTemps;
 use App\Models\Jour;
+use App\Models\Matiere;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Services\AnneeAcademiqueService;
 
 class EmploiDuTempsController extends Controller
 {
@@ -18,44 +20,95 @@ class EmploiDuTempsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function __construct()
+    protected $anneeAcademiqueService;
+    public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
     {
         $this->middleware('auth');
+        $this->anneeAcademiqueService = $anneeAcademiqueService;
     }
-
-
 
 
     public function index()
     {
-        // Récupérer tous les emplois du temps avec les relations
-        $emplois = EmploiDuTemps::with(['matiere', 'classe', 'jour'])->get();
+        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
-        // Récupérer les jours sous forme d'un tableau de noms de jours
-        $jours = Jour::pluck('name')->toArray();
+        $classes = Classe::with(['niveau', 'anneeAcademique', 'salle'])
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+            ->get();
 
-        // Récupérer les heures de début uniques triées
-        $heures = $emplois->pluck('heure_debut')->unique()->sort()->values();
+        return view('emploidutemps.index', compact('classes'));
+    }
 
-        // Organiser les emplois par jour et heure
-        $emploisParJourEtHeure = [];
-        foreach ($emplois as $emploi) {
-            $jour = $emploi->jour->name;
-            $heureDebut = $emploi->heure_debut;
+    public function configurationEmploiTime($classeID)
+    {
+        $classe = Classe::findOrFail($classeID);
+        $matieres = Matiere::all();
+        $jours = Jour::all();
+        $emplois = EmploiDuTemps::where('classe_id', $classeID)->get();
 
-            $emploisParJourEtHeure[$jour][$heureDebut][] = [
-                'matiere' => $emploi->matiere->name,
-                'classe' => $emploi->classe->name,
-                'heure_debut' => $emploi->heure_debut,
-                'heure_fin' => $emploi->heure_fin,
-            ];
+        return view('emploidutemps.configuration', compact('classe', 'matieres', 'jours', 'emplois'));
+    }
+
+
+
+
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        $classeId = $data['classe_id'];
+        $lignes = $data['emplois'];
+        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
+        foreach ($lignes as $ligne) {
+            EmploiDuTemps::updateOrCreate(
+                ['id' => $ligne['id'] ?? null],
+                [
+                    'classe_id'   => $classeId,
+                    'matiere_id'  => $ligne['matiere_id'],
+                    'jour_id'     => $ligne['jour_id'],
+                    'heure_debut' => $ligne['heure_debut'],
+                    'heure_fin'   => $ligne['heure_fin'],
+                    'anneeacademique_id'=> $anneeScolaireActuelle->id
+                ]
+            );
         }
 
-        // Récupérer les classes liées à AffectionAcademique
-        $classes = Classe::with('niveau')->get();
-
-        return view('emploidutemps', compact('emploisParJourEtHeure', 'jours', 'heures', 'classes'));
+        return response()->json(['message' => 'Emploi du temps enregistré avec succès']);
     }
+
+
+
+
+
+    // public function indexs()
+    // {
+    //     // Récupérer tous les emplois du temps avec les relations
+    //     $emplois = EmploiDuTemps::with(['matiere', 'classe', 'jour'])->get();
+
+    //     // Récupérer les jours sous forme d'un tableau de noms de jours
+    //     $jours = Jour::pluck('name')->toArray();
+
+    //     // Récupérer les heures de début uniques triées
+    //     $heures = $emplois->pluck('heure_debut')->unique()->sort()->values();
+
+    //     // Organiser les emplois par jour et heure
+    //     $emploisParJourEtHeure = [];
+    //     foreach ($emplois as $emploi) {
+    //         $jour = $emploi->jour->name;
+    //         $heureDebut = $emploi->heure_debut;
+
+    //         $emploisParJourEtHeure[$jour][$heureDebut][] = [
+    //             'matiere' => $emploi->matiere->name,
+    //             'classe' => $emploi->classe->name,
+    //             'heure_debut' => $emploi->heure_debut,
+    //             'heure_fin' => $emploi->heure_fin,
+    //         ];
+    //     }
+
+    //     // Récupérer les classes liées à AffectionAcademique
+    //     $classes = Classe::with('niveau')->get();
+
+    //     return view('emploidutemps', compact('emploisParJourEtHeure', 'jours', 'heures', 'classes'));
+    // }
 
 
 
@@ -76,16 +129,6 @@ class EmploiDuTempsController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.

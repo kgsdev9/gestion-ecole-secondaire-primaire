@@ -12,7 +12,7 @@ use App\Services\AnneeAcademiqueService;
 
 class VersementController extends Controller
 {
-
+    
 
     protected $anneeAcademiqueService;
     public function __construct(AnneeAcademiqueService $anneeAcademiqueService)
