@@ -168,5 +168,6 @@ Route::prefix('administration')->name('administration.')->group(function () {
     Route::post('/print/versement', [PrintVersementController::class, 'printVersement'])->name('impression.versement');
     Route::resource('/emplois-du-temps', EmploiDuTempsController::class);
     Route::get('/emploidutempsbyclasse/{classeId}', [EmploiDuTempsController::class, 'configurationEmploiTime'])->name('configuration.emploidutemp');
+    Route::post('/printemploidutemps', [EmploiDuTempsController::class, 'printEmploiDuTemps'])->name('configuration.print.emploi.temps');
 });
 

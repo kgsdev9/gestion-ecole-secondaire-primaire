@@ -11,6 +11,7 @@ use App\Models\Matiere;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\AnneeAcademiqueService;
+use Codedge\Fpdf\Fpdf\Fpdf;
 
 class EmploiDuTempsController extends Controller
 {
@@ -44,7 +45,9 @@ class EmploiDuTempsController extends Controller
         $classe = Classe::findOrFail($classeID);
         $matieres = Matiere::all();
         $jours = Jour::all();
-        $emplois =  EmploiDuTemps::with(['matiere', 'jour'])->get();
+        $emplois =  EmploiDuTemps::with(['matiere', 'jour'])
+            ->where('classe_id', $classeID)
+            ->get();
 
         return view('emploidutemps.configuration', compact('classe', 'matieres', 'jours', 'emplois'));
     }
@@ -66,15 +69,15 @@ class EmploiDuTempsController extends Controller
                     'jour_id'     => $ligne['jour_id'],
                     'heure_debut' => $ligne['heure_debut'],
                     'heure_fin'   => $ligne['heure_fin'],
-                    'anneeacademique_id'=> $anneeScolaireActuelle->id
+                    'anneeacademique_id' => $anneeScolaireActuelle->id
                 ]
             );
         }
 
         // Récupérer les emplois enregistrés pour cette classe
         $emplois = EmploiDuTemps::where('classe_id', $classeId)
-                                 ->with(['matiere', 'jour']) // Assurer d'inclure les relations pour matiere et jour
-                                 ->get();
+            ->with(['matiere', 'jour']) // Assurer d'inclure les relations pour matiere et jour
+            ->get();
 
         return response()->json([
             'message' => 'Emploi du temps enregistré avec succès',
@@ -85,36 +88,136 @@ class EmploiDuTempsController extends Controller
 
 
 
-    // public function indexs()
-    // {
-    //     // Récupérer tous les emplois du temps avec les relations
-    //     $emplois = EmploiDuTemps::with(['matiere', 'classe', 'jour'])->get();
+    public function printEmploiDuTemps(Request $request)
+    {
+        $classeID = $request->classe_id;
 
-    //     // Récupérer les jours sous forme d'un tableau de noms de jours
-    //     $jours = Jour::pluck('name')->toArray();
+        $classe = Classe::findOrFail($classeID);
+        $jours = Jour::all()->keyBy('id');
+        $emplois = EmploiDuTemps::with(['matiere', 'jour'])
+            ->where('classe_id', $classeID)
+            ->get();
 
-    //     // Récupérer les heures de début uniques triées
-    //     $heures = $emplois->pluck('heure_debut')->unique()->sort()->values();
+        // Créneaux dynamiques
+        $creneaux = $emplois->map(function ($e) {
+            return [
+                'debut' => $e->heure_debut,
+                'fin'   => $e->heure_fin,
+            ];
+        })
+        ->unique(function ($item) {
+            return $item['debut'] . '-' . $item['fin'];
+        })
+        ->sortBy('debut')
+        ->values()
+        ->all();
 
-    //     // Organiser les emplois par jour et heure
-    //     $emploisParJourEtHeure = [];
-    //     foreach ($emplois as $emploi) {
-    //         $jour = $emploi->jour->name;
-    //         $heureDebut = $emploi->heure_debut;
+        // Infos élève (exemple, adapte à ton modèle)
+        $eleve = [
+            'nom' => 'SANOGO LACINA',
+            'matricule' => '19126509H',
+            'sexe' => 'M',
+            'regime' => 'BOURSIER',
+            'redoublant' => 'NON',
+            'prof_principal' => 'HAMED ADEWALE (PROFESSEUR DE PHYSIQUE - CHIMIE)',
+            'educateur' => 'KOUAKOU AYA EMILIE (0748093465)',
+            'heures_semaine' => '31H',
+        ];
 
-    //         $emploisParJourEtHeure[$jour][$heureDebut][] = [
-    //             'matiere' => $emploi->matiere->name,
-    //             'classe' => $emploi->classe->name,
-    //             'heure_debut' => $emploi->heure_debut,
-    //             'heure_fin' => $emploi->heure_fin,
-    //         ];
-    //     }
+        // Début PDF
+        $fpdf = new Fpdf();
+        $fpdf->AddPage();
 
-    //     // Récupérer les classes liées à AffectionAcademique
-    //     $classes = Classe::with('niveau')->get();
+        // En-tête Éducation Nationale
+        $fpdf->SetFont('Arial', '', 10);
+        $fpdf->Cell(130, 5, utf8_decode("MINISTERE DE L'EDUCATION NATIONALE"), 0, 0, 'L');
+        $fpdf->Cell(0, 5, utf8_decode("REPUBLIQUE DE COTE D'IVOIRE"), 0, 1, 'R');
+        $fpdf->Cell(130, 5, utf8_decode("ET DE L'ALPHABETISATION"), 0, 0, 'L');
+        $fpdf->Cell(0, 5, utf8_decode("Union - Discipline - Travail"), 0, 1, 'R');
+        $fpdf->Cell(130, 5, utf8_decode("DRENA ABIDJAN 4"), 0, 0, 'L');
+        $fpdf->Cell(0, 5, utf8_decode("Année Scolaire : 2021-2022"), 0, 1, 'R');
+        $fpdf->Cell(130, 5, utf8_decode("LYCÉE MODERNE ALASSANE OUATTARA - ANYAMA"), 0, 0, 'L');
+        $fpdf->Cell(0, 5, utf8_decode("Code : 015012   Statut : Public"), 0, 1, 'R');
+        $fpdf->Cell(130, 5, utf8_decode("Email : lymao2015@gmail.com"), 0, 1, 'L');
 
-    //     return view('emploidutemps', compact('emploisParJourEtHeure', 'jours', 'heures', 'classes'));
-    // }
+        $fpdf->Ln(5);
+
+        // Titre centré
+        $fpdf->SetFont('Arial', 'B', 14);
+        $fpdf->Cell(0, 10, utf8_decode("EMPLOI DU TEMPS CLASSE : " . $classe->name), 1, 1, 'C');
+
+        // Infos élève
+        $fpdf->SetFont('Arial', '', 10);
+        $fpdf->Cell(90, 8, utf8_decode("NOM & PRENOMS : " . $eleve['nom']), 0);
+        $fpdf->Cell(60, 8, utf8_decode("MATRICULE : " . $eleve['matricule']), 0);
+        $fpdf->Cell(40, 8, utf8_decode("SEXE : " . $eleve['sexe']), 0, 1);
+
+        $fpdf->Cell(90, 8, utf8_decode("REGIME : " . $eleve['regime']), 0);
+        $fpdf->Cell(60, 8, utf8_decode("REDOUBLANT : " . $eleve['redoublant']), 0, 1);
+
+        $fpdf->Cell(130, 8, utf8_decode("PROFESSEUR PRINCIPAL : " . $eleve['prof_principal']), 0, 1);
+        $fpdf->Cell(130, 8, utf8_decode("EDUCATEUR : " . $eleve['educateur']), 0, 1);
+        $fpdf->Cell(130, 8, utf8_decode("NOMBRE HEURES DE COURS PAR SEMAINE = " . $eleve['heures_semaine']), 0, 1);
+
+        $fpdf->Ln(5);
+
+        // Tableau des cours
+        $fpdf->SetFont('Arial', 'B', 8);
+        $fpdf->Cell(30, 10, 'Horaires', 1, 0, 'C');
+        foreach ($jours as $jour) {
+            $fpdf->Cell(30, 10, utf8_decode($jour->name), 1, 0, 'C');
+        }
+        $fpdf->Ln();
+
+        $fpdf->SetFont('Arial', '', 9);
+        foreach ($creneaux as $creneau) {
+            $label = $creneau['debut'] . ' - ' . $creneau['fin'];
+            $fpdf->Cell(30, 10, $label, 1);
+
+            foreach ($jours as $jourId => $jour) {
+                $matiereText = '';
+
+                foreach ($emplois as $emploi) {
+                    if (
+                        $emploi->jour_id == $jourId &&
+                        $emploi->heure_debut == $creneau['debut'] &&
+                        $emploi->heure_fin == $creneau['fin']
+                    ) {
+                        $matiereText = utf8_decode($emploi->matiere->name);
+                        break;
+                    }
+                }
+
+                $fpdf->Cell(30, 10, $matiereText, 1);
+            }
+
+            $fpdf->Ln();
+        }
+
+        // Sauvegarde
+        $directory = public_path('emplois');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        $filename = 'emploi_du_temps_' . $classe->id . '_' . time() . '.pdf';
+        $savePath = $directory . '/' . $filename;
+
+        $fpdf->Output('F', $savePath);
+        $publicUrl = asset('emplois/' . $filename);
+
+        return response()->json([
+            'url' => $publicUrl
+        ]);
+    }
+
+
+
+
+
+
+
+
 
 
 
