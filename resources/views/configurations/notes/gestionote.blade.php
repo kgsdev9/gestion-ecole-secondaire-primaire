@@ -36,7 +36,7 @@
                                         </svg>
                                     </div>
                                     <div class="card-body">
-                                        <h5 class="card-title text-primary fw-bold" x-text="classe.classe.name"></h5>
+                                        <h5 class="card-title text-primary fw-bold" x-text="classe.name"></h5>
                                         <p class="mb-1">
                                             <strong>Niveau :</strong> <span x-text="classe.niveau.name"></span>
                                         </p>

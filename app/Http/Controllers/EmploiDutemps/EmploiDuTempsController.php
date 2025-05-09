@@ -131,10 +131,10 @@ class EmploiDuTempsController extends Controller
         $fpdf->Cell(130, 5, utf8_decode("ET DE L'ALPHABETISATION"), 0, 0, 'L');
         $fpdf->Cell(0, 5, utf8_decode("Union - Discipline - Travail"), 0, 1, 'R');
         $fpdf->Cell(130, 5, utf8_decode("DRENA ABIDJAN 4"), 0, 0, 'L');
-        $fpdf->Cell(0, 5, utf8_decode("Année Scolaire : 2021-2022"), 0, 1, 'R');
-        $fpdf->Cell(130, 5, utf8_decode("LYCÉE MODERNE ALASSANE OUATTARA - ANYAMA"), 0, 0, 'L');
+        $fpdf->Cell(0, 5, utf8_decode("Année Scolaire : 2024-2025"), 0, 1, 'R');
+        $fpdf->Cell(130, 5, utf8_decode("NOM D'UNE ECOLE"), 0, 0, 'L');
         $fpdf->Cell(0, 5, utf8_decode("Code : 015012   Statut : Public"), 0, 1, 'R');
-        $fpdf->Cell(130, 5, utf8_decode("Email : lymao2015@gmail.com"), 0, 1, 'L');
+        $fpdf->Cell(130, 5, utf8_decode("Email : kgsinformatique@gmail.com"), 0, 1, 'L');
 
         $fpdf->Ln(5);
 
@@ -142,18 +142,18 @@ class EmploiDuTempsController extends Controller
         $fpdf->SetFont('Arial', 'B', 14);
         $fpdf->Cell(0, 10, utf8_decode("EMPLOI DU TEMPS CLASSE : " . $classe->name), 1, 1, 'C');
 
-        // Infos élève
-        $fpdf->SetFont('Arial', '', 10);
-        $fpdf->Cell(90, 8, utf8_decode("NOM & PRENOMS : " . $eleve['nom']), 0);
-        $fpdf->Cell(60, 8, utf8_decode("MATRICULE : " . $eleve['matricule']), 0);
-        $fpdf->Cell(40, 8, utf8_decode("SEXE : " . $eleve['sexe']), 0, 1);
+        // // Infos élève
+        // $fpdf->SetFont('Arial', '', 10);
+        // $fpdf->Cell(90, 8, utf8_decode("NOM & PRENOMS : " . $eleve['nom']), 0);
+        // $fpdf->Cell(60, 8, utf8_decode("MATRICULE : " . $eleve['matricule']), 0);
+        // $fpdf->Cell(40, 8, utf8_decode("SEXE : " . $eleve['sexe']), 0, 1);
 
-        $fpdf->Cell(90, 8, utf8_decode("REGIME : " . $eleve['regime']), 0);
-        $fpdf->Cell(60, 8, utf8_decode("REDOUBLANT : " . $eleve['redoublant']), 0, 1);
+        // $fpdf->Cell(90, 8, utf8_decode("REGIME : " . $eleve['regime']), 0);
+        // $fpdf->Cell(60, 8, utf8_decode("REDOUBLANT : " . $eleve['redoublant']), 0, 1);
 
-        $fpdf->Cell(130, 8, utf8_decode("PROFESSEUR PRINCIPAL : " . $eleve['prof_principal']), 0, 1);
-        $fpdf->Cell(130, 8, utf8_decode("EDUCATEUR : " . $eleve['educateur']), 0, 1);
-        $fpdf->Cell(130, 8, utf8_decode("NOMBRE HEURES DE COURS PAR SEMAINE = " . $eleve['heures_semaine']), 0, 1);
+        // $fpdf->Cell(130, 8, utf8_decode("PROFESSEUR PRINCIPAL : " . $eleve['prof_principal']), 0, 1);
+        // $fpdf->Cell(130, 8, utf8_decode("EDUCATEUR : " . $eleve['educateur']), 0, 1);
+        // $fpdf->Cell(130, 8, utf8_decode("NOMBRE HEURES DE COURS PAR SEMAINE = " . $eleve['heures_semaine']), 0, 1);
 
         $fpdf->Ln(5);
 
