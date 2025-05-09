@@ -58,32 +58,28 @@ class EmploiDuTempsController extends Controller
         $data = $request->all();
         $classeId = $data['classe_id'];
         $lignes = $data['emplois'];
-        $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
+        $anneeScolaireActuelle = $this->anneeAcademiqueService->getAnneeActive();
 
+        // Supprimer les anciens emplois du temps de cette classe pour l'année active
+        EmploiDuTemps::where('classe_id', $classeId)
+            ->where('anneeacademique_id', $anneeScolaireActuelle->id)
+            ->delete();
+
+        // Recréer les nouvelles lignes
         foreach ($lignes as $ligne) {
-            EmploiDuTemps::updateOrCreate(
-                ['id' => $ligne['id'] ?? null],
-                [
-                    'classe_id'   => $classeId,
-                    'matiere_id'  => $ligne['matiere_id'],
-                    'jour_id'     => $ligne['jour_id'],
-                    'heure_debut' => $ligne['heure_debut'],
-                    'heure_fin'   => $ligne['heure_fin'],
-                    'anneeacademique_id' => $anneeScolaireActuelle->id
-                ]
-            );
+            EmploiDuTemps::create([
+                'classe_id'   => $classeId,
+                'matiere_id'  => $ligne['matiere_id'],
+                'jour_id'     => $ligne['jour_id'],
+                'heure_debut' => $ligne['heure_debut'],
+                'heure_fin'   => $ligne['heure_fin'],
+                'anneeacademique_id' => $anneeScolaireActuelle->id
+            ]);
         }
 
-        // Récupérer les emplois enregistrés pour cette classe
-        $emplois = EmploiDuTemps::where('classe_id', $classeId)
-            ->with(['matiere', 'jour']) // Assurer d'inclure les relations pour matiere et jour
-            ->get();
-
-        return response()->json([
-            'message' => 'Emploi du temps enregistré avec succès',
-            'emplois' => $emplois // Inclure les emplois dans la réponse JSON
-        ]);
+        return response()->json(['success' => true, 'message' => 'Emploi du temps mis à jour.']);
     }
+
 
 
 
@@ -191,7 +187,7 @@ class EmploiDuTempsController extends Controller
                     }
                 }
 
-                $fpdf->Cell(30, 10, $matiereText, 1, 0, 'C'); 
+                $fpdf->Cell(30, 10, $matiereText, 1, 0, 'C');
             }
 
             $fpdf->Ln();

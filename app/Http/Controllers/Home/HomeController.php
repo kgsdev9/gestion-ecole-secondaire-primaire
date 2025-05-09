@@ -25,7 +25,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-     
+
+
+        
         // Récupérer l'année scolaire active
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 

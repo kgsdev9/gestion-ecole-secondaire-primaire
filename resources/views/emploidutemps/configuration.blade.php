@@ -104,7 +104,9 @@
                 },
 
                 deleteRow(index) {
+
                     this.emplois.splice(index, 1);
+                   
                 },
 
                 submitEmploiDuTemps() {
@@ -155,6 +157,8 @@
                             console.error(error);
                         });
                 },
+
+
 
                 printEmploiDuTemps() {
                     fetch('{{ route('administration.configuration.print.emploi.temps') }}', {
