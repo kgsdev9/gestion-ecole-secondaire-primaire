@@ -94,7 +94,7 @@
                 },
 
                 saveNotes() {
-                    fetch('{{ route('examens.moyenne.update', $examen->id) }}', {
+                    fetch('{{ route('examens.moyenne.store') }}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

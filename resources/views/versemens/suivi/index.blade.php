@@ -47,16 +47,7 @@
                                         </select>
                                     </div>
 
-                                    <div>
-                                        <select x-model="annee_id" @change="filterYear"
-                                            class="form-select form-select-sm" data-live-search="true">
-                                            <option value="">Toutes les annees academique </option>
-                                            <template x-for="annee in allAnneesAcademique" :key="annee.id">
-                                                <option :value="annee.id" x-text="annee.name"></option>
-                                            </template>
-                                        </select>
-                                    </div>
-
+                                 
                                     <button @click="printProducts" class="btn btn-light-primary btn-sm">
                                         <i class="fa fa-print"></i> Imprimer
                                     </button>

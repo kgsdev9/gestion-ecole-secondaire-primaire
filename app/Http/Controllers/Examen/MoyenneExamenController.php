@@ -27,7 +27,7 @@ class MoyenneExamenController extends Controller
     public function index()
     {
         $this->anneeAcademiqueService->checkAndCreateAnneeAcademique();
-        
+
         $anneeScolaireActuelle  = $this->anneeAcademiqueService->getAnneeActive();
 
         $moyennes = MoyenneExamen::where('anneeacademique_id', $anneeScolaireActuelle->id)
@@ -59,8 +59,10 @@ class MoyenneExamenController extends Controller
 
     public function store(Request $request)
     {
+
         $examen = Examen::find($request->examen_id);
         $anneeAcademiqueId = $examen->anneeacademique_id;
+      
 
         MoyenneExamenLigne::where('examen_id', $examen->id)
             ->where('anneeacademique_id', $anneeAcademiqueId)
@@ -176,6 +178,8 @@ class MoyenneExamenController extends Controller
             'moyennesGenerales', 'moyenneMax', 'moyenneMin'
         ));
     }
+
+
 
 
 }
